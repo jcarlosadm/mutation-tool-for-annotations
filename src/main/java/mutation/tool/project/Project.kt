@@ -5,7 +5,7 @@ import java.io.File
 open class Project(folder:File) {
 	val folder = folder
 	
-	fun runTests():Boolean {
+	fun runTests(pathTests:String):Boolean {
 		return true
 	}
 }
