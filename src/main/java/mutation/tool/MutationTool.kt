@@ -2,10 +2,10 @@ package mutation.tool
 
 import mutation.tool.util.MutationToolConfig
 
-class MutationTool(config:MutationToolConfig) {
+class MutationTool(config: MutationToolConfig) {
 	val config = config
-	
-	fun run(){
-		
+
+	fun run() {
+
 	}
 }
