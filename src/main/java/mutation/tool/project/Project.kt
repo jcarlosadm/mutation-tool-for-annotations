@@ -5,7 +5,6 @@ import java.io.File
 open class Project(folder:File) {
 	val folder = folder
 	
-	fun runTests(pathTests:String):Boolean {
-		return true
-	}
+	// TODO: not implemented
+	fun runTests(pathTests:String):Boolean = true
 }
