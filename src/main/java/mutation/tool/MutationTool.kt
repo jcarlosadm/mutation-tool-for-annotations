@@ -12,7 +12,7 @@ class MutationTool(config: MutationToolConfig) {
 		
 		// run original project against tests
 		if (project.runTests(config.pathTests) == false){
-			println("original project fail on tests. It doesn't seem right...")
+			println("original project fail on tests. It doesn't seem right... exiting...")
 			return
 		}
 	}
