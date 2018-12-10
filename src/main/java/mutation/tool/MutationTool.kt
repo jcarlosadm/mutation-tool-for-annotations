@@ -6,21 +6,38 @@ import java.io.File
 import mu.KotlinLogging
 
 private val logger = KotlinLogging.logger{}
-private val TOOL_NAME = "Mutation Tool for Annotations"
+private const val TOOL_NAME = "Mutation Tool for Annotations"
 
-class MutationTool(config: MutationToolConfig) {
-	val config = config
+/**
+ * class to run mutation tool
+ * @param config: configuration class
+ */
+class MutationTool(private val config: MutationToolConfig) {
+	private var project:Project? = null
 
+    /**
+     * Run mutation tool
+     */
 	fun run() {
 		logger.info { "\n\n	#### Starting $TOOL_NAME #### \n" }
-		
-		val project = Project(File(config.pathSources))
+
+		this.init()
 		
 		logger.info { "Running original project against test suite" }
-		if (project.runTests(config.pathTests) == false){
+		if (project?.runTests(config.pathTests) == false){
 			logger.error { "original project fail against test suite. exiting..." }
 			return
 		}
+	}
+
+    /**
+     * load classes and make basic checks
+     */
+	private fun init(){
+		// TODO: check if source and test folders exist and both not intersects with each other
+		
+		// load original project
+		project = Project(File(config.pathSources))
 	}
 }
 
