@@ -37,8 +37,6 @@ class MutationTool(private val config: MutationToolConfig) {
     }
 
     private fun init() {
-        // TODO: check if source and test folders exist and both not intersects with each other
-
         if (!config.pathSources.exists() || !config.pathSources.isDirectory) {
             throw IOException("source folder not exists or isn't a directory")
         }
@@ -51,7 +49,6 @@ class MutationTool(private val config: MutationToolConfig) {
             throw Exception("exists intersection between source and test folders. exiting...")
         }
 
-        // load original project
         project = Project(config.pathSources)
 
         if (!makeRootFolders()) throw ExceptionInInitializerError("Error to make root folders")
