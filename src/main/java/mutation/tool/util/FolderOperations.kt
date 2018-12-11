@@ -13,16 +13,13 @@ private const val REPORT_FOLDER = "report"
  */
 fun makeRootFolders():Boolean {
     TODO("not implemented")
-    return false
 }
 
 fun deleteTempFolder():Boolean {
-    // TODO: not implemented
-    return false
+    TODO("not implemented")
 }
 
 fun foldersIntersects(folder1:File, folder2:File):Boolean{
-    // TODO: not implemented
-    return true
+    TODO("not implemented")
 }
 
