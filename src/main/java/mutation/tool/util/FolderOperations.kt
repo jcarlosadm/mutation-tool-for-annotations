@@ -1,5 +1,7 @@
 package mutation.tool.util
 
+import java.io.File
+
 private const val TEMP_FOLDER = "temp"
 
 private const val DATA_FOLDER = "data"
@@ -17,5 +19,10 @@ fun makeRootFolders():Boolean {
 fun deleteTempFolder():Boolean {
     // TODO: not implemented
     return true
+}
+
+fun foldersIntersects(folder1:File, folder2:File):Boolean{
+    // TODO: not implemented
+    return false
 }
 

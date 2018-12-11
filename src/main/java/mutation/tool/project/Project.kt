@@ -5,5 +5,5 @@ import java.io.File
 open class Project(val folder: File) {
 
 	// TODO: not implemented
-	fun runTests(pathTests:String):Boolean = true
+	fun runTests(pathTests:File):Boolean = true
 }

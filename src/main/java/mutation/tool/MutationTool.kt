@@ -5,7 +5,9 @@ import mutation.tool.project.Project
 import java.io.File
 import mu.KotlinLogging
 import mutation.tool.util.deleteTempFolder
+import mutation.tool.util.foldersIntersects
 import mutation.tool.util.makeRootFolders
+import java.io.IOException
 import java.lang.Exception
 
 private val logger = KotlinLogging.logger{}
@@ -37,8 +39,20 @@ class MutationTool(private val config: MutationToolConfig) {
     private fun init() {
         // TODO: check if source and test folders exist and both not intersects with each other
 
+        if (!config.pathSources.exists() || !config.pathSources.isDirectory) {
+            throw IOException("source folder not exists or isn't a directory")
+        }
+
+        if (!config.pathTests.exists() || !config.pathTests.isDirectory) {
+            throw IOException("test folder not exists or isn't a directory")
+        }
+
+        if (foldersIntersects(config.pathSources, config.pathTests)) {
+            throw Exception("exists intersection between source and test folders. exiting...")
+        }
+
         // load original project
-        project = Project(File(config.pathSources))
+        project = Project(config.pathSources)
 
         if (!makeRootFolders()) throw ExceptionInInitializerError("Error to make root folders")
     }
@@ -56,6 +70,6 @@ class MutationTool(private val config: MutationToolConfig) {
 }
 
 fun main(args: Array<String>) {
-    val config = MutationToolConfig("", "")
+    val config = MutationToolConfig(File(""), File(""))
     MutationTool(config).run()
 }
