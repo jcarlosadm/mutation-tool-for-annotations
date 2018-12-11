@@ -4,5 +4,5 @@ import mutation.tool.project.Project
 import java.io.File
 
 class Mutant(folder:File):Project(folder) {
-	val mutatedFiles = mutableListOf<MutatedFile>()
+	private val mutatedFiles = mutableListOf<MutatedFile>()
 }
