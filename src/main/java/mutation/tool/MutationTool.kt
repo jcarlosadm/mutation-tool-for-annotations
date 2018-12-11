@@ -13,35 +13,35 @@ private const val TOOL_NAME = "Mutation Tool for Annotations"
  * @param config: configuration class
  */
 class MutationTool(private val config: MutationToolConfig) {
-	private var project:Project? = null
+    private var project:Project? = null
 
     /**
      * Run mutation tool
      */
-	fun run() {
-		logger.info { "\n\n	#### Starting $TOOL_NAME #### \n" }
+    fun run() {
+        logger.info { "\n\n	#### Starting $TOOL_NAME #### \n" }
 
-		this.init()
-		
-		logger.info { "Running original project against test suite" }
-		if (project?.runTests(config.pathTests) == false){
-			logger.error { "original project fail against test suite. exiting..." }
-			return
-		}
-	}
+        this.init()
+
+        logger.info { "Running original project against test suite" }
+        if (project?.runTests(config.pathTests) == false){
+            logger.error { "original project fail against test suite. exiting..." }
+            return
+        }
+    }
 
     /**
      * load classes and make basic checks
      */
-	private fun init(){
-		// TODO: check if source and test folders exist and both not intersects with each other
-		
-		// load original project
-		project = Project(File(config.pathSources))
-	}
+    private fun init(){
+        // TODO: check if source and test folders exist and both not intersects with each other
+
+        // load original project
+        project = Project(File(config.pathSources))
+    }
 }
 
 fun main(args: Array<String>) {
-	val config = MutationToolConfig("", "")
-	MutationTool(config).run()
+    val config = MutationToolConfig("", "")
+    MutationTool(config).run()
 }
