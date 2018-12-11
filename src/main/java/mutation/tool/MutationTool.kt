@@ -23,7 +23,7 @@ class MutationTool(private val config: MutationToolConfig) {
     /**
      * Run mutation tool
      */
-    fun run() {
+    fun run():Boolean {
         logger.info { "\n\n	#### Starting $TOOL_NAME #### \n" }
 
         try {
@@ -32,8 +32,10 @@ class MutationTool(private val config: MutationToolConfig) {
             this.end()
         } catch (e:Exception){
             logger.error(e) {"${e.message}"}
-            return
+            return false
         }
+
+        return true
     }
 
     private fun init() {
