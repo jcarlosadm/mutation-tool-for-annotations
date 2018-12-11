@@ -1,14 +1,12 @@
 package mutation.tool
 
-import mutation.tool.util.MutationToolConfig
-import mutation.tool.project.Project
-import java.io.File
 import mu.KotlinLogging
+import mutation.tool.project.Project
+import mutation.tool.util.MutationToolConfig
 import mutation.tool.util.deleteTempFolder
 import mutation.tool.util.foldersIntersects
 import mutation.tool.util.makeRootFolders
 import java.io.IOException
-import java.lang.Exception
 
 private val logger = KotlinLogging.logger{}
 private const val TOOL_NAME = "Mutation Tool for Annotations"
@@ -28,9 +26,15 @@ class MutationTool(private val config: MutationToolConfig) {
 
         try {
             this.init()
-            this.testOriginalProject()
+
+            if (config.testOriginalProject)
+                this.testOriginalProject()
+
             this.genMutants()
-            this.testMutants()
+
+            if (config.testMutants)
+                this.testMutants()
+
             this.end()
         } catch (e:Exception){
             logger.error(e) {"${e.message}"}
@@ -42,11 +46,11 @@ class MutationTool(private val config: MutationToolConfig) {
 
     private fun init() {
         if (!config.pathSources.exists() || !config.pathSources.isDirectory) {
-            throw IOException("source folder not exists or isn't a directory")
+            throw IOException("following source folder not exists or isn't a directory: ${config.pathSources}")
         }
 
         if (!config.pathTests.exists() || !config.pathTests.isDirectory) {
-            throw IOException("test folder not exists or isn't a directory")
+            throw IOException("following test folder not exists or isn't a directory: ${config.pathTests}")
         }
 
         if (foldersIntersects(config.pathSources, config.pathTests)) {
@@ -76,9 +80,4 @@ class MutationTool(private val config: MutationToolConfig) {
     private fun end() {
         if (!deleteTempFolder()) throw Exception("Error to delete temporary folder")
     }
-}
-
-fun main(args: Array<String>) {
-    val config = MutationToolConfig(File(""), File(""))
-    MutationTool(config).run()
 }
