@@ -12,7 +12,7 @@ private const val REPORT_FOLDER = "report"
  * Make basic root folders of Mutation Tool project
  */
 fun makeRootFolders():Boolean {
-    // TODO: not implemented
+    TODO("not implemented")
     return false
 }
 
