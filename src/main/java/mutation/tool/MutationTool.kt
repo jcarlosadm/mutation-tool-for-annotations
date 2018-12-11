@@ -4,6 +4,9 @@ import mutation.tool.util.MutationToolConfig
 import mutation.tool.project.Project
 import java.io.File
 import mu.KotlinLogging
+import mutation.tool.util.deleteTempFolder
+import mutation.tool.util.makeRootFolders
+import java.lang.Exception
 
 private val logger = KotlinLogging.logger{}
 private const val TOOL_NAME = "Mutation Tool for Annotations"
@@ -21,23 +24,34 @@ class MutationTool(private val config: MutationToolConfig) {
     fun run() {
         logger.info { "\n\n	#### Starting $TOOL_NAME #### \n" }
 
-        this.init()
-
-        logger.info { "Running original project against test suite" }
-        if (project?.runTests(config.pathTests) == false){
-            logger.error { "original project fail against test suite. exiting..." }
+        try {
+            this.init()
+            this.testOriginalProject()
+            this.end()
+        } catch (e:Exception){
+            logger.error(e) {"${e.message}"}
             return
         }
     }
 
-    /**
-     * load classes and make basic checks
-     */
-    private fun init(){
+    private fun init() {
         // TODO: check if source and test folders exist and both not intersects with each other
 
         // load original project
         project = Project(File(config.pathSources))
+
+        if (!makeRootFolders()) throw ExceptionInInitializerError("Error to make root folders")
+    }
+
+    private fun testOriginalProject() {
+        logger.info { "Running original project against test suite" }
+
+        if (this.project?.runTests(config.pathTests) == false)
+            throw Exception("original project fail against test suite. exiting...")
+    }
+
+    private fun end() {
+        if (!deleteTempFolder()) throw Exception("Error to delete temporary folder")
     }
 }
 
