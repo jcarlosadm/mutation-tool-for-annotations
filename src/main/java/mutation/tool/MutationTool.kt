@@ -30,6 +30,7 @@ class MutationTool(private val config: MutationToolConfig) {
             this.init()
             this.testOriginalProject()
             this.genMutants()
+            this.testMutants()
             this.end()
         } catch (e:Exception){
             logger.error(e) {"${e.message}"}
@@ -65,6 +66,10 @@ class MutationTool(private val config: MutationToolConfig) {
     }
 
     private fun genMutants() {
+        TODO("not implemented")
+    }
+
+    private fun testMutants() {
         TODO("not implemented")
     }
 
