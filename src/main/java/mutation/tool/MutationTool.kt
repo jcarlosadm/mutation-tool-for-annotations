@@ -29,6 +29,7 @@ class MutationTool(private val config: MutationToolConfig) {
         try {
             this.init()
             this.testOriginalProject()
+            this.genMutants()
             this.end()
         } catch (e:Exception){
             logger.error(e) {"${e.message}"}
@@ -61,6 +62,10 @@ class MutationTool(private val config: MutationToolConfig) {
 
         if (this.project?.runTests(config.pathTests) == false)
             throw Exception("original project fail against test suite. exiting...")
+    }
+
+    private fun genMutants() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     private fun end() {
