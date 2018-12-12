@@ -10,5 +10,6 @@ fun getValidOperators(context:AnnotationContext):List<Operator> {
 }
 
 interface Operator {
+    fun checkContext(context: AnnotationContext):Boolean
     fun mutate(context:AnnotationContext)
 }
