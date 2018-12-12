@@ -25,5 +25,4 @@ internal class MutationToolTest {
         assertFalse(MutationTool(config).run())
     }
 
-
 }

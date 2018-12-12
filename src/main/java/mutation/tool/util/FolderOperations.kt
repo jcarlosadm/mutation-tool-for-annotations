@@ -19,7 +19,9 @@ fun deleteTempFolder():Boolean {
     TODO("not implemented")
 }
 
-fun foldersIntersects(folder1:File, folder2:File):Boolean{
-    TODO("not implemented")
+fun isSubpath(folder1:File, folder2:File):Boolean{
+    if (folder1.absolutePath.contains(folder2.absolutePath) || folder2.absolutePath.contains(folder1.absolutePath))
+        return true
+    return false
 }
 
