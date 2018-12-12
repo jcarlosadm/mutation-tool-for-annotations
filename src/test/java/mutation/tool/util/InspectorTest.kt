@@ -14,6 +14,7 @@ internal class InspectorTest {
     fun testGetAllJavaFiles() {
         val files = getAllJavaFiles(File(PATH))
         assertFalse(files.isEmpty())
+        assertTrue(files.size == 2)
         for (file in files) {
             assertTrue(file.name.equals(FILENAME1) || file.name.equals(FILENAME2))
         }
