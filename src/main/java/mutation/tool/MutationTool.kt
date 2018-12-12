@@ -1,12 +1,13 @@
 package mutation.tool
 
 import mu.KotlinLogging
+import mutation.tool.annotation.getListOfAnnotationContext
+import mutation.tool.mutant.generateMutants
+import mutation.tool.operator.getValidOperators
 import mutation.tool.project.Project
-import mutation.tool.util.MutationToolConfig
-import mutation.tool.util.deleteTempFolder
-import mutation.tool.util.isSubFolder
-import mutation.tool.util.makeRootFolders
+import mutation.tool.util.*
 import java.io.IOException
+import java.util.concurrent.Executors
 
 private val logger = KotlinLogging.logger{}
 private const val TOOL_NAME = "Mutation Tool for Annotations"
@@ -45,6 +46,7 @@ class MutationTool(private val config: MutationToolConfig) {
     }
 
     private fun init() {
+        logger.info { "checking source and test directories..." }
         if (!config.pathSources.exists() || !config.pathSources.isDirectory) {
             throw IOException("following source folder not exists or isn't a directory: ${config.pathSources}")
         }
@@ -57,9 +59,13 @@ class MutationTool(private val config: MutationToolConfig) {
             throw Exception("one folder is subfolder of another folder. exiting...")
         }
 
+        logger.info { "source and test directories: OK" }
+
         project = Project(config.pathSources)
 
+        logger.info { "creating basic directories..." }
         if (!makeRootFolders()) throw ExceptionInInitializerError("Error to make root folders")
+        logger.info { "creating basic directories: done" }
     }
 
     private fun testOriginalProject() {
@@ -70,7 +76,28 @@ class MutationTool(private val config: MutationToolConfig) {
     }
 
     private fun genMutants() {
-        TODO("not implemented")
+        logger.info { "generating mutants" }
+        val executor = Executors.newFixedThreadPool(config.threads)
+
+        for(javaFile in getAllJavaFiles(config.pathSources)){
+
+            val worker = Runnable {
+                synchronized(this) { logger.info { "check java file: $javaFile" } }
+
+                for (context in getListOfAnnotationContext(javaFile)){
+                    val operators = getValidOperators(context)
+                    generateMutants(operators)
+                }
+
+                synchronized(this) { logger.info { "java file checked: $javaFile" } }
+            }
+            executor.execute(worker)
+        }
+
+        executor.shutdown()
+        while (!executor.isTerminated){}
+
+        logger.info { "generation of mutants ended" }
     }
 
     private fun testMutants() {
