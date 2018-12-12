@@ -26,4 +26,12 @@ internal class FolderOperationsTest {
         assertTrue(isSubpath(testFolder1, testFolder2))
         assertTrue(isSubpath(testFolder2, testFolder1))
     }
+
+    @Test
+    fun testMakeRootDir() {
+        assertTrue(makeRootFolders())
+        assertTrue(File(TEMP_FOLDER).exists())
+        assertTrue(File(DATA_FOLDER).exists())
+        assertTrue(File(REPORT_FOLDER).exists())
+    }
 }
