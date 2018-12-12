@@ -17,9 +17,7 @@ fun makeRootFolders():Boolean = (makeFolderIfNotExists(File("./$TEMP_FOLDER")) &
 /**
  * delete temporary folder, and all his contents
  */
-fun deleteTempFolder():Boolean {
-    TODO("not implemented")
-}
+fun deleteTempFolder():Boolean = File("./$TEMP_FOLDER").deleteRecursively()
 
 /**
  * Check if folder1 is subfolder of folder2, and vice versa

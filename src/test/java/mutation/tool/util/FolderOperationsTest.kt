@@ -34,4 +34,18 @@ internal class FolderOperationsTest {
         assertTrue(File(DATA_FOLDER).exists())
         assertTrue(File(REPORT_FOLDER).exists())
     }
+
+    @Test
+    fun testDeleteTempFolder() {
+        makeRootFolders()
+        if(File(TEMP_FOLDER).list().isEmpty())
+            File(TEMP_FOLDER + File.separator + "tempFile").createNewFile()
+
+        assertTrue(deleteTempFolder())
+        assertFalse(File(TEMP_FOLDER).exists())
+
+        makeRootFolders()
+        assertTrue(deleteTempFolder())
+        assertFalse(File(TEMP_FOLDER).exists())
+    }
 }
