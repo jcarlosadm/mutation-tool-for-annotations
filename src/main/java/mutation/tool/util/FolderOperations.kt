@@ -27,5 +27,5 @@ fun deleteTempFolder():Boolean {
  * @param folder1: first folder
  * @param folder2: second folder
  */
-fun isSubpath(folder1:File, folder2:File):Boolean = (folder1.absolutePath.contains(folder2.absolutePath) ||
+fun isSubFolder(folder1:File, folder2:File):Boolean = (folder1.absolutePath.contains(folder2.absolutePath) ||
         folder2.absolutePath.contains(folder1.absolutePath))

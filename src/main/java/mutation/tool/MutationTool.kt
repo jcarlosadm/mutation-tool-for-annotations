@@ -4,7 +4,7 @@ import mu.KotlinLogging
 import mutation.tool.project.Project
 import mutation.tool.util.MutationToolConfig
 import mutation.tool.util.deleteTempFolder
-import mutation.tool.util.isSubpath
+import mutation.tool.util.isSubFolder
 import mutation.tool.util.makeRootFolders
 import java.io.IOException
 
@@ -53,8 +53,8 @@ class MutationTool(private val config: MutationToolConfig) {
             throw IOException("following test folder not exists or isn't a directory: ${config.pathTests}")
         }
 
-        if (isSubpath(config.pathSources, config.pathTests)) {
-            throw Exception("one folder is subpath of another folder. exiting...")
+        if (isSubFolder(config.pathSources, config.pathTests)) {
+            throw Exception("one folder is subfolder of another folder. exiting...")
         }
 
         project = Project(config.pathSources)

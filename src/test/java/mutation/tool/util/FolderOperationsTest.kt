@@ -13,18 +13,18 @@ internal class FolderOperationsTest {
 
     @Test
     fun notContainsSubpath() {
-        assertFalse(isSubpath(sourceFolder1, testFolder1))
-        assertFalse(isSubpath(testFolder1, sourceFolder1))
-        assertFalse(isSubpath(sourceFolder2, testFolder2))
-        assertFalse(isSubpath(testFolder2, sourceFolder2))
+        assertFalse(isSubFolder(sourceFolder1, testFolder1))
+        assertFalse(isSubFolder(testFolder1, sourceFolder1))
+        assertFalse(isSubFolder(sourceFolder2, testFolder2))
+        assertFalse(isSubFolder(testFolder2, sourceFolder2))
     }
 
     @Test
     fun containsSubpath() {
-        assertTrue(isSubpath(sourceFolder1, sourceFolder2))
-        assertTrue(isSubpath(sourceFolder2, sourceFolder1))
-        assertTrue(isSubpath(testFolder1, testFolder2))
-        assertTrue(isSubpath(testFolder2, testFolder1))
+        assertTrue(isSubFolder(sourceFolder1, sourceFolder2))
+        assertTrue(isSubFolder(sourceFolder2, sourceFolder1))
+        assertTrue(isSubFolder(testFolder1, testFolder2))
+        assertTrue(isSubFolder(testFolder2, testFolder1))
     }
 
     @Test
