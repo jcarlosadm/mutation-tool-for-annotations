@@ -1,7 +1,8 @@
 package mutation.tool.util
 
+// TODO: change to interface
 enum class InsertionPoint {
 	CLASS,
 	METHOD,
-	PROPERTTY
+	PROPERTY
 }
