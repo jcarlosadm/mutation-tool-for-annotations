@@ -7,7 +7,8 @@ fun getValidOperators(context:Context):List<Operator> {
     TODO("not implemented")
 }
 
-interface Operator {
-    fun checkContext(context: Context):Boolean
-    fun mutate(context:Context):Mutant?
+abstract class Operator(val context:Context) {
+
+    abstract fun checkContext():Boolean
+    abstract fun mutate():List<Mutant>?
 }
