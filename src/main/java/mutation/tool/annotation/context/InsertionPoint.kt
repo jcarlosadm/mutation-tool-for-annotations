@@ -1,6 +1,5 @@
-package mutation.tool.util
+package mutation.tool.annotation.context
 
-// TODO: change to interface
 enum class InsertionPoint {
 	CLASS,
 	METHOD,

@@ -1,6 +1,10 @@
 package mutation.tool.annotation
 
-import mutation.tool.util.InsertionPoint
+import com.github.javaparser.ast.expr.AnnotationExpr
+import mutation.tool.annotation.context.ClassContext
+import mutation.tool.annotation.context.InsertionPoint
+import mutation.tool.annotation.context.MethodContext
+import mutation.tool.annotation.context.PropertyContext
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.AnyOf
@@ -17,27 +21,40 @@ internal class AnnotationContextTest {
         val file = File(PATH)
         val list = getListOfAnnotationContext(file)
 
-        assertEquals(10, list.size)
+        assertEquals(9, list.size)
 
         var classCount = 0
         var propertyCount = 0
         var methodCount = 0
+
         for (context in list) {
-            when(context.insertionPoint) {
-                InsertionPoint.CLASS -> classCount++
-                InsertionPoint.METHOD -> methodCount++
-                InsertionPoint.PROPERTY -> propertyCount++
+            var annotations:List<AnnotationExpr>
+            when(context.getInsertionPoint()) {
+                InsertionPoint.CLASS -> {
+                    classCount++
+                    annotations = (context as ClassContext).entity.annotations
+                }
+                InsertionPoint.METHOD -> {
+                    methodCount++
+                    annotations = (context as MethodContext).entity.annotations
+                }
+                InsertionPoint.PROPERTY -> {
+                    propertyCount++
+                    annotations = (context as PropertyContext).entity.annotations
+                }
             }
 
-            MatcherAssert.assertThat(context.annotation.toString(), AnyOf.
-                    anyOf(CoreMatchers.containsString("@Controller"),
-                            CoreMatchers.containsString("@Qualifier"),
-                            CoreMatchers.containsString("@Autowired"),
-                            CoreMatchers.containsString("@RequestMapping")))
+            for (annotation in annotations){
+                MatcherAssert.assertThat(annotation.nameAsString, AnyOf.
+                        anyOf(CoreMatchers.containsString("Controller"),
+                                CoreMatchers.containsString("Qualifier"),
+                                CoreMatchers.containsString("Autowired"),
+                                CoreMatchers.containsString("RequestMapping")))
+            }
         }
 
         assertEquals(1, classCount)
-        assertEquals(2, propertyCount)
+        assertEquals(1, propertyCount)
         assertEquals(7, methodCount)
     }
 }
