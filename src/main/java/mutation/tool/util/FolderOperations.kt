@@ -1,5 +1,6 @@
 package mutation.tool.util
 
+import org.apache.commons.io.FileUtils
 import java.io.File
 
 const val TEMP_FOLDER = "temp"
@@ -27,3 +28,5 @@ fun deleteTempFolder():Boolean = File("./$TEMP_FOLDER").deleteRecursively()
  */
 fun isSubFolder(folder1:File, folder2:File):Boolean = (folder1.absolutePath.contains(folder2.absolutePath) ||
         folder2.absolutePath.contains(folder1.absolutePath))
+
+fun getAllJavaFiles(dir: File):List<File> = FileUtils.listFiles(dir, arrayOf("java"), true).toList()

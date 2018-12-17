@@ -9,6 +9,11 @@ private val sourceFolder2 = File("./src/test/resources/fakeProject/src/main")
 private val testFolder1 = File("./src/test/resources/fakeProject/src/test/java")
 private val testFolder2 = File("./src/test/resources/fakeProject/src/test")
 
+private const val PATH = "./src/test/resources/fakeProject/src"
+private const val FILENAME1 = "Main.java"
+private const val FILENAME2 = "MainTest.java"
+private const val FILENAME3 = "TarefasController.java"
+
 internal class FolderOperationsTest {
 
     @Test
@@ -47,5 +52,15 @@ internal class FolderOperationsTest {
         makeRootFolders()
         assertTrue(deleteTempFolder())
         assertFalse(File(TEMP_FOLDER).exists())
+    }
+
+    @Test
+    fun testGetAllJavaFiles() {
+        val files = getAllJavaFiles(File(PATH))
+        assertFalse(files.isEmpty())
+        assertTrue(files.size == 3)
+        for (file in files) {
+            assertTrue(file.name == FILENAME1 || file.name == FILENAME2 || file.name == FILENAME3)
+        }
     }
 }

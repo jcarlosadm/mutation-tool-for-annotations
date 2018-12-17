@@ -1,22 +1,25 @@
 package mutation.tool.util
 
+import com.github.javaparser.ast.expr.AnnotationExpr
+import mutation.tool.annotation.getListOfAnnotationContext
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.io.File
 
-private const val PATH = "./src/test/resources/fakeProject/src"
-private const val FILENAME1 = "Main.java"
-private const val FILENAME2 = "MainTest.java"
+private const val FILE1 = "./src/test/resources/fakeProject/src/main/java/TarefasController.java"
 
 internal class InspectorTest {
 
     @Test
-    fun testGetAllJavaFiles() {
-        val files = getAllJavaFiles(File(PATH))
-        assertFalse(files.isEmpty())
-        assertTrue(files.size == 2)
-        for (file in files) {
-            assertTrue(file.name.equals(FILENAME1) || file.name.equals(FILENAME2))
+    fun getAnnotationsTest() {
+        val annotations = mutableListOf<AnnotationExpr>()
+
+        for (context in getListOfAnnotationContext(File(FILE1))) {
+            annotations.addAll(getAnnotations(context))
         }
+
+        assertTrue(annotations.isNotEmpty())
+        assertEquals(10, annotations.size)
     }
+
 }
