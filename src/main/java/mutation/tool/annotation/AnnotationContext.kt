@@ -2,7 +2,7 @@ package mutation.tool.annotation
 
 import com.github.javaparser.JavaParser
 import mutation.tool.annotation.context.Context
-import mutation.tool.util.ContextCatcherVisitor
+import mutation.tool.annotation.context.ContextCatcherVisitor
 import java.io.File
 
 fun getListOfAnnotationContext(javaFile: File):List<Context> {
