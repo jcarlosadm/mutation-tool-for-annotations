@@ -23,7 +23,7 @@ private val logger = KotlinLogging.logger{}
 class RMA(context: Context, file: File) : Operator(context, file) {
 
     private var currentAnnotation:AnnotationExpr? = null
-    private var lock:Boolean = false
+    private var locked:Boolean = false
 
     override fun checkContext(): Boolean = (getAnnotations(context)).isNotEmpty()
 
@@ -36,7 +36,7 @@ class RMA(context: Context, file: File) : Operator(context, file) {
         for (annotation in getAnnotations(context)) {
             val newCompUnit = compUnit.clone()
             currentAnnotation = annotation
-            lock = false
+            locked = false
             mutateVisitor.visit(newCompUnit, null)
             logger.debug { "$newCompUnit" }
             mutants.add(Mutant(newCompUnit))
@@ -47,19 +47,19 @@ class RMA(context: Context, file: File) : Operator(context, file) {
 
     override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?) {
         super.visit(n, arg)
-        if (lock || n == null || !isSameClass(context, n)) return
+        if (locked || n == null || !isSameClass(context, n)) return
         removeCurrentAnnotation(n.annotations!!)
     }
 
     override fun visit(n: FieldDeclaration?, arg: Any?) {
         super.visit(n, arg)
-        if (lock || n == null || !isSameProp(context, n)) return
+        if (locked || n == null || !isSameProp(context, n)) return
         removeCurrentAnnotation(n.annotations!!)
     }
 
     override fun visit(n: MethodDeclaration?, arg: Any?) {
         super.visit(n, arg)
-        if (lock || n == null || !isSameMethod(context, n)) return
+        if (locked || n == null || !isSameMethod(context, n)) return
         removeCurrentAnnotation(n.annotations!!)
     }
 
@@ -70,7 +70,7 @@ class RMA(context: Context, file: File) : Operator(context, file) {
         for (annotation in annotations) {
             if (annotation.toString() == currentAnnotation?.toString()) {
                 annotation.remove()
-                lock = true
+                locked = true
                 return
             }
         }
