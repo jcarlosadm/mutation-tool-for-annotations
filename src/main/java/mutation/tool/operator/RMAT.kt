@@ -1,7 +1,11 @@
 package mutation.tool.operator
 
+import com.github.javaparser.ast.expr.MarkerAnnotationExpr
+import com.github.javaparser.ast.expr.NormalAnnotationExpr
+import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
 import mutation.tool.annotation.context.Context
 import mutation.tool.mutant.Mutant
+import mutation.tool.util.getAnnotations
 import java.io.File
 
 /**
@@ -10,7 +14,14 @@ import java.io.File
 class RMAT(context: Context, file: File) : Operator(context, file) {
 
     override fun checkContext(): Boolean {
-        TODO("not implemented")
+        val annotations = getAnnotations(context)
+        for (annotation in annotations) {
+            if (annotation.toString().contains(Regex("\\((.*?)\\)"))) {
+                return true
+            }
+        }
+
+        return false
     }
 
     override fun mutate(): List<Mutant> {

@@ -17,7 +17,9 @@ public class TarefasController {
     @Autowired
     private TarefaDao dao;
 
-    @RequestMapping("novaTarefa")
+    private String name;
+
+    @RequestMapping(value = "novaTarefa", method = RequestMethod.POST)
     public String form() {
         return "tarefa/formulario";
     }
