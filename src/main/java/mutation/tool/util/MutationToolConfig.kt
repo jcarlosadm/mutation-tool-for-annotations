@@ -13,4 +13,6 @@ class MutationToolConfig(val pathSources: File, val pathTests: File) {
     var testOriginalProject:Boolean = true
 
     val operators = mutableListOf<OperatorsEnum>()
+
+    var mutantsFolder:String = MUTANTS_FOLDER
 }
