@@ -7,7 +7,7 @@ import java.io.File
 /**
  * Switch the annotation to another valid target
  */
-class SWTG(context: Context, file:File, val anotherContexts: List<Context>): Operator(context, file) {
+class SWTG(context: Context, file:File, val allContexts: List<Context>): Operator(context, file) {
 
     override fun checkContext(): Boolean {
         TODO("not implemented")

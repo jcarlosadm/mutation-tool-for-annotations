@@ -3,6 +3,7 @@ package mutation.tool.operator
 import mutation.tool.annotation.context.Context
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.mutant.Mutant
+import mutation.tool.util.MutationToolConfig
 import mutation.tool.util.getAnnotations
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
@@ -25,7 +26,10 @@ internal class OperatorTest {
 
     @Test
     fun testGetValidOperators() {
+        val operatorsEnum = listOf<OperatorsEnum>(OperatorsEnum.RMA, OperatorsEnum.RMAT)
+        val validOperators = getValidOperators(contexts!!, File(FILE1), operatorsEnum)
 
+        assertEquals(19, validOperators.size)
     }
 
     @Test

@@ -1,5 +1,6 @@
 package mutation.tool.util
 
+import mutation.tool.operator.OperatorsEnum
 import java.io.File
 
 class MutationToolConfig(val pathSources: File, val pathTests: File) {
@@ -9,4 +10,6 @@ class MutationToolConfig(val pathSources: File, val pathTests: File) {
         }
     var testMutants:Boolean = true
     var testOriginalProject:Boolean = true
+
+    val validOperators = mutableListOf<OperatorsEnum>()
 }
