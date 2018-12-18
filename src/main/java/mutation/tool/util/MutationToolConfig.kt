@@ -11,5 +11,5 @@ class MutationToolConfig(val pathSources: File, val pathTests: File) {
     var testMutants:Boolean = true
     var testOriginalProject:Boolean = true
 
-    val validOperators = mutableListOf<OperatorsEnum>()
+    val operators = mutableListOf<OperatorsEnum>()
 }
