@@ -1,0 +1,25 @@
+package mutation.tool.util
+
+import com.github.javaparser.ast.expr.AnnotationExpr
+import mutation.tool.annotation.getListOfAnnotationContext
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
+import java.io.File
+
+private const val FILE1 = "./src/test/resources/fakeProject/src/main/java/TarefasController.java"
+
+internal class InspectorTest {
+
+    @Test
+    fun getAnnotationsTest() {
+        val annotations = mutableListOf<AnnotationExpr>()
+
+        for (context in getListOfAnnotationContext(File(FILE1))) {
+            annotations.addAll(getAnnotations(context))
+        }
+
+        assertTrue(annotations.isNotEmpty())
+        assertEquals(10, annotations.size)
+    }
+
+}
