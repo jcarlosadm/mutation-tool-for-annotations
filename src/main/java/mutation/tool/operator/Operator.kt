@@ -6,9 +6,10 @@ import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import mutation.tool.annotation.context.Context
 import mutation.tool.mutant.Mutant
+import mutation.tool.util.MutationToolConfig
 import java.io.File
 
-fun getValidOperators(context: Context, javaFile: File):List<Operator> {
+fun getValidOperators(context: Context, javaFile: File, config: MutationToolConfig):List<Operator> {
     TODO("not implemented")
 }
 

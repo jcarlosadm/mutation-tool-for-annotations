@@ -85,7 +85,7 @@ class MutationTool(private val config: MutationToolConfig) {
                 synchronized(this) { logger.info { "check java file: $javaFile" } }
 
                 for (context in getListOfAnnotationContext(javaFile)){
-                    val operators = getValidOperators(context, javaFile)
+                    val operators = getValidOperators(context, javaFile, config)
                     generateMutants(operators, javaFile, project)
                 }
 

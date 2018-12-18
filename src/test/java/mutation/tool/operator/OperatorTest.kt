@@ -24,6 +24,11 @@ internal class OperatorTest {
     }
 
     @Test
+    fun testGetValidOperators() {
+
+    }
+
+    @Test
     fun testRMA() {
         val mutants = mutableListOf<Mutant>()
         for (context in contexts!!) {
