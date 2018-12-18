@@ -34,6 +34,7 @@ internal class MutationToolTest {
         config.projectName = "fakeProject"
         config.operators.addAll(listOf(OperatorsEnum.RMA, OperatorsEnum.RMAT))
         config.mutantsFolder = "./src/test/resources/mutants"
+        config.threads = 2
         assertTrue(MutationTool(config).run())
     }
 
