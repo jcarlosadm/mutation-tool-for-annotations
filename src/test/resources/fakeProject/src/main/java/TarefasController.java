@@ -25,7 +25,7 @@ public class TarefasController {
     }
 
     @RequestMapping("adicionaTarefa")
-    public String adiciona(@Valid Tarefa tarefa, BindingResult bindingResult) {
+    public String adiciona(@Valid("33") Tarefa tarefa, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors("descricao")) {
             return "tarefa/formulario";
         }

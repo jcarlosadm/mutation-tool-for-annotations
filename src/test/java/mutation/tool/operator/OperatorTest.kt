@@ -38,7 +38,7 @@ internal class OperatorTest {
                 assertFalse(operator.checkContext())
             }
         }
-        assertEquals(10, mutants.size)
+        assertEquals(11, mutants.size)
     }
 
     @Test
@@ -60,6 +60,6 @@ internal class OperatorTest {
             }
         }
 
-        assertEquals(9, mutants.size)
+        assertEquals(10, mutants.size)
     }
 }

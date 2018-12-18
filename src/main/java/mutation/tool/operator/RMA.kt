@@ -4,15 +4,13 @@ import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
+import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import mu.KotlinLogging
 import mutation.tool.annotation.context.*
 import mutation.tool.mutant.Mutant
 import mutation.tool.mutant.MutateVisitor
-import mutation.tool.util.getAnnotations
-import mutation.tool.util.isSameClass
-import mutation.tool.util.isSameMethod
-import mutation.tool.util.isSameProp
+import mutation.tool.util.*
 import java.io.File
 
 private val logger = KotlinLogging.logger{}
@@ -48,19 +46,26 @@ class RMA(context: Context, file: File) : Operator(context, file) {
     override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?) {
         super.visit(n, arg)
         if (locked || n == null || !isSameClass(context, n)) return
-        removeCurrentAnnotation(n.annotations!!)
+        removeCurrentAnnotation(n.annotations)
     }
 
     override fun visit(n: FieldDeclaration?, arg: Any?) {
         super.visit(n, arg)
         if (locked || n == null || !isSameProp(context, n)) return
-        removeCurrentAnnotation(n.annotations!!)
+        removeCurrentAnnotation(n.annotations)
     }
 
     override fun visit(n: MethodDeclaration?, arg: Any?) {
         super.visit(n, arg)
         if (locked || n == null || !isSameMethod(context, n)) return
-        removeCurrentAnnotation(n.annotations!!)
+        removeCurrentAnnotation(n.annotations)
+    }
+
+    override fun visit(n: Parameter?, arg: Any?) {
+        super.visit(n, arg)
+        if (locked || n == null || !isSameParameter(context, n)) return
+        logger.debug { "$n" }
+        removeCurrentAnnotation(n.annotations)
     }
 
     private fun removeCurrentAnnotation(annotations:List<AnnotationExpr>){

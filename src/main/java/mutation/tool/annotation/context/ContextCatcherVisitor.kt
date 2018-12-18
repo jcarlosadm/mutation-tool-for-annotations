@@ -3,6 +3,7 @@ package mutation.tool.annotation.context
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
+import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter
 
 class ContextCatcherVisitor:VoidVisitorAdapter<Any>() {
@@ -22,5 +23,10 @@ class ContextCatcherVisitor:VoidVisitorAdapter<Any>() {
     override fun visit(n: MethodDeclaration?, arg: Any?) {
         super.visit(n, arg)
         if (n != null) contexts.add(MethodContext(n))
+    }
+
+    override fun visit(n: Parameter?, arg: Any?) {
+        super.visit(n, arg)
+        if (n != null) contexts.add(ParameterContext(n))
     }
 }

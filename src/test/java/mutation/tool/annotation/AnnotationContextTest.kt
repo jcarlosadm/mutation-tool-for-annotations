@@ -1,10 +1,7 @@
 package mutation.tool.annotation
 
 import com.github.javaparser.ast.expr.AnnotationExpr
-import mutation.tool.annotation.context.ClassContext
-import mutation.tool.annotation.context.InsertionPoint
-import mutation.tool.annotation.context.MethodContext
-import mutation.tool.annotation.context.PropertyContext
+import mutation.tool.annotation.context.*
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.AnyOf
@@ -21,11 +18,12 @@ internal class AnnotationContextTest {
         val file = File(PATH)
         val list = getListOfAnnotationContext(file)
 
-        assertEquals(9, list.size)
+        assertEquals(19, list.size)
 
         var classCount = 0
         var propertyCount = 0
         var methodCount = 0
+        var parameterCount = 0
 
         for (context in list) {
             var annotations:List<AnnotationExpr>
@@ -42,6 +40,10 @@ internal class AnnotationContextTest {
                     propertyCount++
                     annotations = (context as PropertyContext).entity.annotations
                 }
+                InsertionPoint.PARAMETER -> {
+                    parameterCount++
+                    annotations = (context as ParameterContext).entity.annotations
+                }
             }
 
             for (annotation in annotations){
@@ -49,12 +51,14 @@ internal class AnnotationContextTest {
                         anyOf(CoreMatchers.containsString("Controller"),
                                 CoreMatchers.containsString("Qualifier"),
                                 CoreMatchers.containsString("Autowired"),
-                                CoreMatchers.containsString("RequestMapping")))
+                                CoreMatchers.containsString("RequestMapping"),
+                                CoreMatchers.containsString("Valid")))
             }
         }
 
         assertEquals(1, classCount)
-        assertEquals(1, propertyCount)
+        assertEquals(2, propertyCount)
         assertEquals(7, methodCount)
+        assertEquals(9, parameterCount)
     }
 }
