@@ -1,6 +1,10 @@
 app.log
 *pid*
 
+/data/
+/src/test/resources/mutants/
+
+
 
 # Created by https://www.gitignore.io/api/java,code,maven,kotlin,intellij,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=java,code,maven,kotlin,intellij,visualstudiocode

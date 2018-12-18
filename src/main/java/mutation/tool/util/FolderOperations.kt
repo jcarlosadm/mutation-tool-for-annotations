@@ -5,6 +5,7 @@ import java.io.File
 
 const val TEMP_FOLDER = "temp"
 const val DATA_FOLDER = "data"
+const val MUTANTS_FOLDER = "$DATA_FOLDER/mutants"
 const val REPORT_FOLDER = "report"
 
 private fun makeFolderIfNotExists(folder:File):Boolean = ((folder.exists() && folder.isDirectory) || folder.mkdirs())
@@ -13,7 +14,8 @@ private fun makeFolderIfNotExists(folder:File):Boolean = ((folder.exists() && fo
  * Make basic root folders of Mutation Tool project
  */
 fun makeRootFolders():Boolean = (makeFolderIfNotExists(File("./$TEMP_FOLDER")) &&
-        makeFolderIfNotExists(File("./$DATA_FOLDER")) && makeFolderIfNotExists(File("./$REPORT_FOLDER")))
+        makeFolderIfNotExists(File("./$DATA_FOLDER")) && makeFolderIfNotExists(File(
+        "./$REPORT_FOLDER")) && makeFolderIfNotExists(File(MUTANTS_FOLDER)))
 
 /**
  * delete temporary folder, and all his contents

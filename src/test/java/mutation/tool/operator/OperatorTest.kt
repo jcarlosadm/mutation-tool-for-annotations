@@ -3,6 +3,7 @@ package mutation.tool.operator
 import mutation.tool.annotation.context.Context
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.generateMutants
 import mutation.tool.util.MutationToolConfig
 import mutation.tool.util.getAnnotations
 import org.junit.jupiter.api.Assertions.*
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.io.File
 
-private const val FILE1 = "./src/test/resources/fakeProject/src/main/java/TarefasController.java"
+const val FILE1 = "./src/test/resources/fakeProject/src/main/java/TarefasController.java"
 
 internal class OperatorTest {
 

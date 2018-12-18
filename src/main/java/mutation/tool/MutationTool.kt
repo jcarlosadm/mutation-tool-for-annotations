@@ -6,6 +6,7 @@ import mutation.tool.mutant.generateMutants
 import mutation.tool.operator.getValidOperators
 import mutation.tool.project.Project
 import mutation.tool.util.*
+import java.io.File
 import java.io.IOException
 import java.util.concurrent.Executors
 
@@ -61,7 +62,7 @@ class MutationTool(private val config: MutationToolConfig) {
 
         logger.info { "source and test directories: OK" }
 
-        project = Project(config.pathSources)
+        project = Project(config.projectName,config.pathSources)
 
         logger.info { "creating basic directories..." }
         if (!makeRootFolders()) throw ExceptionInInitializerError("Error to make root folders")
@@ -85,7 +86,7 @@ class MutationTool(private val config: MutationToolConfig) {
                 synchronized(this) { logger.info { "check java file: $javaFile" } }
 
                 val operators = getValidOperators(getListOfAnnotationContext(javaFile), javaFile, config.operators)
-                generateMutants(operators, javaFile, project)
+                generateMutants(operators, javaFile, project!!, File(MUTANTS_FOLDER))
 
                 synchronized(this) { logger.info { "java file checked: $javaFile" } }
             }
