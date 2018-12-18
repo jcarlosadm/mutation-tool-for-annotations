@@ -1,7 +1,12 @@
 package mutation.tool.util
 
+import mu.KotlinLogging
 import mutation.tool.operator.OperatorsEnum
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.io.File
+
+private val logger = KotlinLogging.logger{}
 
 class MutationToolConfig(val pathSources: File, val pathTests: File) {
     var projectName:String = ""
@@ -15,4 +20,8 @@ class MutationToolConfig(val pathSources: File, val pathTests: File) {
     val operators = mutableListOf<OperatorsEnum>()
 
     var mutantsFolder:String = MUTANTS_FOLDER
+
+    fun setDebugOn() {
+        System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "debug");
+    }
 }

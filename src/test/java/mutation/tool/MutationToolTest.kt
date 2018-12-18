@@ -35,6 +35,7 @@ internal class MutationToolTest {
         config.operators.addAll(listOf(OperatorsEnum.RMA, OperatorsEnum.RMAT))
         config.mutantsFolder = "./src/test/resources/mutants"
         config.threads = 2
+        config.setDebugOn()
         assertTrue(MutationTool(config).run())
     }
 
