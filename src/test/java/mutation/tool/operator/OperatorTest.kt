@@ -15,20 +15,10 @@ const val FILE1 = "./src/test/resources/fakeProject/src/main/java/TarefasControl
 
 internal class OperatorTest {
 
-    companion object {
-        private var contexts:List<Context>? = null
-
-        @BeforeAll
-        @JvmStatic
-        internal fun getContexts() {
-            contexts = getListOfAnnotationContext(File(FILE1))
-        }
-    }
-
     @Test
     fun testGetValidOperators() {
         val operatorsEnum = listOf<OperatorsEnum>(OperatorsEnum.RMA, OperatorsEnum.RMAT)
-        val validOperators = getValidOperators(contexts!!, File(FILE1), operatorsEnum)
+        val validOperators = getValidOperators(getListOfAnnotationContext(File(FILE1)), File(FILE1), operatorsEnum)
 
         assertEquals(19, validOperators.size)
     }
@@ -36,7 +26,8 @@ internal class OperatorTest {
     @Test
     fun testRMA() {
         val mutants = mutableListOf<Mutant>()
-        for (context in contexts!!) {
+
+        for (context in getListOfAnnotationContext(File(FILE1))) {
             val operator:Operator = RMA(context, File(FILE1))
 
             val annotations = getAnnotations(context)
@@ -54,7 +45,7 @@ internal class OperatorTest {
     @Test
     fun testRMAT() {
         val mutants = mutableListOf<Mutant>()
-        for (context in contexts!!) {
+        for (context in getListOfAnnotationContext(File(FILE1))) {
             val operator:Operator = RMAT(context, File(FILE1))
 
             var count = 0
