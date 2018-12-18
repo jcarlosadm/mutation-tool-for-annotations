@@ -20,6 +20,7 @@ private val logger = KotlinLogging.logger{}
  */
 class RMAT(context: Context, file: File) : Operator(context, file) {
 
+    private var currentMutant:Mutant? = null
     private var currentAnnotation:AnnotationExpr? = null
     private var currentIndex:Int? = null
     private var locked:Boolean = false
@@ -47,9 +48,11 @@ class RMAT(context: Context, file: File) : Operator(context, file) {
                 currentAnnotation = annotation
                 currentIndex = index
                 locked = false
+                currentMutant = Mutant(OperatorsEnum.RMAT)
                 visitor.visit(newCompUnit, null)
                 logger.debug { "$newCompUnit" }
-                mutants.add(Mutant(newCompUnit))
+                currentMutant!!.compilationUnit = newCompUnit
+                mutants.add(currentMutant!!)
             }
         }
 
@@ -83,10 +86,16 @@ class RMAT(context: Context, file: File) : Operator(context, file) {
     private fun removeAttribute(annotations:List<AnnotationExpr>) {
         for (annotation in annotations) {
             if (annotation.toString() == currentAnnotation.toString()) {
+                currentMutant?.before = annotation.toString()
                 when (annotation) {
-                    is SingleMemberAnnotationExpr -> annotation.replace(MarkerAnnotationExpr(
-                            Name(annotation.nameAsString + "()")))
-                    is NormalAnnotationExpr -> annotation.pairs.removeAt(currentIndex!!)
+                    is SingleMemberAnnotationExpr -> {
+                        annotation.replace(MarkerAnnotationExpr(Name(annotation.nameAsString + "()")))
+                        currentMutant?.after = annotation.nameAsString + "()"
+                    }
+                    is NormalAnnotationExpr -> {
+                        annotation.pairs.removeAt(currentIndex!!)
+                        currentMutant?.after = annotation.toString()
+                    }
                 }
 
                 locked = true

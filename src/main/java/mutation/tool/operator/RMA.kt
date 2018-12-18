@@ -20,6 +20,7 @@ private val logger = KotlinLogging.logger{}
  */
 class RMA(context: Context, file: File) : Operator(context, file) {
 
+    private var currentMutant:Mutant? = null
     private var currentAnnotation:AnnotationExpr? = null
     private var locked:Boolean = false
 
@@ -35,9 +36,11 @@ class RMA(context: Context, file: File) : Operator(context, file) {
             val newCompUnit = compUnit.clone()
             currentAnnotation = annotation
             locked = false
+            currentMutant = Mutant(OperatorsEnum.RMA)
             mutateVisitor.visit(newCompUnit, null)
             logger.debug { "$newCompUnit" }
-            mutants.add(Mutant(newCompUnit))
+            currentMutant?.compilationUnit = newCompUnit
+            mutants.add(currentMutant!!)
         }
 
         return mutants
@@ -74,6 +77,7 @@ class RMA(context: Context, file: File) : Operator(context, file) {
 
         for (annotation in annotations) {
             if (annotation.toString() == currentAnnotation?.toString()) {
+                currentMutant?.before = annotation.toString()
                 annotation.remove()
                 locked = true
                 return

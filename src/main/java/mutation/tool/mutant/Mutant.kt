@@ -1,10 +1,9 @@
 package mutation.tool.mutant
 
-import com.github.javaparser.Range
 import com.github.javaparser.ast.CompilationUnit
 import mutation.tool.operator.Operator
+import mutation.tool.operator.OperatorsEnum
 import mutation.tool.project.Project
-import mutation.tool.util.MUTANTS_FOLDER
 import java.io.File
 
 private const val PATTERN = "%07d"
@@ -24,7 +23,13 @@ fun generateMutants(operators: List<Operator>, javaFile: File, project: Project,
 				out.newLine()
 				out.write("		\"projectName\": \"$project\",")
 				out.newLine()
-				out.write("		\"originalFile\": \"${javaFile.path}\"")
+				out.write("		\"originalFile\": \"${javaFile.path}\",")
+				out.newLine()
+				out.write("		\"operator\": \"${mutant.operator.name}\",")
+				out.newLine()
+				out.write("		\"before\": \"${mutant.before}\",")
+				out.newLine()
+				out.write("		\"after\": \"${mutant.after}\"")
 				out.newLine()
 				out.write("}")
 			}
@@ -32,10 +37,12 @@ fun generateMutants(operators: List<Operator>, javaFile: File, project: Project,
 	}
 }
 
-class Mutant(private val compilationUnit: CompilationUnit) {
-	override fun toString(): String {
-		return compilationUnit.toString()
-	}
+class Mutant(val operator:OperatorsEnum) {
+	lateinit var compilationUnit: CompilationUnit
+	var before:String = ""
+	var after:String = ""
+
+	override fun toString(): String = compilationUnit.toString()
 }
 
 @Synchronized
