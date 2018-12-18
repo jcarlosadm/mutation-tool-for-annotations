@@ -11,8 +11,6 @@ import kotlin.test.assertEquals
 
 internal class MutantTest {
 
-
-
     @Test
     fun generateMutantsTest() {
         val contexts = getListOfAnnotationContext(File(FILE1))
