@@ -47,3 +47,6 @@ class Mutant(val operator:OperatorsEnum) {
 
 @Synchronized
 private fun getNum(): String = PATTERN.format(++mutantNum)
+
+@Synchronized
+fun resetMutantFoldersNum() { mutantNum = 0 }

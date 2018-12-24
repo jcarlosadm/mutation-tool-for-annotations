@@ -1,5 +1,6 @@
 package mutation.tool
 
+import mutation.tool.mutant.resetMutantFoldersNum
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.util.MutationToolConfig
 import org.junit.jupiter.api.Test
@@ -13,7 +14,7 @@ private const val testPath = "./src/test/resources/fakeProject/src/test/java"
 internal class MutationToolTest {
 
     @Test
-    fun runPathSourceNotExists() {
+    fun testRunPathSourceNotExists() {
         assertTrue(File(testPath).exists())
         val config = MutationToolConfig(File(""), File(testPath))
         config.testOriginalProject = true
@@ -21,7 +22,7 @@ internal class MutationToolTest {
     }
 
     @Test
-    fun runPathTestNotExists() {
+    fun testRunPathTestNotExists() {
         assertTrue(File(sourcePath).exists())
         val config = MutationToolConfig(File(sourcePath), File(""))
         config.testOriginalProject = true
@@ -29,13 +30,14 @@ internal class MutationToolTest {
     }
 
     @Test
-    fun mutantToolTest() {
+    fun testMutantTool() {
         val config = MutationToolConfig(File(sourcePath))
         config.projectName = "fakeProject"
         config.operators.addAll(listOf(OperatorsEnum.RMA, OperatorsEnum.RMAT))
         config.mutantsFolder = "./src/test/resources/mutants"
         config.threads = 2
         config.setDebugOn()
+        resetMutantFoldersNum()
         assertTrue(MutationTool(config).run())
     }
 
