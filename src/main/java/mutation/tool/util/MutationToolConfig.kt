@@ -14,8 +14,8 @@ class MutationToolConfig(val pathSources: File, val pathTests: File) {
         set(value) {
             if (value > 0) field = value
         }
-    var testMutants:Boolean = true
-    var testOriginalProject:Boolean = true
+    var testMutants:Boolean = false
+    var testOriginalProject:Boolean = false
 
     val operators = mutableListOf<OperatorsEnum>()
 

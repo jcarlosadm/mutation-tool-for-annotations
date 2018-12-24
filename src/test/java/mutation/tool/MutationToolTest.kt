@@ -29,8 +29,6 @@ internal class MutationToolTest {
     @Test
     fun mutantToolTest() {
         val config = MutationToolConfig(File(sourcePath), File(testPath))
-        config.testMutants = false
-        config.testOriginalProject = false
         config.projectName = "fakeProject"
         config.operators.addAll(listOf(OperatorsEnum.RMA, OperatorsEnum.RMAT))
         config.mutantsFolder = "./src/test/resources/mutants"
