@@ -21,16 +21,16 @@ And the Dependency:
 <dependency>
   <groupId>com.github.easy-software-ufal</groupId>
   <artifactId>mutation-tool-for-annotations</artifactId>
-  <version>0.1.1</version>
+  <version>Tag</version>
 </dependency>
 ```
+
+Replace the *Tag* with target release.
 
 ## Example
 
 ```java
-MutationToolConfig config = new MutationToolConfig(new File(SOURCE_PATH), new File(TEST_PATH));
-config.setTestMutants(false);
-config.setTestOriginalProject(false);
+MutationToolConfig config = new MutationToolConfig(new File(SOURCE_PATH));
 config.setProjectName(PROJECT_NAME);
 config.getOperators().addAll(Arrays.asList(OperatorsEnum.RMA, OperatorsEnum.RMAT));
 config.setThreads(2);

@@ -52,11 +52,12 @@ class MutationTool(private val config: MutationToolConfig) {
             throw IOException("following source folder not exists or isn't a directory: ${config.pathSources}")
         }
 
-        if (!config.pathTests.exists() || !config.pathTests.isDirectory) {
+        if ((config.testMutants || config.testOriginalProject) && (!config.pathTests.exists() ||
+                !config.pathTests.isDirectory)) {
             throw IOException("following test folder not exists or isn't a directory: ${config.pathTests}")
         }
 
-        if (isSubFolder(config.pathSources, config.pathTests)) {
+        if ((config.testMutants || config.testOriginalProject) && isSubFolder(config.pathSources, config.pathTests)) {
             throw Exception("one folder is subfolder of another folder. exiting...")
         }
 

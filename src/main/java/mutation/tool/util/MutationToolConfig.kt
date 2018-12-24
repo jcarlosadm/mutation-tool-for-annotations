@@ -8,14 +8,14 @@ import java.io.File
 
 private val logger = KotlinLogging.logger{}
 
-class MutationToolConfig(val pathSources: File, val pathTests: File) {
+class MutationToolConfig(val pathSources: File, val pathTests: File = File("")) {
     var projectName:String = ""
     var threads = 1
         set(value) {
             if (value > 0) field = value
         }
-    var testMutants:Boolean = true
-    var testOriginalProject:Boolean = true
+    var testMutants:Boolean = false
+    var testOriginalProject:Boolean = false
 
     val operators = mutableListOf<OperatorsEnum>()
 
