@@ -16,6 +16,7 @@ internal class MutationToolTest {
     fun runPathSourceNotExists() {
         assertTrue(File(testPath).exists())
         val config = MutationToolConfig(File(""), File(testPath))
+        config.testOriginalProject = true
         assertFalse(MutationTool(config).run())
     }
 
@@ -23,12 +24,13 @@ internal class MutationToolTest {
     fun runPathTestNotExists() {
         assertTrue(File(sourcePath).exists())
         val config = MutationToolConfig(File(sourcePath), File(""))
+        config.testOriginalProject = true
         assertFalse(MutationTool(config).run())
     }
 
     @Test
     fun mutantToolTest() {
-        val config = MutationToolConfig(File(sourcePath), File(testPath))
+        val config = MutationToolConfig(File(sourcePath))
         config.projectName = "fakeProject"
         config.operators.addAll(listOf(OperatorsEnum.RMA, OperatorsEnum.RMAT))
         config.mutantsFolder = "./src/test/resources/mutants"

@@ -8,7 +8,7 @@ import java.io.File
 
 private val logger = KotlinLogging.logger{}
 
-class MutationToolConfig(val pathSources: File, val pathTests: File) {
+class MutationToolConfig(val pathSources: File, val pathTests: File = File("")) {
     var projectName:String = ""
     var threads = 1
         set(value) {

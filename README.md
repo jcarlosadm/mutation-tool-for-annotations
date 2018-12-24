@@ -30,7 +30,7 @@ Replace the *Tag* with target release.
 ## Example
 
 ```java
-MutationToolConfig config = new MutationToolConfig(new File(SOURCE_PATH), new File(TEST_PATH));
+MutationToolConfig config = new MutationToolConfig(new File(SOURCE_PATH));
 config.setProjectName(PROJECT_NAME);
 config.getOperators().addAll(Arrays.asList(OperatorsEnum.RMA, OperatorsEnum.RMAT));
 config.setThreads(2);
