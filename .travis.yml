@@ -4,6 +4,3 @@ install: true
 cache:
   directories:
   - $HOME/.m2
-os:
-  - linux
-  - windows
