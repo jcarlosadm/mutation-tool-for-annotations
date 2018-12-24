@@ -90,7 +90,7 @@ class RMAT(context: Context, file: File) : Operator(context, file) {
                 when (annotation) {
                     is SingleMemberAnnotationExpr -> {
                         annotation.replace(MarkerAnnotationExpr(Name(annotation.nameAsString + "()")))
-                        currentMutant?.after = annotation.nameAsString + "()"
+                        currentMutant?.after = "@${annotation.nameAsString}()"
                     }
                     is NormalAnnotationExpr -> {
                         annotation.pairs.removeAt(currentIndex!!)
