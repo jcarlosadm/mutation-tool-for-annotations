@@ -1,6 +1,6 @@
 # mutation-tool-for-annotations
 
-[![Build Status](https://travis-ci.org/easy-software-ufal/mutation-tool-for-annotations.svg?branch=master)](https://travis-ci.org/easy-software-ufal/mutation-tool-for-annotations) [![](https://jitpack.io/v/easy-software-ufal/mutation-tool-for-annotations.svg)](https://jitpack.io/#easy-software-ufal/mutation-tool-for-annotations)
+[![Build Status](https://travis-ci.org/easy-software-ufal/mutation-tool-for-annotations.svg?branch=master)](https://travis-ci.org/easy-software-ufal/mutation-tool-for-annotations) [![](https://jitpack.io/v/easy-software-ufal/mutation-tool-for-annotations.svg)](https://jitpack.io/#easy-software-ufal/mutation-tool-for-annotations) [![codecov](https://codecov.io/gh/easy-software-ufal/mutation-tool-for-annotations/branch/master/graph/badge.svg)](https://codecov.io/gh/easy-software-ufal/mutation-tool-for-annotations)
 
 ## Using with maven
 

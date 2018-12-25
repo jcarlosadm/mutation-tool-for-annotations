@@ -11,7 +11,7 @@ private const val FILE1 = "./src/test/resources/fakeProject/src/main/java/Tarefa
 internal class InspectorTest {
 
     @Test
-    fun getAnnotationsTest() {
+    fun testGetAnnotations() {
         val annotations = mutableListOf<AnnotationExpr>()
 
         for (context in getListOfAnnotationContext(File(FILE1))) {
@@ -19,7 +19,7 @@ internal class InspectorTest {
         }
 
         assertTrue(annotations.isNotEmpty())
-        assertEquals(10, annotations.size)
+        assertEquals(11, annotations.size)
     }
 
 }

@@ -17,7 +17,7 @@ private const val FILENAME3 = "TarefasController.java"
 internal class FolderOperationsTest {
 
     @Test
-    fun notContainsSubpath() {
+    fun testNotContainsSubpath() {
         assertFalse(isSubFolder(sourceFolder1, testFolder1))
         assertFalse(isSubFolder(testFolder1, sourceFolder1))
         assertFalse(isSubFolder(sourceFolder2, testFolder2))
@@ -25,7 +25,7 @@ internal class FolderOperationsTest {
     }
 
     @Test
-    fun containsSubpath() {
+    fun testContainsSubpath() {
         assertTrue(isSubFolder(sourceFolder1, sourceFolder2))
         assertTrue(isSubFolder(sourceFolder2, sourceFolder1))
         assertTrue(isSubFolder(testFolder1, testFolder2))

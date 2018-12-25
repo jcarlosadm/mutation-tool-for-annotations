@@ -12,14 +12,14 @@ import kotlin.test.assertEquals
 internal class MutantTest {
 
     @Test
-    fun generateMutantsTest() {
+    fun testGenerateMutants() {
         val contexts = getListOfAnnotationContext(File(FILE1))
         val operatorsEnum = listOf<OperatorsEnum>(OperatorsEnum.RMA, OperatorsEnum.RMAT)
         val validOperators = getValidOperators(contexts, File(FILE1), operatorsEnum)
 
+        resetMutantFoldersNum()
         generateMutants(validOperators, File(FILE1), Project("fakeProject",
-                File("/home/jcarlos_research/Documents/git/research/mutation-tool-for-annotations/src/test/" +
-                        "resources/fakeProject")), File("./src/test/resources/mutants"))
+                File("./src/test/resources/fakeProject")), File("./src/test/resources/mutants"))
 
         assertEquals(21, File("./src/test/resources/mutants/").listFiles().size)
     }
