@@ -8,6 +8,12 @@ import java.io.File
  * Add Annotation
  */
 class ADA(context: Context, file:File): Operator(context, file) {
+    
+    private val validContexts = listOf<Context>()
+
+    init {
+        // TODO: run a entity builder and fill validContexts
+    }
 
     override fun checkContext(): Boolean {
         TODO("not implemented")
