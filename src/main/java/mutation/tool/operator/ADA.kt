@@ -1,6 +1,6 @@
 package mutation.tool.operator
 
-import mutation.tool.annotation.context.Context
+import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import java.io.File
 
@@ -8,7 +8,7 @@ import java.io.File
  * Add Annotation
  */
 class ADA(context: Context, file:File): Operator(context, file) {
-    
+
     private val validContexts = listOf<Context>()
 
     init {

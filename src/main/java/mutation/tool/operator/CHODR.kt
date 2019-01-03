@@ -1,6 +1,6 @@
 package mutation.tool.operator
 
-import mutation.tool.annotation.context.Context
+import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import java.io.File
 

@@ -1,4 +1,4 @@
-package mutation.tool.annotation.context
+package mutation.tool.context
 
 enum class InsertionPoint {
 	CLASS,

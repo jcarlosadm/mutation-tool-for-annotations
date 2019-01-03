@@ -1,4 +1,4 @@
-package mutation.tool.annotation.context
+package mutation.tool.context
 
 interface Context {
     fun getInsertionPoint(): InsertionPoint
