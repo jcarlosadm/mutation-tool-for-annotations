@@ -3,6 +3,8 @@ package mutation.tool
 import mu.KotlinLogging
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.mutant.generateMutants
+import mutation.tool.operator.OperatorsEnum
+import mutation.tool.operator.checker.ADAChecker
 import mutation.tool.operator.getValidOperators
 import mutation.tool.project.Project
 import mutation.tool.util.*
@@ -68,6 +70,8 @@ class MutationTool(private val config: MutationToolConfig) {
         logger.info { "creating basic directories..." }
         if (!makeRootFolders()) throw ExceptionInInitializerError("Error to make root folders")
         logger.info { "creating basic directories: done" }
+
+        this.setADAChecker(config)
     }
 
     private fun testOriginalProject() {
@@ -86,7 +90,7 @@ class MutationTool(private val config: MutationToolConfig) {
             val worker = Runnable {
                 synchronized(this) { logger.info { "check java file: $javaFile" } }
 
-                val operators = getValidOperators(getListOfAnnotationContext(javaFile), javaFile, config.operators)
+                val operators = getValidOperators(getListOfAnnotationContext(javaFile), javaFile, config)
                 generateMutants(operators, javaFile, project!!, File(config.mutantsFolder))
 
                 synchronized(this) { logger.info { "java file checked: $javaFile" } }
@@ -98,6 +102,13 @@ class MutationTool(private val config: MutationToolConfig) {
         while (!executor.isTerminated){}
 
         logger.info { "generation of mutants ended" }
+    }
+
+    private fun setADAChecker(config: MutationToolConfig) {
+        if (config.operators.contains(OperatorsEnum.ADA)){
+            config.adaChecker = ADAChecker()
+            config.adaChecker?.buildTree()
+        }
     }
 
     private fun testMutants() {
