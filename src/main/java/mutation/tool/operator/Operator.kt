@@ -4,8 +4,9 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
-import mutation.tool.annotation.context.Context
+import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
+import mutation.tool.util.MutationToolConfig
 import java.io.File
 
 abstract class Operator(val context:Context, val file:File) {
@@ -17,16 +18,12 @@ abstract class Operator(val context:Context, val file:File) {
     open fun visit(n:Parameter?, arg: Any?) {}
 }
 
-fun getValidOperators(contexts: List<Context>, javaFile: File, operatorsEnum: List<OperatorsEnum>):List<Operator> {
+fun getValidOperators(contexts: List<Context>, javaFile: File, config: MutationToolConfig):List<Operator> {
     val validOperators = mutableListOf<Operator>()
+    val operatorsEnum = config.operators
+    val factory = OperatorFactory(config.adaChecker)
 
-    for (context in contexts) {
-        for (operatorEnum in operatorsEnum) {
-            val operator = getOperatorInstance(operatorEnum, context, javaFile, contexts)
-            if (operator.checkContext())
-                validOperators.add(operator)
-        }
-    }
+    for (operatorEnum in operatorsEnum) validOperators += factory.getOperators(operatorEnum, contexts, javaFile)
 
     return validOperators
 }
@@ -42,20 +39,3 @@ enum class OperatorsEnum {
     RPAV,
     SWTG
 }
-
-private fun getOperatorInstance(
-        operatorEnum: OperatorsEnum,
-        context: Context,
-        javaFile: File,
-        allContexts: List<Context>
-): Operator = when(operatorEnum) {
-        OperatorsEnum.ADA -> ADA(context, javaFile)
-        OperatorsEnum.ADAT -> ADAT(context, javaFile)
-        OperatorsEnum.CHODR -> CHODR(context, javaFile)
-        OperatorsEnum.RMA -> RMA(context, javaFile)
-        OperatorsEnum.RMAT -> RMAT(context, javaFile)
-        OperatorsEnum.RPA -> RPA(context, javaFile)
-        OperatorsEnum.RPAT -> RPAT(context, javaFile)
-        OperatorsEnum.RPAV -> RPAV(context, javaFile)
-        OperatorsEnum.SWTG -> SWTG(context, javaFile, allContexts)
-    }

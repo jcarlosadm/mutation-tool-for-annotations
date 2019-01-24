@@ -1,4 +1,4 @@
-package mutation.tool.annotation.context
+package mutation.tool.context
 
 import com.github.javaparser.ast.body.FieldDeclaration
 

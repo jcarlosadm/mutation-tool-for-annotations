@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.*
 import mu.KotlinLogging
-import mutation.tool.annotation.context.Context
+import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.mutant.MutateVisitor
 import mutation.tool.util.*

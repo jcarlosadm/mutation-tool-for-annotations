@@ -1,6 +1,6 @@
 package mutation.tool.operator
 
-import mutation.tool.annotation.context.Context
+import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import java.io.File
 
@@ -9,9 +9,9 @@ import java.io.File
  */
 class ADA(context: Context, file:File): Operator(context, file) {
 
-    override fun checkContext(): Boolean {
-        TODO("not implemented")
-    }
+    var annotation:String? = null
+
+    override fun checkContext(): Boolean = true
 
     override fun mutate(): List<Mutant> {
         TODO("not implemented")

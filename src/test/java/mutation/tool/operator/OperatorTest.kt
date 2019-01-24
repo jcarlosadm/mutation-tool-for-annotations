@@ -1,13 +1,10 @@
 package mutation.tool.operator
 
-import mutation.tool.annotation.context.Context
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.mutant.Mutant
-import mutation.tool.mutant.generateMutants
 import mutation.tool.util.MutationToolConfig
 import mutation.tool.util.getAnnotations
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.io.File
 
@@ -17,8 +14,9 @@ internal class OperatorTest {
 
     @Test
     fun testGetValidOperators() {
-        val operatorsEnum = listOf<OperatorsEnum>(OperatorsEnum.RMA, OperatorsEnum.RMAT)
-        val validOperators = getValidOperators(getListOfAnnotationContext(File(FILE1)), File(FILE1), operatorsEnum)
+        val config = MutationToolConfig(File(""), File(""))
+        config.operators += listOf(OperatorsEnum.RMA, OperatorsEnum.RMAT)
+        val validOperators = getValidOperators(getListOfAnnotationContext(File(FILE1)), File(FILE1), config)
 
         assertEquals(19, validOperators.size)
     }
@@ -28,7 +26,7 @@ internal class OperatorTest {
         val mutants = mutableListOf<Mutant>()
 
         for (context in getListOfAnnotationContext(File(FILE1))) {
-            val operator:Operator = RMA(context, File(FILE1))
+            val operator = RMA(context, File(FILE1))
 
             val annotations = getAnnotations(context)
             if (annotations.isNotEmpty()) {
@@ -46,7 +44,7 @@ internal class OperatorTest {
     fun testRMAT() {
         val mutants = mutableListOf<Mutant>()
         for (context in getListOfAnnotationContext(File(FILE1))) {
-            val operator:Operator = RMAT(context, File(FILE1))
+            val operator = RMAT(context, File(FILE1))
 
             var count = 0
             for (annotation in getAnnotations(context)) {
@@ -62,5 +60,17 @@ internal class OperatorTest {
         }
 
         assertEquals(10, mutants.size)
+    }
+
+    @Test
+    fun testADA() {
+        val mutants = mutableListOf<Mutant>()
+        for (context in getListOfAnnotationContext(File(FILE1))) {
+            val operator = ADA(context, File(FILE1))
+            mutants.addAll(operator.mutate())
+        }
+
+        // TODO change later
+        assertEquals(0, mutants.size)
     }
 }
