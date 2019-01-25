@@ -30,10 +30,9 @@ class ADA(context: Context, file:File): Operator(context, file) {
 
         val mutateVisitor = MutateVisitor(this)
         val compUnit = JavaParser.parse(file)
-        val newCompUnit = compUnit.clone()
 
-        mutateVisitor.visit(newCompUnit, null)
-        mutant.compilationUnit = newCompUnit
+        mutateVisitor.visit(compUnit, null)
+        mutant.compilationUnit = compUnit
 
         return listOf(mutant)
     }

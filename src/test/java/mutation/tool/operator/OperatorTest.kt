@@ -75,13 +75,22 @@ internal class OperatorTest {
         for (context in getListOfAnnotationContext(File(FILE1))) {
             val operator = ADA(context, File(FILE1))
             operator.annotation = annotations[(0..(annotations.size - 1)).random()]
-            mutants.addAll(operator.mutate())
+            mutants += operator.mutate()
         }
 
-        for (mutant in mutants)
-            println(mutant.toString())
-
-        // TODO change later
         assertEquals(19, mutants.size)
+    }
+
+    @Test
+    fun testCHODR() {
+        val mutants = mutableListOf<Mutant>()
+
+        for(context in getListOfAnnotationContext(File(FILE1))) {
+            val operator = CHODR(context, File(FILE1))
+            if (operator.checkContext())
+                mutants += operator.mutate()
+        }
+
+        assertEquals(1, mutants.size)
     }
 }
