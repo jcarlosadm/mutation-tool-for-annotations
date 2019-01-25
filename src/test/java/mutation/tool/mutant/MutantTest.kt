@@ -5,6 +5,7 @@ import mutation.tool.operator.FILE1
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.operator.getValidOperators
 import mutation.tool.project.Project
+import mutation.tool.util.MutationToolConfig
 import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
@@ -14,8 +15,11 @@ internal class MutantTest {
     @Test
     fun testGenerateMutants() {
         val contexts = getListOfAnnotationContext(File(FILE1))
-        val operatorsEnum = listOf<OperatorsEnum>(OperatorsEnum.RMA, OperatorsEnum.RMAT)
-        val validOperators = getValidOperators(contexts, File(FILE1), operatorsEnum)
+
+        val config = MutationToolConfig(File(""), File(""))
+        config.operators += listOf(OperatorsEnum.RMA, OperatorsEnum.RMAT)
+
+        val validOperators = getValidOperators(contexts, File(FILE1), config)
 
         resetMutantFoldersNum()
         generateMutants(validOperators, File(FILE1), Project("fakeProject",

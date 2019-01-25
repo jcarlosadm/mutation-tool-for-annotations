@@ -64,13 +64,24 @@ internal class OperatorTest {
 
     @Test
     fun testADA() {
+        val annotations = listOf(
+                "@a",
+                "@a(\"ww\")",
+                "@a(5)",
+                "@a(file=\"err\", name = \"ee\")"
+        )
+
         val mutants = mutableListOf<Mutant>()
         for (context in getListOfAnnotationContext(File(FILE1))) {
             val operator = ADA(context, File(FILE1))
+            operator.annotation = annotations[(0..(annotations.size - 1)).random()]
             mutants.addAll(operator.mutate())
         }
 
+        for (mutant in mutants)
+            println(mutant.toString())
+
         // TODO change later
-        assertEquals(0, mutants.size)
+        assertEquals(19, mutants.size)
     }
 }

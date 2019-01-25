@@ -5,6 +5,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
+import mutation.tool.annotation.AnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.mutant.MutateVisitor
@@ -55,22 +56,20 @@ class ADA(context: Context, file:File): Operator(context, file) {
             fieldDeclaration: FieldDeclaration?,
             parameter: Parameter?
     ):Boolean {
-        var error = false
-
         if (classOrInterfaceDeclaration != null)
-            classOrInterfaceDeclaration.addAnnotation(annotation)
+            classOrInterfaceDeclaration.addAnnotation(AnnotationBuilder(annotation!!).build())
         else if (methodDeclaration != null)
-            methodDeclaration.addAnnotation(annotation)
+            methodDeclaration.addAnnotation(AnnotationBuilder(annotation!!).build())
         else if (fieldDeclaration != null)
-            fieldDeclaration.addAnnotation(annotation)
+            fieldDeclaration.addAnnotation(AnnotationBuilder(annotation!!).build())
         else if (parameter != null)
-            parameter.addAnnotation(annotation)
+            parameter.addAnnotation(AnnotationBuilder(annotation!!).build())
         else
-            error = true
+            return false
 
-        if (!error)
-            locked = true
+        mutant.after = annotation!!
+        locked = true
 
-        return !error
+        return true
     }
 }
