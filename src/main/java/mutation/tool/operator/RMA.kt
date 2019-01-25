@@ -22,7 +22,6 @@ class RMA(context: Context, file: File) : Operator(context, file) {
 
     private var currentMutant:Mutant? = null
     private var currentAnnotation:AnnotationExpr? = null
-    private var locked:Boolean = false
 
     override fun checkContext(): Boolean = (getAnnotations(context)).isNotEmpty()
 
@@ -46,42 +45,31 @@ class RMA(context: Context, file: File) : Operator(context, file) {
         return mutants
     }
 
-    override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?) {
-        super.visit(n, arg)
-        if (locked || n == null || !isSameClass(context, n)) return
-        removeCurrentAnnotation(n.annotations)
-    }
+    override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?):Boolean = super.visit(n, arg) &&
+            removeCurrentAnnotation(n!!.annotations)
 
-    override fun visit(n: FieldDeclaration?, arg: Any?) {
-        super.visit(n, arg)
-        if (locked || n == null || !isSameProp(context, n)) return
-        removeCurrentAnnotation(n.annotations)
-    }
+    override fun visit(n: FieldDeclaration?, arg: Any?):Boolean = super.visit(n, arg) &&
+            removeCurrentAnnotation(n!!.annotations)
 
-    override fun visit(n: MethodDeclaration?, arg: Any?) {
-        super.visit(n, arg)
-        if (locked || n == null || !isSameMethod(context, n)) return
-        removeCurrentAnnotation(n.annotations)
-    }
+    override fun visit(n: MethodDeclaration?, arg: Any?):Boolean = super.visit(n, arg) &&
+            removeCurrentAnnotation(n!!.annotations)
 
-    override fun visit(n: Parameter?, arg: Any?) {
-        super.visit(n, arg)
-        if (locked || n == null || !isSameParameter(context, n)) return
-        logger.debug { "$n" }
-        removeCurrentAnnotation(n.annotations)
-    }
+    override fun visit(n: Parameter?, arg: Any?):Boolean = super.visit(n, arg) &&
+            removeCurrentAnnotation(n!!.annotations)
 
-    private fun removeCurrentAnnotation(annotations:List<AnnotationExpr>){
+    private fun removeCurrentAnnotation(annotations:List<AnnotationExpr>): Boolean {
         if (currentAnnotation == null)
-            return
+            return false
 
         for (annotation in annotations) {
             if (annotation.toString() == currentAnnotation?.toString()) {
                 currentMutant?.before = annotation.toString()
                 annotation.remove()
                 locked = true
-                return
+                return true
             }
         }
+
+        return false
     }
 }

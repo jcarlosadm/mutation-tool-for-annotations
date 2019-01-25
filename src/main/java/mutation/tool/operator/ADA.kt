@@ -21,7 +21,6 @@ class ADA(context: Context, file:File): Operator(context, file) {
 
     var annotation:String? = null
     var mutant = Mutant(OperatorsEnum.ADA)
-    var locked = false
 
     override fun checkContext(): Boolean = true
 
@@ -38,36 +37,26 @@ class ADA(context: Context, file:File): Operator(context, file) {
         return listOf(mutant)
     }
 
-    override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?) {
-        super.visit(n, arg)
-        if (locked || n == null || !isSameClass(context, n)) return
+    override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?) : Boolean = super.visit(n, arg) &&
         insertAnnotation(n, null, null, null)
-    }
 
-    override fun visit(n: MethodDeclaration?, arg: Any?) {
-        super.visit(n, arg)
-        if (locked || n == null || !isSameMethod(context, n)) return
+    override fun visit(n: MethodDeclaration?, arg: Any?) : Boolean = super.visit(n, arg) &&
         insertAnnotation(null, n, null, null)
-    }
 
-    override fun visit(n: FieldDeclaration?, arg: Any?) {
-        super.visit(n, arg)
-        if (locked || n == null || !isSameProp(context, n)) return
+    override fun visit(n: FieldDeclaration?, arg: Any?) : Boolean = super.visit(n, arg) &&
         insertAnnotation(null, null, n, null)
-    }
 
-    override fun visit(n: Parameter?, arg: Any?) {
-        super.visit(n, arg)
-        if (locked || n == null || !isSameParameter(context, n)) return
+    override fun visit(n: Parameter?, arg: Any?) : Boolean = super.visit(n, arg) &&
         insertAnnotation(null, null, null, n)
-    }
 
     private fun insertAnnotation(
             classOrInterfaceDeclaration: ClassOrInterfaceDeclaration?,
             methodDeclaration: MethodDeclaration?,
             fieldDeclaration: FieldDeclaration?,
             parameter: Parameter?
-    ) {
+    ):Boolean {
+        var error = false
+
         if (classOrInterfaceDeclaration != null)
             classOrInterfaceDeclaration.addAnnotation(annotation)
         else if (methodDeclaration != null)
@@ -77,8 +66,11 @@ class ADA(context: Context, file:File): Operator(context, file) {
         else if (parameter != null)
             parameter.addAnnotation(annotation)
         else
-            throw Exception("ADA insertion annotation error")
+            error = true
 
-        locked = true
+        if (!error)
+            locked = true
+
+        return !error
     }
 }
