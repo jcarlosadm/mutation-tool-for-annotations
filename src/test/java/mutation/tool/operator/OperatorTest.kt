@@ -2,6 +2,11 @@ package mutation.tool.operator
 
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.mutant.Mutant
+import mutation.tool.operator.ada.ADA
+import mutation.tool.operator.chodr.CHODR
+import mutation.tool.operator.rma.RMA
+import mutation.tool.operator.rmat.RMAT
+import mutation.tool.operator.rpa.RPA
 import mutation.tool.util.MutationToolConfig
 import mutation.tool.util.getAnnotations
 import org.junit.jupiter.api.Assertions.*

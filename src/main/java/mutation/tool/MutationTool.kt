@@ -4,7 +4,7 @@ import mu.KotlinLogging
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.mutant.generateMutants
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.operator.checker.ADAChecker
+import mutation.tool.operator.ada.ADAChecker
 import mutation.tool.operator.getValidOperators
 import mutation.tool.project.Project
 import mutation.tool.util.*

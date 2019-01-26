@@ -1,10 +1,8 @@
-package mutation.tool.operator
+package mutation.tool.operator.swtg
 
-import com.github.javaparser.JavaParser
 import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
-import mutation.tool.mutant.MutateVisitor
-import mutation.tool.util.getAnnotations
+import mutation.tool.operator.Operator
 import java.io.File
 
 /**

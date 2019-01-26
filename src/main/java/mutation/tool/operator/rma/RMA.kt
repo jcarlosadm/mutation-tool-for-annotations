@@ -1,4 +1,4 @@
-package mutation.tool.operator
+package mutation.tool.operator.rma
 
 import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
@@ -10,6 +10,8 @@ import mu.KotlinLogging
 import mutation.tool.context.*
 import mutation.tool.mutant.Mutant
 import mutation.tool.mutant.MutateVisitor
+import mutation.tool.operator.Operator
+import mutation.tool.operator.OperatorsEnum
 import mutation.tool.util.*
 import java.io.File
 

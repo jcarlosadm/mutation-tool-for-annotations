@@ -1,4 +1,4 @@
-package mutation.tool.operator.checker
+package mutation.tool.operator.ada
 
 import mutation.tool.context.Context
 import mutation.tool.operator.Operator

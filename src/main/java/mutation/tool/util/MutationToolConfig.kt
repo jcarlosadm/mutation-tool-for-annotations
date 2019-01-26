@@ -1,7 +1,7 @@
 package mutation.tool.util
 
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.operator.checker.ADAChecker
+import mutation.tool.operator.ada.ADAChecker
 import java.io.File
 
 // TODO: add rpa_switch_map and import_map, and load aside of adaChecker

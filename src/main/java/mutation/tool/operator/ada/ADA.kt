@@ -1,4 +1,4 @@
-package mutation.tool.operator
+package mutation.tool.operator.ada
 
 import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
@@ -9,10 +9,8 @@ import mutation.tool.annotation.AnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.mutant.MutateVisitor
-import mutation.tool.util.isSameClass
-import mutation.tool.util.isSameMethod
-import mutation.tool.util.isSameParameter
-import mutation.tool.util.isSameProp
+import mutation.tool.operator.Operator
+import mutation.tool.operator.OperatorsEnum
 import java.io.File
 
 /**

@@ -1,7 +1,11 @@
 package mutation.tool.operator
 
 import mutation.tool.context.Context
-import mutation.tool.operator.checker.ADAChecker
+import mutation.tool.operator.ada.ADAChecker
+import mutation.tool.operator.chodr.CHODR
+import mutation.tool.operator.rma.RMA
+import mutation.tool.operator.rmat.RMAT
+import mutation.tool.operator.rpa.RPA
 import java.io.File
 
 // TODO: change adaChecker to config

@@ -1,4 +1,4 @@
-package mutation.tool.operator
+package mutation.tool.operator.chodr
 
 import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
@@ -10,6 +10,8 @@ import com.google.common.collect.Collections2
 import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.mutant.MutateVisitor
+import mutation.tool.operator.Operator
+import mutation.tool.operator.OperatorsEnum
 import mutation.tool.util.getAnnotations
 import java.io.File
 

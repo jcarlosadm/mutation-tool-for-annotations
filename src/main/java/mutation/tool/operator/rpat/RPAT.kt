@@ -1,13 +1,14 @@
-package mutation.tool.operator
+package mutation.tool.operator.rpat
 
 import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
+import mutation.tool.operator.Operator
 import java.io.File
 
 /**
- * Add valid attribute to annotation
+ * Replace a code annotation attribute by another
  */
-class ADAT(context: Context, file:File) : Operator(context, file) {
+class RPAT(context: Context, file: File) : Operator(context, file) {
 
     override fun checkContext(): Boolean {
         TODO("not implemented")
