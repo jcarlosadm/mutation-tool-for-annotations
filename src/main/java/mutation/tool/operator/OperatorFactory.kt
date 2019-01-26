@@ -4,6 +4,7 @@ import mutation.tool.context.Context
 import mutation.tool.operator.checker.ADAChecker
 import java.io.File
 
+// TODO: change adaChecker to config
 class OperatorFactory(private val adaChecker: ADAChecker?) {
     fun getOperators(operatorEnum: OperatorsEnum, contexts:List<Context>, file:File):List<Operator> =
         when(operatorEnum) {
@@ -12,11 +13,23 @@ class OperatorFactory(private val adaChecker: ADAChecker?) {
             OperatorsEnum.ADA -> this.getADAOperators(contexts, file)
             OperatorsEnum.ADAT -> TODO()
             OperatorsEnum.CHODR -> this.getCHODROperators(contexts, file)
-            OperatorsEnum.RPA -> TODO()
+            OperatorsEnum.RPA -> this.getRPAOperators(contexts, file)
             OperatorsEnum.RPAT -> TODO()
             OperatorsEnum.RPAV -> TODO()
             OperatorsEnum.SWTG -> TODO()
         }
+
+    private fun getRPAOperators(contexts: List<Context>, file: File): List<Operator> {
+        val operators = mutableListOf<Operator>()
+        for (context in contexts) {
+            val rpa = RPA(context, file)
+            // TODO: set map
+            // TODO: set import map
+            if (rpa.checkContext()) operators += rpa
+        }
+
+        return operators
+    }
 
     private fun getCHODROperators(contexts: List<Context>, file: File): List<Operator> {
         val operators = mutableListOf<Operator>()
