@@ -1,0 +1,12 @@
+{
+  "annotations": [
+    {
+      "name": "Autowired",
+      "replacements": ["@a", "@b(1)", "@c(name=\"aaa\")"]
+    },
+    {
+      "name": "Qualifier",
+      "replacements": ["@rrrr"]
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import mutation.tool.mutant.generateMutants
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.operator.ada.ADAChecker
 import mutation.tool.operator.getValidOperators
+import mutation.tool.operator.rpa.RPAMapBuilder
 import mutation.tool.operator.swtg.SWTGMapBuilder
 import mutation.tool.project.Project
 import mutation.tool.util.*
@@ -74,6 +75,8 @@ class MutationTool(private val config: MutationToolConfig) {
 
         this.setADAChecker(config)
         this.setSWTGMap(config)
+        this.setRPAMap(config)
+        this.setImportMap(config)
     }
 
     private fun testOriginalProject() {
@@ -117,6 +120,18 @@ class MutationTool(private val config: MutationToolConfig) {
         val builder = SWTGMapBuilder(File(SWTG_FILEPATH_CONFIG))
         builder.build()
         config.swtgMap = builder.map
+    }
+
+    private fun setRPAMap(config: MutationToolConfig) {
+        val builder = RPAMapBuilder(File(RPA_FILEPATH_CONFIG))
+        builder.build()
+        config.rpaMap = builder.map
+    }
+
+    private fun setImportMap(config: MutationToolConfig) {
+        val importBuilder = ImportMapBuilder(File(IMPORT_MAP_FILEPATH_CONFIG))
+        importBuilder.build()
+        config.importMap = importBuilder.map
     }
 
     private fun testMutants() {

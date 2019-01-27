@@ -1,7 +1,6 @@
 package mutation.tool.operator
 
 import mutation.tool.context.Context
-import mutation.tool.operator.ada.ADAChecker
 import mutation.tool.operator.chodr.CHODR
 import mutation.tool.operator.rma.RMA
 import mutation.tool.operator.rmat.RMAT
@@ -39,8 +38,8 @@ class OperatorFactory(private val config: MutationToolConfig) {
         val operators = mutableListOf<Operator>()
         for (context in contexts) {
             val rpa = RPA(context, file)
-            // TODO: set map
-            // TODO: set import map
+            rpa.switchMap = config.rpaMap!!
+            rpa.importMap = config.importMap!!
             if (rpa.checkContext()) operators += rpa
         }
 

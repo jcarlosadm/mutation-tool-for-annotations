@@ -110,10 +110,10 @@ internal class OperatorTest {
                 "Qualifier" to listOf("@rrrr")
         )
         val importMap = mapOf(
-                "@a" to "mutationtool.test.annotation.a",
-                "@b" to "mutationtool.test.annotation.b",
-                "@c" to "mutationtool.test.annotation.c",
-                "@rrrr" to "mutationtool.test.annotation.rrrr"
+                "a" to "mutationtool.test.annotation.a",
+                "b" to "mutationtool.test.annotation.b",
+                "c" to "mutationtool.test.annotation.c",
+                "rrrr" to "mutationtool.test.annotation.rrrr"
         )
 
         for (context in contexts) {

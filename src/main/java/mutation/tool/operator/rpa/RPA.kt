@@ -84,6 +84,7 @@ class RPA(context: Context, file: File) : Operator(context, file) {
                         if (op.isPresent)
                             op.get().addImport(importMap[this.getName(currentAnnotationRep)])
                     }
+                    // TODO: if not import, warning!
 
                     locked = true
                     return true
@@ -96,7 +97,7 @@ class RPA(context: Context, file: File) : Operator(context, file) {
 
     private fun getName(annotationString:String):String {
         if (!annotationString.contains("("))
-            return annotationString
-        return annotationString.substring(0, annotationString.indexOf("("))
+            return annotationString.removePrefix("@")
+        return annotationString.substring(0, annotationString.indexOf("(")).removePrefix("@")
     }
 }

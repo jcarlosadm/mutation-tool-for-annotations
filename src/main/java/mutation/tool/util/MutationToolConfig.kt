@@ -5,9 +5,9 @@ import mutation.tool.operator.OperatorsEnum
 import mutation.tool.operator.ada.ADAChecker
 import java.io.File
 
-// TODO: add rpa_map and import_map, and load aside of adaChecker
-
-const val SWTG_FILEPATH_CONFIG = "./src/main/resources/SWTG_map.json"
+const val SWTG_FILEPATH_CONFIG = "./config/SWTG_map.json"
+const val RPA_FILEPATH_CONFIG = "./config/RPA_map.json"
+const val IMPORT_MAP_FILEPATH_CONFIG = "./config/import_map.json"
 
 class MutationToolConfig(val pathSources: File, val pathTests: File = File("")) {
     var projectName:String = ""
@@ -28,6 +28,10 @@ class MutationToolConfig(val pathSources: File, val pathTests: File = File("")) 
     var adaChecker:ADAChecker? = null
 
     var swtgMap:Map<String, List<InsertionPoint>>? = null
+
+    var rpaMap:Map<String, List<String>>? = null
+
+    var importMap:Map<String, String>? = null
 
     fun setDebugOn() {
         System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "debug")

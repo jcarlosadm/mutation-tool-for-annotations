@@ -19,7 +19,7 @@ import java.io.File
 /**
  * Switch the annotation to another valid target
  */
-class SWTG(context: Context, file:File, val allContexts: List<Context>): Operator(context, file) {
+class SWTG(context: Context, file:File, private val allContexts: List<Context>): Operator(context, file) {
 
     lateinit var mapContextType:Map<String, List<InsertionPoint>>
 
@@ -31,7 +31,7 @@ class SWTG(context: Context, file:File, val allContexts: List<Context>): Operato
     override fun checkContext(): Boolean {
         for (annotation in getAnnotations(context)) {
             if (mapContextType.containsKey(annotation.nameAsString) && mapContextType[annotation.nameAsString] != null) {
-                for (insertionPoint in mapContextType[annotation.nameAsString]!!) {
+                for (insertionPoint in mapContextType.getValue(annotation.nameAsString)) {
                     if (context.getInsertionPoint() != insertionPoint)
                         return true
                 }
@@ -50,7 +50,7 @@ class SWTG(context: Context, file:File, val allContexts: List<Context>): Operato
             if (!mapContextType.containsKey(annotation.nameAsString) || mapContextType[annotation.nameAsString] == null)
                 continue
 
-            for (insertionPoint in mapContextType[annotation.nameAsString]!!) {
+            for (insertionPoint in mapContextType.getValue(annotation.nameAsString)) {
                 if (context.getInsertionPoint() == insertionPoint) continue
 
                 for (otherContext in allContexts) {
