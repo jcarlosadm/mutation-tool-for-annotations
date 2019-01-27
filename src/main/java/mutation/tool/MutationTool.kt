@@ -6,6 +6,7 @@ import mutation.tool.mutant.generateMutants
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.operator.ada.ADAChecker
 import mutation.tool.operator.getValidOperators
+import mutation.tool.operator.swtg.SWTGMapBuilder
 import mutation.tool.project.Project
 import mutation.tool.util.*
 import java.io.File
@@ -72,6 +73,7 @@ class MutationTool(private val config: MutationToolConfig) {
         logger.info { "creating basic directories: done" }
 
         this.setADAChecker(config)
+        this.setSWTGMap(config)
     }
 
     private fun testOriginalProject() {
@@ -109,6 +111,12 @@ class MutationTool(private val config: MutationToolConfig) {
             config.adaChecker = ADAChecker()
             config.adaChecker?.buildTree()
         }
+    }
+
+    private fun setSWTGMap(config: MutationToolConfig) {
+        val builder = SWTGMapBuilder(File(SWTG_FILEPATH_CONFIG))
+        builder.build()
+        config.swtgMap = builder.map
     }
 
     private fun testMutants() {

@@ -7,10 +7,10 @@ import mutation.tool.operator.rma.RMA
 import mutation.tool.operator.rmat.RMAT
 import mutation.tool.operator.rpa.RPA
 import mutation.tool.operator.swtg.SWTG
+import mutation.tool.util.MutationToolConfig
 import java.io.File
 
-// TODO: change adaChecker to config
-class OperatorFactory(private val adaChecker: ADAChecker?) {
+class OperatorFactory(private val config: MutationToolConfig) {
     fun getOperators(operatorEnum: OperatorsEnum, contexts:List<Context>, file:File):List<Operator> =
         when(operatorEnum) {
             OperatorsEnum.RMA -> this.getRMAOperators(contexts, file)
@@ -28,7 +28,7 @@ class OperatorFactory(private val adaChecker: ADAChecker?) {
         val operators = mutableListOf<Operator>()
         for (context in contexts) {
             val operator = SWTG(context, file, contexts)
-            // TODO: set map
+            operator.mapContextType = config.swtgMap!!
             if (operator.checkContext()) operators += operator
         }
 
@@ -58,8 +58,8 @@ class OperatorFactory(private val adaChecker: ADAChecker?) {
     }
 
     private fun getADAOperators(contexts: List<Context>, file: File): List<Operator> {
-        if (this.adaChecker == null) return listOf()
-        return this.adaChecker.check(contexts, file)
+        if (this.config.adaChecker == null) return listOf()
+        return this.config.adaChecker!!.check(contexts, file)
     }
 
     private fun getRMATOperators(contexts: List<Context>, file: File): List<Operator> {

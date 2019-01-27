@@ -22,7 +22,7 @@ abstract class Operator(val context:Context, val file:File) {
 fun getValidOperators(contexts: List<Context>, javaFile: File, config: MutationToolConfig):List<Operator> {
     val validOperators = mutableListOf<Operator>()
     val operatorsEnum = config.operators
-    val factory = OperatorFactory(config.adaChecker)
+    val factory = OperatorFactory(config)
 
     for (operatorEnum in operatorsEnum) validOperators += factory.getOperators(operatorEnum, contexts, javaFile)
 
