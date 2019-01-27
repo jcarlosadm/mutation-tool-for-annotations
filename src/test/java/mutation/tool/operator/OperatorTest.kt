@@ -1,12 +1,14 @@
 package mutation.tool.operator
 
 import mutation.tool.annotation.getListOfAnnotationContext
+import mutation.tool.context.InsertionPoint
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.ada.ADA
 import mutation.tool.operator.chodr.CHODR
 import mutation.tool.operator.rma.RMA
 import mutation.tool.operator.rmat.RMAT
 import mutation.tool.operator.rpa.RPA
+import mutation.tool.operator.swtg.SWTG
 import mutation.tool.util.MutationToolConfig
 import mutation.tool.util.getAnnotations
 import org.junit.jupiter.api.Assertions.*
@@ -127,15 +129,20 @@ internal class OperatorTest {
 
     @Test
     fun testSWTG() {
-        /*val mutants = mutableListOf<Mutant>()
+        val mutants = mutableListOf<Mutant>()
         val contexts = getListOfAnnotationContext(File(FILE1))
+        val map = mapOf(
+                "Autowired" to listOf(InsertionPoint.PROPERTY, InsertionPoint.METHOD),
+                "RequestMapping" to listOf(InsertionPoint.CLASS, InsertionPoint.METHOD)
+        )
 
         for (context in contexts) {
             val operator = SWTG(context, File(FILE1), contexts)
+            operator.mapContextType = map
             if (operator.checkContext())
                 mutants += operator.mutate()
         }
 
-        assertEquals(0, mutants.size)*/
+        assertEquals(14, mutants.size)
     }
 }
