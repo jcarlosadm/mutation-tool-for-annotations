@@ -5,6 +5,7 @@ import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.mutant.generateMutants
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.operator.ada.ADAChecker
+import mutation.tool.operator.adat.ADATMapBuilder
 import mutation.tool.operator.getValidOperators
 import mutation.tool.operator.rpa.RPAMapBuilder
 import mutation.tool.operator.swtg.SWTGMapBuilder
@@ -76,6 +77,7 @@ class MutationTool(private val config: MutationToolConfig) {
         this.setADAChecker(config)
         this.setSWTGMap(config)
         this.setRPAMap(config)
+        this.setADATMap(config)
         this.setImportMap(config)
     }
 
@@ -126,6 +128,12 @@ class MutationTool(private val config: MutationToolConfig) {
         val builder = RPAMapBuilder(File(RPA_FILEPATH_CONFIG))
         builder.build()
         config.rpaMap = builder.map
+    }
+
+    private fun setADATMap(config: MutationToolConfig) {
+        val builder = ADATMapBuilder(File(ADAT_FILEPATH_CONFIG))
+        builder.build()
+        config.adatMap = builder.map
     }
 
     private fun setImportMap(config: MutationToolConfig) {

@@ -7,9 +7,9 @@ import java.io.File
 
 const val SWTG_FILEPATH_CONFIG = "./config/SWTG_map.json"
 const val RPA_FILEPATH_CONFIG = "./config/RPA_map.json"
+const val ADAT_FILEPATH_CONFIG = "./config/ADAT_map.json"
 const val IMPORT_MAP_FILEPATH_CONFIG = "./config/import_map.json"
 
-// TODO: add ADAT_map, and load aside of ADAChecker
 class MutationToolConfig(val pathSources: File, val pathTests: File = File("")) {
     var projectName:String = ""
 
@@ -27,6 +27,8 @@ class MutationToolConfig(val pathSources: File, val pathTests: File = File("")) 
     var mutantsFolder:String = MUTANTS_FOLDER
 
     var adaChecker:ADAChecker? = null
+
+    var adatMap:Map<String, List<Map<String, String>>>? = null
 
     var swtgMap:Map<String, List<InsertionPoint>>? = null
 

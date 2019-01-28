@@ -28,7 +28,7 @@ class OperatorFactory(private val config: MutationToolConfig) {
         val operators = mutableListOf<Operator>()
         for (context in contexts) {
             val operator = ADAT(context, file)
-            // TODO: set map
+            operator.map = config.adatMap!!
             if (operator.checkContext()) operators += operator
         }
 
