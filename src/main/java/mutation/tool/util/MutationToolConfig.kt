@@ -9,6 +9,7 @@ const val SWTG_FILEPATH_CONFIG = "./config/SWTG_map.json"
 const val RPA_FILEPATH_CONFIG = "./config/RPA_map.json"
 const val IMPORT_MAP_FILEPATH_CONFIG = "./config/import_map.json"
 
+// TODO: add ADAT_map, and load aside of ADAChecker
 class MutationToolConfig(val pathSources: File, val pathTests: File = File("")) {
     var projectName:String = ""
 

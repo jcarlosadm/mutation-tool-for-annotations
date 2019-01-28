@@ -1,6 +1,7 @@
 package mutation.tool.operator
 
 import mutation.tool.context.Context
+import mutation.tool.operator.adat.ADAT
 import mutation.tool.operator.chodr.CHODR
 import mutation.tool.operator.rma.RMA
 import mutation.tool.operator.rmat.RMAT
@@ -15,13 +16,24 @@ class OperatorFactory(private val config: MutationToolConfig) {
             OperatorsEnum.RMA -> this.getRMAOperators(contexts, file)
             OperatorsEnum.RMAT -> this.getRMATOperators(contexts, file)
             OperatorsEnum.ADA -> this.getADAOperators(contexts, file)
-            OperatorsEnum.ADAT -> TODO()
+            OperatorsEnum.ADAT -> this.getADATOperators(contexts, file)
             OperatorsEnum.CHODR -> this.getCHODROperators(contexts, file)
             OperatorsEnum.RPA -> this.getRPAOperators(contexts, file)
             OperatorsEnum.RPAT -> TODO()
             OperatorsEnum.RPAV -> TODO()
             OperatorsEnum.SWTG -> this.getSWTGOperators(contexts, file)
         }
+
+    private fun getADATOperators(contexts: List<Context>, file: File): List<Operator> {
+        val operators = mutableListOf<Operator>()
+        for (context in contexts) {
+            val operator = ADAT(context, file)
+            // TODO: set map
+            if (operator.checkContext()) operators += operator
+        }
+
+        return operators
+    }
 
     private fun getSWTGOperators(contexts: List<Context>, file: File): List<Operator> {
         val operators = mutableListOf<Operator>()

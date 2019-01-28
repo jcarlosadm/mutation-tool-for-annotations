@@ -13,11 +13,16 @@ internal class ADATTest {
             "RequestMapping" to listOf(
                     mapOf(
                             "name" to "value",
-                            "type" to "String"
+                            "value" to "\"/ex/foos\"",
+                            "asSingle" to "true"
                     ),
                     mapOf(
                             "name" to "method",
-                            "type" to "RequestMethod"
+                            "value" to "RequestMethod.POST"
+                    ),
+                    mapOf(
+                            "name" to "headers",
+                            "value" to "{\"key1=val1\", \"key2=val2\"}"
                     )
             )
     )
@@ -32,6 +37,6 @@ internal class ADATTest {
             if (operator.checkContext()) mutants += operator.mutate()
         }
 
-        assertEquals(0, mutants.size)
+        assertEquals(13, mutants.size)
     }
 }
