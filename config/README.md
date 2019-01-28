@@ -1,0 +1,1 @@
+see [Contexts Conditions](https://github.com/easy-software-ufal/mutation-tool-for-annotations/wiki/Contexts-conditions) for more details.

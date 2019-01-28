@@ -1,7 +1,7 @@
 package mutation.tool.annotation
 
 import com.github.javaparser.ast.expr.AnnotationExpr
-import mutation.tool.annotation.context.*
+import mutation.tool.context.*
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.AnyOf

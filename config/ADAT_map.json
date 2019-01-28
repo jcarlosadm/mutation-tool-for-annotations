@@ -1,0 +1,22 @@
+{
+  "annotations": [
+    {
+      "name": "RequestMapping",
+      "attributes": [
+        {
+          "name": "value",
+          "value": "\"/ex/foos\"",
+          "asSingle": "true"
+        },
+        {
+          "name": "method",
+          "value": "RequestMethod.POST"
+        },
+        {
+          "name": "headers",
+          "value": "{\"key1=val1\", \"key2=val2\"}"
+        }
+      ]
+    }
+  ]
+}

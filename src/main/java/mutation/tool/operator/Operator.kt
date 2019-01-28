@@ -4,29 +4,27 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
-import mutation.tool.annotation.context.Context
+import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
+import mutation.tool.util.*
 import java.io.File
 
 abstract class Operator(val context:Context, val file:File) {
+    protected var locked = false
     abstract fun checkContext():Boolean
     abstract fun mutate():List<Mutant>
-    open fun visit(n:ClassOrInterfaceDeclaration?, arg: Any?) {}
-    open fun visit(n:FieldDeclaration?, arg: Any?) {}
-    open fun visit(n:MethodDeclaration?, arg: Any?) {}
-    open fun visit(n:Parameter?, arg: Any?) {}
+    open fun visit(n:ClassOrInterfaceDeclaration?, arg: Any?):Boolean = (!locked && n != null && isSameClass(context, n))
+    open fun visit(n:FieldDeclaration?, arg: Any?):Boolean = (!locked && n != null && isSameProp(context, n))
+    open fun visit(n:MethodDeclaration?, arg: Any?):Boolean = (!locked && n != null && isSameMethod(context, n))
+    open fun visit(n:Parameter?, arg: Any?):Boolean = (!locked && n != null && isSameParameter(context, n))
 }
 
-fun getValidOperators(contexts: List<Context>, javaFile: File, operatorsEnum: List<OperatorsEnum>):List<Operator> {
+fun getValidOperators(contexts: List<Context>, javaFile: File, config: MutationToolConfig):List<Operator> {
     val validOperators = mutableListOf<Operator>()
+    val operatorsEnum = config.operators
+    val factory = OperatorFactory(config)
 
-    for (context in contexts) {
-        for (operatorEnum in operatorsEnum) {
-            val operator = getOperatorInstance(operatorEnum, context, javaFile, contexts)
-            if (operator.checkContext())
-                validOperators.add(operator)
-        }
-    }
+    for (operatorEnum in operatorsEnum) validOperators += factory.getOperators(operatorEnum, contexts, javaFile)
 
     return validOperators
 }
@@ -42,20 +40,3 @@ enum class OperatorsEnum {
     RPAV,
     SWTG
 }
-
-private fun getOperatorInstance(
-        operatorEnum: OperatorsEnum,
-        context: Context,
-        javaFile: File,
-        allContexts: List<Context>
-): Operator = when(operatorEnum) {
-        OperatorsEnum.ADA -> ADA(context, javaFile)
-        OperatorsEnum.ADAT -> ADAT(context, javaFile)
-        OperatorsEnum.CHODR -> CHODR(context, javaFile)
-        OperatorsEnum.RMA -> RMA(context, javaFile)
-        OperatorsEnum.RMAT -> RMAT(context, javaFile)
-        OperatorsEnum.RPA -> RPA(context, javaFile)
-        OperatorsEnum.RPAT -> RPAT(context, javaFile)
-        OperatorsEnum.RPAV -> RPAV(context, javaFile)
-        OperatorsEnum.SWTG -> SWTG(context, javaFile, allContexts)
-    }

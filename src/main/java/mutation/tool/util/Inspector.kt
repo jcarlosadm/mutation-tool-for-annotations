@@ -5,7 +5,7 @@ import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
-import mutation.tool.annotation.context.*
+import mutation.tool.context.*
 
 fun getAnnotations(context: Context):List<AnnotationExpr> = when(context.getInsertionPoint()) {
     InsertionPoint.PROPERTY -> (context as PropertyContext).entity.annotations

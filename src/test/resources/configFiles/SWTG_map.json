@@ -1,0 +1,12 @@
+{
+  "annotations": [
+    {
+      "name":"Autowired",
+      "insertionPoints": ["PROPERTY", "METHOD"]
+    },
+    {
+      "name": "RequestMapping",
+      "insertionPoints": ["CLASS", "METHOD"]
+    }
+  ]
+}
