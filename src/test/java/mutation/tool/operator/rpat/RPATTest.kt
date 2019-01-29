@@ -32,6 +32,6 @@ internal class RPATTest {
 
         for (mutant in mutants) println(mutant)
 
-        assertEquals(0, mutants.size)
+        assertEquals(6, mutants.size)
     }
 }

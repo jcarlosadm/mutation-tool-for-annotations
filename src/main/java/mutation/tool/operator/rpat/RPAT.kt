@@ -2,8 +2,14 @@ package mutation.tool.operator.rpat
 
 import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.CompilationUnit
+import com.github.javaparser.ast.NodeList
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
+import com.github.javaparser.ast.body.FieldDeclaration
+import com.github.javaparser.ast.body.MethodDeclaration
+import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import com.github.javaparser.ast.expr.NormalAnnotationExpr
+import mutation.tool.annotation.AnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.mutant.MutateVisitor
@@ -23,6 +29,7 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
     private lateinit var currentAnnotation: AnnotationExpr
     private lateinit var currentAttr:String
     private lateinit var currentAttrRep:String
+    private lateinit var currentAttrRepVal: String
 
     override fun checkContext(): Boolean {
         for (annotation in getAnnotations(context)){
@@ -35,17 +42,18 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
                 // check each attr of annotation
                 for (pair in annotation.pairs) {
                     // if present on map
-                    if (map.getValue(annotation.nameAsString).containsKey(pair.nameAsString)) {
-                        // check if replacements is not present on annotation
+                    if (!map.getValue(annotation.nameAsString).containsKey(pair.nameAsString)) continue
+
+                    for (attrMap in map.getValue(annotation.nameAsString).getValue(pair.nameAsString)) {
                         var notContain = true
-                        for (mapAttr in map.getValue(annotation.nameAsString).getValue(pair.nameAsString)) {
-                            for (anotherPair in annotation.pairs) {
-                                if (anotherPair.nameAsString == mapAttr.getValue("name")) {
-                                    notContain = false
-                                    break
-                                }
+
+                        for (anotherPair in annotation.pairs) {
+                            if (anotherPair.nameAsString == attrMap.getValue("name")) {
+                                notContain = false
+                                break
                             }
                         }
+
                         if (notContain) return true
                     }
                 }
@@ -65,10 +73,28 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
 
             if (annotation.isSingleMemberAnnotationExpr && map.getValue(annotation.nameAsString).containsKey("")) {
                 for (attrMap in map.getValue(annotation.nameAsString).getValue(""))
-                    createMutant(annotation, attrMap, compUnit, mutateVisitor, mutants)
+                    createMutant(annotation, "", attrMap, compUnit, mutateVisitor, mutants)
             }
             else if (annotation.isNormalAnnotationExpr) {
-                
+                annotation as NormalAnnotationExpr
+
+                for (pair in annotation.pairs) {
+                    if (!map.getValue(annotation.nameAsString).contains(pair.nameAsString)) continue
+
+                    for (attrMap in map.getValue(annotation.nameAsString).getValue(pair.nameAsString)) {
+                        var notContain = true
+
+                        for (anotherPair in annotation.pairs) {
+                            if (anotherPair.nameAsString == attrMap.getValue("name")) {
+                                notContain = false
+                                break
+                            }
+                        }
+
+                        if (notContain)
+                            createMutant(annotation, pair.nameAsString, attrMap, compUnit, mutateVisitor, mutants)
+                    }
+                }
             }
         }
 
@@ -77,6 +103,7 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
 
     private fun createMutant(
             annotation: AnnotationExpr,
+            attr: String,
             attrMap: Map<String, String>,
             compUnit: CompilationUnit,
             mutateVisitor: MutateVisitor,
@@ -84,12 +111,53 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
     ) {
         currentAnnotation = annotation
         currentMutant = Mutant(OperatorsEnum.RPAT)
-        currentAttr = ""
+        currentAttr = attr
         currentAttrRep = attrMap.getValue("name")
+        currentAttrRepVal = attrMap.getValue("value")
+        locked = false
 
         val newCompUnit = compUnit.clone()
         mutateVisitor.visit(newCompUnit, null)
         currentMutant.compilationUnit = newCompUnit
         mutants += currentMutant
+    }
+
+    override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?): Boolean = super.visit(n, arg) &&
+            this.replacement(n!!.annotations)
+
+    override fun visit(n: MethodDeclaration?, arg: Any?): Boolean = super.visit(n, arg) &&
+            this.replacement(n!!.annotations)
+
+    override fun visit(n: FieldDeclaration?, arg: Any?): Boolean = super.visit(n, arg) &&
+            this.replacement(n!!.annotations)
+
+    override fun visit(n: Parameter?, arg: Any?): Boolean = super.visit(n, arg) &&
+            this.replacement(n!!.annotations)
+
+    private fun replacement(annotations: NodeList<AnnotationExpr>): Boolean {
+        for (annotation in annotations) {
+            if (annotation.nameAsString != currentAnnotation.nameAsString) continue
+
+            if (annotation.isNormalAnnotationExpr) {
+                annotation as NormalAnnotationExpr
+
+                for (pair in annotation.pairs) {
+                    if (pair.nameAsString == currentAttr){
+                        pair.remove()
+                        break
+                    }
+                }
+
+                annotation.addPair(currentAttrRep, currentAttrRepVal)
+            } else {
+                annotation.replace(AnnotationBuilder("@${annotation.nameAsString}(" +
+                        "${currentAttrRep} = ${currentAttrRepVal})").build())
+            }
+
+            locked = true
+            return true
+        }
+
+        return false
     }
 }
