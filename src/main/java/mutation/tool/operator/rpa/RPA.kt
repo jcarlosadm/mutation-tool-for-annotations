@@ -1,6 +1,5 @@
 package mutation.tool.operator.rpa
 
-import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
@@ -9,7 +8,6 @@ import com.github.javaparser.ast.expr.AnnotationExpr
 import mutation.tool.annotation.AnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
-import mutation.tool.mutant.MutateVisitor
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.util.getAnnotations
@@ -19,7 +17,6 @@ import java.io.File
  * Replace an annotation for another
  */
 class RPA(context: Context, file: File) : Operator(context, file) {
-
     lateinit var switchMap:Map<String, List<String>>
     lateinit var importMap:Map<String, String>
 
@@ -39,22 +36,16 @@ class RPA(context: Context, file: File) : Operator(context, file) {
     override fun mutate(): List<Mutant> {
         val mutants = mutableListOf<Mutant>()
 
-        val mutateVisitor = MutateVisitor(this)
-        val compUnit = JavaParser.parse(file)
-
         for (annotation in getAnnotations(context)) {
             if (!switchMap.containsKey(annotation.nameAsString) || switchMap[annotation.nameAsString] == null) continue
 
             currentAnnotation = annotation
 
             for (annotationRep in switchMap.getValue(annotation.nameAsString)){
-                val newCompUnit = compUnit.clone()
                 currentAnnotationRep = annotationRep
-                locked = false
                 currentMutant = Mutant(OperatorsEnum.RPA)
 
-                mutateVisitor.visit(newCompUnit, null)
-                currentMutant.compilationUnit = newCompUnit
+                currentMutant.compilationUnit = this.visit()
                 mutants += currentMutant
             }
         }
@@ -86,7 +77,6 @@ class RPA(context: Context, file: File) : Operator(context, file) {
                     }
                     // TODO: if not import, warning!
 
-                    locked = true
                     return true
                 }
             }

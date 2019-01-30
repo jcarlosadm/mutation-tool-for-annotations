@@ -1,6 +1,5 @@
 package mutation.tool.operator.swtg
 
-import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.NodeList
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
@@ -10,7 +9,6 @@ import com.github.javaparser.ast.expr.AnnotationExpr
 import mutation.tool.context.Context
 import mutation.tool.context.InsertionPoint
 import mutation.tool.mutant.Mutant
-import mutation.tool.mutant.MutateVisitor
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.util.*
@@ -43,8 +41,6 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
 
     override fun mutate(): List<Mutant> {
         val mutants = mutableListOf<Mutant>()
-        val mutateVisitor = MutateVisitor(this)
-        val compUnit = JavaParser.parse(file)
 
         for (annotation in getAnnotations(context)) {
             if (!mapContextType.containsKey(annotation.nameAsString) || mapContextType[annotation.nameAsString] == null)
@@ -56,15 +52,12 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
                 for (otherContext in allContexts) {
                     if (otherContext.getInsertionPoint() != insertionPoint) continue
 
-                    locked = false
                     lockedInsert = false
                     currentMutant = Mutant(OperatorsEnum.SWTG)
                     currentAnnotation = annotation
                     currentOtherContext = otherContext
 
-                    val newCompUnit = compUnit.clone()
-                    mutateVisitor.visit(newCompUnit, null)
-                    currentMutant.compilationUnit = newCompUnit
+                    currentMutant.compilationUnit = this.visit()
                     mutants += currentMutant
                 }
             }
@@ -76,32 +69,35 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
     override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?): Boolean {
         if (super.visit(n, arg))
             return removeAnnotation(n!!.annotations)
-        return !lockedInsert && n != null && isSameClass(currentOtherContext, n) && addAnnotation(n.annotations)
+        else if (!lockedInsert && n != null && isSameClass(currentOtherContext, n)) addAnnotation(n.annotations)
+        return false
     }
 
     override fun visit(n: MethodDeclaration?, arg: Any?): Boolean {
         if (super.visit(n, arg))
             return removeAnnotation(n!!.annotations)
-        return !lockedInsert && n != null && isSameMethod(currentOtherContext, n) && addAnnotation(n.annotations)
+        else if(!lockedInsert && n != null && isSameMethod(currentOtherContext, n)) addAnnotation(n.annotations)
+        return false
     }
 
     override fun visit(n: FieldDeclaration?, arg: Any?): Boolean {
         if (super.visit(n, arg))
             return removeAnnotation(n!!.annotations)
-        return !lockedInsert && n != null && isSameProp(currentOtherContext, n) && addAnnotation(n.annotations)
+        else if(!lockedInsert && n != null && isSameProp(currentOtherContext, n)) addAnnotation(n.annotations)
+        return false
     }
 
     override fun visit(n: Parameter?, arg: Any?): Boolean {
         if (super.visit(n, arg))
             return removeAnnotation(n!!.annotations)
-        return !lockedInsert && n != null && isSameParameter(currentOtherContext, n) && addAnnotation(n.annotations)
+        else if(!lockedInsert && n != null && isSameParameter(currentOtherContext, n)) addAnnotation(n.annotations)
+        return false
     }
 
     private fun removeAnnotation(annotations: NodeList<AnnotationExpr>): Boolean {
         for (annotation in annotations) {
             if (annotation.toString() == currentAnnotation.toString()) {
                 annotation.remove()
-                locked = true
                 return true
             }
         }
@@ -109,9 +105,8 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
         return false
     }
 
-    private fun addAnnotation(annotations: NodeList<AnnotationExpr>): Boolean {
+    private fun addAnnotation(annotations: NodeList<AnnotationExpr>) {
         annotations.add(currentAnnotation)
         lockedInsert = true
-        return true
     }
 }

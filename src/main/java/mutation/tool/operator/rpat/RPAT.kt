@@ -1,7 +1,5 @@
 package mutation.tool.operator.rpat
 
-import com.github.javaparser.JavaParser
-import com.github.javaparser.ast.CompilationUnit
 import com.github.javaparser.ast.NodeList
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
@@ -12,7 +10,6 @@ import com.github.javaparser.ast.expr.NormalAnnotationExpr
 import mutation.tool.annotation.AnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
-import mutation.tool.mutant.MutateVisitor
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.util.getAnnotations
@@ -22,7 +19,6 @@ import java.io.File
  * Replace a code annotation attribute by another
  */
 class RPAT(context: Context, file: File) : Operator(context, file) {
-
     lateinit var map: Map<String, Map<String, List<Map<String, String>>>>
 
     private lateinit var currentMutant:Mutant
@@ -65,15 +61,13 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
 
     override fun mutate(): List<Mutant> {
         val mutants = mutableListOf<Mutant>()
-        val mutateVisitor = MutateVisitor(this)
-        val compUnit = JavaParser.parse(file)
 
         for (annotation in getAnnotations(context)) {
             if (!map.containsKey(annotation.nameAsString)) continue
 
             if (annotation.isSingleMemberAnnotationExpr && map.getValue(annotation.nameAsString).containsKey("")) {
                 for (attrMap in map.getValue(annotation.nameAsString).getValue(""))
-                    createMutant(annotation, "", attrMap, compUnit, mutateVisitor, mutants)
+                    createMutant(annotation, "", attrMap, mutants)
             }
             else if (annotation.isNormalAnnotationExpr) {
                 annotation as NormalAnnotationExpr
@@ -92,7 +86,7 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
                         }
 
                         if (notContain)
-                            createMutant(annotation, pair.nameAsString, attrMap, compUnit, mutateVisitor, mutants)
+                            createMutant(annotation, pair.nameAsString, attrMap, mutants)
                     }
                 }
             }
@@ -105,8 +99,6 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
             annotation: AnnotationExpr,
             attr: String,
             attrMap: Map<String, String>,
-            compUnit: CompilationUnit,
-            mutateVisitor: MutateVisitor,
             mutants: MutableList<Mutant>
     ) {
         currentAnnotation = annotation
@@ -114,11 +106,8 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
         currentAttr = attr
         currentAttrRep = attrMap.getValue("name")
         currentAttrRepVal = attrMap.getValue("value")
-        locked = false
 
-        val newCompUnit = compUnit.clone()
-        mutateVisitor.visit(newCompUnit, null)
-        currentMutant.compilationUnit = newCompUnit
+        currentMutant.compilationUnit = this.visit()
         mutants += currentMutant
     }
 
@@ -151,10 +140,9 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
                 annotation.addPair(currentAttrRep, currentAttrRepVal)
             } else {
                 annotation.replace(AnnotationBuilder("@${annotation.nameAsString}(" +
-                        "${currentAttrRep} = ${currentAttrRepVal})").build())
+                        "$currentAttrRep = $currentAttrRepVal)").build())
             }
 
-            locked = true
             return true
         }
 

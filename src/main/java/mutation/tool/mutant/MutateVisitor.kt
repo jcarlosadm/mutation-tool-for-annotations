@@ -10,21 +10,21 @@ import mutation.tool.operator.Operator
 class MutateVisitor(private val operator:Operator):VoidVisitorAdapter<Any>() {
     override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?) {
         super.visit(n, arg)
-        operator.visit(n, arg)
+        if (operator.visit(n, arg)) operator.lock()
     }
 
     override fun visit(n: MethodDeclaration?, arg: Any?) {
         super.visit(n, arg)
-        operator.visit(n, arg)
+        if (operator.visit(n, arg)) operator.lock()
     }
 
     override fun visit(n: FieldDeclaration?, arg: Any?) {
         super.visit(n, arg)
-        operator.visit(n, arg)
+        if (operator.visit(n, arg)) operator.lock()
     }
 
     override fun visit(n: Parameter?, arg: Any?) {
         super.visit(n, arg)
-        operator.visit(n, arg)
+        if (operator.visit(n, arg)) operator.lock()
     }
 }
