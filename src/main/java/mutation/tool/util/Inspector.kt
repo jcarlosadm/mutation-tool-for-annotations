@@ -7,13 +7,6 @@ import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import mutation.tool.context.*
 
-fun getAnnotations(context: Context):List<AnnotationExpr> = when(context.getInsertionPoint()) {
-    InsertionPoint.PROPERTY -> (context as PropertyContext).entity.annotations
-    InsertionPoint.METHOD -> (context as MethodContext).entity.annotations
-    InsertionPoint.CLASS -> (context as ClassContext).entity.annotations
-    InsertionPoint.PARAMETER -> (context as ParameterContext).entity.annotations
-}
-
 // TODO create test
 fun isSameClass(context: Context, classDeclr:ClassOrInterfaceDeclaration):Boolean = (context.getInsertionPoint() ==
         InsertionPoint.CLASS && classDeclr.nameAsString == (context as ClassContext).entity.nameAsString)

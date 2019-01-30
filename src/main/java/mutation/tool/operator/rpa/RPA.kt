@@ -10,7 +10,6 @@ import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.util.getAnnotations
 import java.io.File
 
 /**
@@ -25,7 +24,7 @@ class RPA(context: Context, file: File) : Operator(context, file) {
     private lateinit var currentAnnotationRep: String
 
     override fun checkContext(): Boolean {
-        for (annotation in getAnnotations(context)){
+        for (annotation in context.getAnnotations()){
             if (switchMap.containsKey(annotation.nameAsString))
                 return true
         }
@@ -36,7 +35,7 @@ class RPA(context: Context, file: File) : Operator(context, file) {
     override fun mutate(): List<Mutant> {
         val mutants = mutableListOf<Mutant>()
 
-        for (annotation in getAnnotations(context)) {
+        for (annotation in context.getAnnotations()) {
             if (!switchMap.containsKey(annotation.nameAsString) || switchMap[annotation.nameAsString] == null) continue
 
             currentAnnotation = annotation

@@ -12,7 +12,6 @@ import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.util.getAnnotations
 import java.io.File
 
 /**
@@ -28,7 +27,7 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
     private lateinit var currentAttrRepVal: String
 
     override fun checkContext(): Boolean {
-        for (annotation in getAnnotations(context)){
+        for (annotation in context.getAnnotations()){
             if (!map.containsKey(annotation.nameAsString)) continue
 
             if (annotation.isSingleMemberAnnotationExpr && map.getValue(annotation.nameAsString).containsKey(""))
@@ -62,7 +61,7 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
     override fun mutate(): List<Mutant> {
         val mutants = mutableListOf<Mutant>()
 
-        for (annotation in getAnnotations(context)) {
+        for (annotation in context.getAnnotations()) {
             if (!map.containsKey(annotation.nameAsString)) continue
 
             if (annotation.isSingleMemberAnnotationExpr && map.getValue(annotation.nameAsString).containsKey("")) {

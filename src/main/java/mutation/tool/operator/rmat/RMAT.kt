@@ -9,7 +9,6 @@ import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.util.getAnnotations
 import mutation.tool.util.numOfAnnotationAttributes
 import java.io.File
 
@@ -22,7 +21,7 @@ class RMAT(context: Context, file: File) : Operator(context, file) {
     private var currentIndex:Int? = null
 
     override fun checkContext(): Boolean {
-        for (annotation in getAnnotations(context)) {
+        for (annotation in context.getAnnotations()) {
             if (annotation.toString().contains(Regex("\\((.*?)\\)"))) {
                 return true
             }
@@ -34,7 +33,7 @@ class RMAT(context: Context, file: File) : Operator(context, file) {
     override fun mutate(): List<Mutant> {
         val mutants = mutableListOf<Mutant>()
 
-        for (annotation in getAnnotations(context)) {
+        for (annotation in context.getAnnotations()) {
             val nAttr = numOfAnnotationAttributes(annotation)
             for (index in 0..(nAttr-1)) {
                 currentAnnotation = annotation

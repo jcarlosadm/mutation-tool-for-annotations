@@ -9,7 +9,6 @@ import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.util.getAnnotations
 import java.io.File
 
 /**
@@ -19,12 +18,12 @@ class RMA(context: Context, file: File) : Operator(context, file) {
     private var currentMutant:Mutant? = null
     private var currentAnnotation:AnnotationExpr? = null
 
-    override fun checkContext(): Boolean = (getAnnotations(context)).isNotEmpty()
+    override fun checkContext(): Boolean = (context.getAnnotations()).isNotEmpty()
 
     override fun mutate(): List<Mutant> {
         val mutants = mutableListOf<Mutant>()
 
-        for (annotation in getAnnotations(context)) {
+        for (annotation in context.getAnnotations()) {
             currentAnnotation = annotation
             currentMutant = Mutant(OperatorsEnum.RMA)
             currentMutant?.compilationUnit = this.visit()

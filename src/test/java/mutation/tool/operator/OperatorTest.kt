@@ -1,17 +1,8 @@
 package mutation.tool.operator
 
 import mutation.tool.annotation.getListOfAnnotationContext
-import mutation.tool.context.InsertionPoint
-import mutation.tool.mutant.Mutant
-import mutation.tool.operator.ada.ADA
-import mutation.tool.operator.chodr.CHODR
-import mutation.tool.operator.rma.RMA
-import mutation.tool.operator.rmat.RMAT
-import mutation.tool.operator.rpa.RPA
-import mutation.tool.operator.swtg.SWTG
 import mutation.tool.util.MutationToolConfig
-import mutation.tool.util.getAnnotations
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.File
 

@@ -27,7 +27,7 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
     private var lockedInsert = false
 
     override fun checkContext(): Boolean {
-        for (annotation in getAnnotations(context)) {
+        for (annotation in context.getAnnotations()) {
             if (mapContextType.containsKey(annotation.nameAsString) && mapContextType[annotation.nameAsString] != null) {
                 for (insertionPoint in mapContextType.getValue(annotation.nameAsString)) {
                     if (context.getInsertionPoint() != insertionPoint)
@@ -42,7 +42,7 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
     override fun mutate(): List<Mutant> {
         val mutants = mutableListOf<Mutant>()
 
-        for (annotation in getAnnotations(context)) {
+        for (annotation in context.getAnnotations()) {
             if (!mapContextType.containsKey(annotation.nameAsString) || mapContextType[annotation.nameAsString] == null)
                 continue
 

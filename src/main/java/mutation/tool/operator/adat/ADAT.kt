@@ -12,7 +12,6 @@ import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.util.getAnnotations
 import java.io.File
 
 /**
@@ -26,7 +25,7 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
     private lateinit var currentAttr:Map<String, String>
 
     override fun checkContext(): Boolean {
-        for (annotation in getAnnotations(context)) {
+        for (annotation in context.getAnnotations()) {
             if (!map.containsKey(annotation.nameAsString)) continue
 
             if (annotation.isNormalAnnotationExpr) {
@@ -56,7 +55,7 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
     override fun mutate(): List<Mutant> {
         val mutants = mutableListOf<Mutant>()
 
-        for (annotation in getAnnotations(context)) {
+        for (annotation in context.getAnnotations()) {
             if (!map.containsKey(annotation.nameAsString)) continue
 
             if (annotation.isNormalAnnotationExpr) {

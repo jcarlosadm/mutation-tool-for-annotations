@@ -10,7 +10,6 @@ import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.util.getAnnotations
 import java.io.File
 
 /**
@@ -21,14 +20,14 @@ class CHODR(context: Context, file: File) : Operator(context, file) {
     private var mutant:Mutant? = null
 
     override fun checkContext(): Boolean {
-        if (getAnnotations(context).size > 1)
+        if (context.getAnnotations().size > 1)
             return true
         return false
     }
 
     override fun mutate(): List<Mutant> {
         val mutants = mutableListOf<Mutant>()
-        val annotations = getAnnotations(context)
+        val annotations = context.getAnnotations()
 
         val originalSequence = (0..(annotations.size-1)).toList()
         val permutations = Collections2.permutations((0..(annotations.size-1)).toMutableList())
