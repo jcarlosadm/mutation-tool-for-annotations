@@ -6,6 +6,7 @@ import mutation.tool.operator.chodr.CHODR
 import mutation.tool.operator.rma.RMA
 import mutation.tool.operator.rmat.RMAT
 import mutation.tool.operator.rpa.RPA
+import mutation.tool.operator.rpat.RPAT
 import mutation.tool.operator.swtg.SWTG
 import mutation.tool.util.MutationToolConfig
 import java.io.File
@@ -19,10 +20,21 @@ class OperatorFactory(private val config: MutationToolConfig) {
             OperatorsEnum.ADAT -> this.getADATOperators(contexts, file)
             OperatorsEnum.CHODR -> this.getCHODROperators(contexts, file)
             OperatorsEnum.RPA -> this.getRPAOperators(contexts, file)
-            OperatorsEnum.RPAT -> TODO()
+            OperatorsEnum.RPAT -> this.getRPATOperators(contexts, file)
             OperatorsEnum.RPAV -> TODO()
             OperatorsEnum.SWTG -> this.getSWTGOperators(contexts, file)
         }
+
+    private fun getRPATOperators(contexts: List<Context>, file: File): List<Operator> {
+        val operators = mutableListOf<Operator>()
+        for (context in contexts) {
+            val operator = RPAT(context, file)
+            operator.map = config.rpatMap!!
+            if (operator.checkContext()) operators += operator
+        }
+
+        return operators
+    }
 
     private fun getADATOperators(contexts: List<Context>, file: File): List<Operator> {
         val operators = mutableListOf<Operator>()
