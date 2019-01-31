@@ -9,6 +9,7 @@ import mutation.tool.operator.adat.ADATMapBuilder
 import mutation.tool.operator.getValidOperators
 import mutation.tool.operator.rpa.RPAMapBuilder
 import mutation.tool.operator.rpat.RPATMapBuilder
+import mutation.tool.operator.rpav.RPAVMapBuilder
 import mutation.tool.operator.swtg.SWTGMapBuilder
 import mutation.tool.project.Project
 import mutation.tool.util.*
@@ -80,6 +81,7 @@ class MutationTool(private val config: MutationToolConfig) {
         this.setRPAMap(config)
         this.setADATMap(config)
         this.setRPATMap(config)
+        this.setRPAVMap(config)
         this.setImportMap(config)
     }
 
@@ -142,6 +144,12 @@ class MutationTool(private val config: MutationToolConfig) {
         val builder = RPATMapBuilder(File(RPAT_FILEPATH_CONFIG))
         builder.build()
         config.rpatMap = builder.map
+    }
+
+    private fun setRPAVMap(config: MutationToolConfig) {
+        val builder = RPAVMapBuilder(File(RPAV_FILEPATH_CONFIG))
+        builder.build()
+        config.rpavMap = builder.map
     }
 
     private fun setImportMap(config: MutationToolConfig) {
