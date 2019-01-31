@@ -1,16 +1,13 @@
 package mutation.tool.context
 
+import com.github.javaparser.Range
 import com.github.javaparser.ast.expr.AnnotationExpr
+import mutation.tool.context.entity.Entity
 
-interface Context {
-    fun getInsertionPoint(): InsertionPoint
-
-    fun getAnnotations():List<AnnotationExpr> {
-        return when(getInsertionPoint()) {
-            InsertionPoint.PROPERTY -> (this as PropertyContext).entity.annotations
-            InsertionPoint.METHOD -> (this as MethodContext).entity.annotations
-            InsertionPoint.CLASS -> (this as ClassContext).entity.annotations
-            InsertionPoint.PARAMETER -> (this as ParameterContext).entity.annotations
-        }
-    }
+abstract class Context(private val entity: Entity) {
+    abstract fun getInsertionPoint(): InsertionPoint
+    fun getAnnotations():List<AnnotationExpr> = entity.getAnnotations()
+    fun getName():String = entity.getName()
+    override fun toString(): String = entity.toString()
+    fun getRange():Range = entity.getRange()
 }

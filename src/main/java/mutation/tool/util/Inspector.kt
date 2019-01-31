@@ -9,18 +9,18 @@ import mutation.tool.context.*
 
 // TODO create test
 fun isSameClass(context: Context, classDeclr:ClassOrInterfaceDeclaration):Boolean = (context.getInsertionPoint() ==
-        InsertionPoint.CLASS && classDeclr.nameAsString == (context as ClassContext).entity.nameAsString)
+        InsertionPoint.CLASS && classDeclr.nameAsString == context.getName())
 // TODO create test
 fun isSameMethod(context: Context, methodDeclr:MethodDeclaration): Boolean = (context.getInsertionPoint() ==
-        InsertionPoint.METHOD && methodDeclr.toString() == (context as MethodContext).entity.toString())
+        InsertionPoint.METHOD && methodDeclr.toString() == context.toString())
 // TODO create test
 fun isSameProp(context: Context, field:FieldDeclaration):Boolean = (context.getInsertionPoint() ==
-        InsertionPoint.PROPERTY && field.toString() == (context as PropertyContext).entity.toString())
+        InsertionPoint.PROPERTY && field.toString() == context.toString())
 
 // TODO create test
 fun isSameParameter(context: Context, parameter:Parameter): Boolean = (context.getInsertionPoint() ==
-        InsertionPoint.PARAMETER && parameter.toString() == (context as ParameterContext).entity.toString() &&
-        parameter.range.equals(context.entity.range))
+        InsertionPoint.PARAMETER && parameter.toString() == context.toString() &&
+        parameter.range.equals(context.getRange()))
 
 // TODO create test
 fun numOfAnnotationAttributes(annotation: AnnotationExpr): Int {
