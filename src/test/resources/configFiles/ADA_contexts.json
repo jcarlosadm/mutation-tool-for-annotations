@@ -1,0 +1,14 @@
+{
+  "annotations": [
+    {
+      "name": "RequestMapping",
+      "conditions": [
+        {
+          "isTarget": "true",
+          "contextType": "METHOD",
+          "return": "String"
+        }
+      ]
+    }
+  ]
+}

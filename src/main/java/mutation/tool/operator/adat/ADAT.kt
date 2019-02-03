@@ -44,7 +44,7 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
                 }
             } else if(annotation.isSingleMemberAnnotationExpr) {
                 for (attr in map.getValue(annotation.nameAsString)) {
-                    if (attr.containsKey("asSingle")) return true
+                    if (attr.containsKey("asSingle") && attr.getValue("asSingle") == "true") return true
                 }
             }
         }
@@ -75,7 +75,7 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
             } else if(annotation.isSingleMemberAnnotationExpr) {
                 var containsSingle = false
                 for (attr in map.getValue(annotation.nameAsString)) {
-                    if (attr.containsKey("asSingle")) {
+                    if (attr.containsKey("asSingle") && attr.getValue("asSingle") == "true") {
                         containsSingle = true
                         break
                     }

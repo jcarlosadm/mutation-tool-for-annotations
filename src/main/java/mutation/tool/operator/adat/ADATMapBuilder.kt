@@ -22,7 +22,10 @@ class ADATMapBuilder(private val mapFile:File) {
                         "name" to attr.getString("name"),
                         "value" to attr.getString("value")
                 )
-                if (attr.keySet().contains("asSingle")) attrMap.put("asSingle", "true")
+                if (attr.keySet().contains("asSingle")) {
+                    val asSingleValue = attr.getString("asSingle")
+                    attrMap.put("asSingle", asSingleValue)
+                }
 
                 attrList += attrMap
             }
