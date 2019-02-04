@@ -1,3 +1,14 @@
 {
-
+  "annotations": [
+    {
+      "name": "@RequestMapping(\"foo/ada\")",
+      "conditions": [
+        {
+          "isTarget": "true",
+          "contextType": "METHOD",
+          "return": "String"
+        }
+      ]
+    }
+  ]
 }
