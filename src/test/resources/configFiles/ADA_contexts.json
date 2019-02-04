@@ -1,7 +1,7 @@
 {
   "annotations": [
     {
-      "name": "RequestMapping",
+      "name": "@RequestMapping(\"foo/ada\")",
       "conditions": [
         {
           "isTarget": "true",

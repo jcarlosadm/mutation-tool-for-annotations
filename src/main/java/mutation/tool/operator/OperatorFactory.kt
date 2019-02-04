@@ -93,8 +93,16 @@ class OperatorFactory(private val config: MutationToolConfig) {
     }
 
     private fun getADAOperators(contexts: List<Context>, file: File): List<Operator> {
-        if (this.config.adaChecker == null) return listOf()
-        return this.config.adaChecker!!.check(contexts, file)
+        val operators = mutableListOf<Operator>()
+
+        if (this.config.adaChecker != null) {
+            val list = this.config.adaChecker!!.check(contexts, file)
+            for (adaOperator in list) {
+                if (adaOperator.checkContext()) operators += adaOperator
+            }
+        }
+
+        return operators
     }
 
     private fun getRMATOperators(contexts: List<Context>, file: File): List<Operator> {

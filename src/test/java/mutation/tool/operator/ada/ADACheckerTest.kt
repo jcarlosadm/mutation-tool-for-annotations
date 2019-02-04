@@ -13,9 +13,12 @@ internal class ADACheckerTest {
     @Test
     fun testCheck() {
         val checker = ADAChecker(jsonFile)
+
+        assertTrue(checker.build())
+
         val contexts = getListOfAnnotationContext(File(FILE1))
         val operators = checker.check(contexts, File(FILE1))
 
-        assertEquals(0, operators.size)
+        assertEquals(7, operators.size)
     }
 }

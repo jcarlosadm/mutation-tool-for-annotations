@@ -18,7 +18,21 @@ class ADA(context: Context, file:File): Operator(context, file) {
     var annotation:String? = null
     var mutant = Mutant(OperatorsEnum.ADA)
 
-    override fun checkContext(): Boolean = true
+    override fun checkContext(): Boolean {
+        if (annotation == null) return false
+
+        for (annotationContext in context.getAnnotations()) {
+            if (getName(annotation!!) == annotationContext.nameAsString) return false
+        }
+
+        return true
+    }
+
+    private fun getName(annotation: String): String? {
+        if (annotation.contains("("))
+            return annotation.substring(0, annotation.indexOf("(")).removePrefix("@")
+        return annotation.removePrefix("@")
+    }
 
     override fun mutate(): List<Mutant> {
         if (annotation == null) throw Exception("ADA with null annotation")

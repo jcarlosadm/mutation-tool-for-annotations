@@ -116,8 +116,10 @@ class MutationTool(private val config: MutationToolConfig) {
     }
 
     private fun setADAChecker(config: MutationToolConfig) {
-        if (config.operators.contains(OperatorsEnum.ADA))
-            config.adaChecker = ADAChecker(File(ADA_FILEPATH_CONFIG))
+        if (config.operators.contains(OperatorsEnum.ADA)) {
+            val adaChecker = ADAChecker(File(ADA_FILEPATH_CONFIG))
+            if (adaChecker.build()) config.adaChecker = adaChecker
+        }
     }
 
     private fun setSWTGMap(config: MutationToolConfig) {
