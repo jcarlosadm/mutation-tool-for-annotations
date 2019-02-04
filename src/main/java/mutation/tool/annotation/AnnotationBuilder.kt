@@ -18,8 +18,8 @@ class AnnotationBuilder(private val stringRepresentation:String) {
         val expr = NormalAnnotationExpr()
         expr.setName(this.extractName().removePrefix("@"))
         for (pair in this.getPairs()) {
-            val key = pair.split("=")[0].trim()
-            val value = pair.split("=")[1].trim()
+            val key = pair.split(Regex("="), 2)[0].trim()
+            val value = pair.split(Regex("="), 2)[1].trim()
             expr.addPair(key, value)
         }
 

@@ -1,0 +1,17 @@
+{
+  "annotations": [
+    {
+      "name": "RequestMapping",
+      "attributes": [
+        {
+          "name": "value",
+          "values": ["\"aaaa\"", "\"bbbb\"", "\"cccc\""]
+        },
+        {
+          "name": "",
+          "values": ["\"aaaa\"", "\"bbbb\"", "\"cccc\""]
+        }
+      ]
+    }
+  ]
+}

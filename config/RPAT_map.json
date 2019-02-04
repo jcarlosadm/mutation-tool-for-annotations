@@ -1,0 +1,27 @@
+{
+  "annotations": [
+    {
+      "name": "RequestMapping",
+      "attributes": [
+        {
+          "name": "value",
+          "replacements": [
+            {
+              "name": "method",
+              "value": "GET"
+            }
+          ]
+        },
+        {
+          "name": "",
+          "replacements": [
+            {
+              "name": "headers",
+              "value": "{\"key1=2\"}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

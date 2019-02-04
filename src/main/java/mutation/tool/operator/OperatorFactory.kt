@@ -6,6 +6,8 @@ import mutation.tool.operator.chodr.CHODR
 import mutation.tool.operator.rma.RMA
 import mutation.tool.operator.rmat.RMAT
 import mutation.tool.operator.rpa.RPA
+import mutation.tool.operator.rpat.RPAT
+import mutation.tool.operator.rpav.RPAV
 import mutation.tool.operator.swtg.SWTG
 import mutation.tool.util.MutationToolConfig
 import java.io.File
@@ -19,10 +21,32 @@ class OperatorFactory(private val config: MutationToolConfig) {
             OperatorsEnum.ADAT -> this.getADATOperators(contexts, file)
             OperatorsEnum.CHODR -> this.getCHODROperators(contexts, file)
             OperatorsEnum.RPA -> this.getRPAOperators(contexts, file)
-            OperatorsEnum.RPAT -> TODO()
-            OperatorsEnum.RPAV -> TODO()
+            OperatorsEnum.RPAT -> this.getRPATOperators(contexts, file)
+            OperatorsEnum.RPAV -> this.getRPAVOperators(contexts, file)
             OperatorsEnum.SWTG -> this.getSWTGOperators(contexts, file)
         }
+
+    private fun getRPAVOperators(contexts: List<Context>, file: File): List<Operator> {
+        val operators = mutableListOf<Operator>()
+        for (context in contexts){
+            val operator = RPAV(context, file)
+            operator.map = config.rpavMap!!
+            if (operator.checkContext()) operators += operator
+        }
+        
+        return operators
+    }
+
+    private fun getRPATOperators(contexts: List<Context>, file: File): List<Operator> {
+        val operators = mutableListOf<Operator>()
+        for (context in contexts) {
+            val operator = RPAT(context, file)
+            operator.map = config.rpatMap!!
+            if (operator.checkContext()) operators += operator
+        }
+
+        return operators
+    }
 
     private fun getADATOperators(contexts: List<Context>, file: File): List<Operator> {
         val operators = mutableListOf<Operator>()
@@ -69,8 +93,16 @@ class OperatorFactory(private val config: MutationToolConfig) {
     }
 
     private fun getADAOperators(contexts: List<Context>, file: File): List<Operator> {
-        if (this.config.adaChecker == null) return listOf()
-        return this.config.adaChecker!!.check(contexts, file)
+        val operators = mutableListOf<Operator>()
+
+        if (this.config.adaChecker != null) {
+            val list = this.config.adaChecker!!.check(contexts, file)
+            for (adaOperator in list) {
+                if (adaOperator.checkContext()) operators += adaOperator
+            }
+        }
+
+        return operators
     }
 
     private fun getRMATOperators(contexts: List<Context>, file: File): List<Operator> {

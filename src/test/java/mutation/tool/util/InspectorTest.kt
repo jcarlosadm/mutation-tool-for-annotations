@@ -15,7 +15,7 @@ internal class InspectorTest {
         val annotations = mutableListOf<AnnotationExpr>()
 
         for (context in getListOfAnnotationContext(File(FILE1))) {
-            annotations.addAll(getAnnotations(context))
+            annotations.addAll(context.getAnnotations())
         }
 
         assertTrue(annotations.isNotEmpty())

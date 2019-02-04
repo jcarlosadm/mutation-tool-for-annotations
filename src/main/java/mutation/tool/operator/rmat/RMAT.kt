@@ -1,33 +1,27 @@
 package mutation.tool.operator.rmat
 
-import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.*
-import mu.KotlinLogging
 import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
-import mutation.tool.mutant.MutateVisitor
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.util.*
+import mutation.tool.util.numOfAnnotationAttributes
 import java.io.File
-
-private val logger = KotlinLogging.logger{}
 
 /**
  * Removes an attribute from a code annotation
  */
 class RMAT(context: Context, file: File) : Operator(context, file) {
-
     private var currentMutant:Mutant? = null
     private var currentAnnotation:AnnotationExpr? = null
     private var currentIndex:Int? = null
 
     override fun checkContext(): Boolean {
-        for (annotation in getAnnotations(context)) {
+        for (annotation in context.getAnnotations()) {
             if (annotation.toString().contains(Regex("\\((.*?)\\)"))) {
                 return true
             }
@@ -39,20 +33,13 @@ class RMAT(context: Context, file: File) : Operator(context, file) {
     override fun mutate(): List<Mutant> {
         val mutants = mutableListOf<Mutant>()
 
-        val compilationUnit = JavaParser.parse(file)
-        val visitor = MutateVisitor(this)
-
-        for (annotation in getAnnotations(context)) {
+        for (annotation in context.getAnnotations()) {
             val nAttr = numOfAnnotationAttributes(annotation)
             for (index in 0..(nAttr-1)) {
-                val newCompUnit = compilationUnit.clone()
                 currentAnnotation = annotation
                 currentIndex = index
-                locked = false
                 currentMutant = Mutant(OperatorsEnum.RMAT)
-                visitor.visit(newCompUnit, null)
-                logger.debug { "$newCompUnit" }
-                currentMutant!!.compilationUnit = newCompUnit
+                currentMutant!!.compilationUnit = this.visit()
                 mutants.add(currentMutant!!)
             }
         }
@@ -87,7 +74,6 @@ class RMAT(context: Context, file: File) : Operator(context, file) {
                     }
                 }
 
-                locked = true
                 return true
             }
         }

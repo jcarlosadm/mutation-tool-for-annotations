@@ -26,24 +26,12 @@ internal class AnnotationContextTest {
         var parameterCount = 0
 
         for (context in list) {
-            var annotations:List<AnnotationExpr>
+            var annotations:List<AnnotationExpr> = context.getAnnotations()
             when(context.getInsertionPoint()) {
-                InsertionPoint.CLASS -> {
-                    classCount++
-                    annotations = (context as ClassContext).entity.annotations
-                }
-                InsertionPoint.METHOD -> {
-                    methodCount++
-                    annotations = (context as MethodContext).entity.annotations
-                }
-                InsertionPoint.PROPERTY -> {
-                    propertyCount++
-                    annotations = (context as PropertyContext).entity.annotations
-                }
-                InsertionPoint.PARAMETER -> {
-                    parameterCount++
-                    annotations = (context as ParameterContext).entity.annotations
-                }
+                InsertionPoint.CLASS -> classCount++
+                InsertionPoint.METHOD -> methodCount++
+                InsertionPoint.PROPERTY -> propertyCount++
+                InsertionPoint.PARAMETER -> parameterCount++
             }
 
             for (annotation in annotations){

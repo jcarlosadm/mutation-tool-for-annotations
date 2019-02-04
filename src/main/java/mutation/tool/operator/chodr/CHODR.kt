@@ -1,6 +1,5 @@
 package mutation.tool.operator.chodr
 
-import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
@@ -9,32 +8,26 @@ import com.github.javaparser.ast.expr.AnnotationExpr
 import com.google.common.collect.Collections2
 import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
-import mutation.tool.mutant.MutateVisitor
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.util.getAnnotations
 import java.io.File
 
 /**
  * Change order of annotations
  */
 class CHODR(context: Context, file: File) : Operator(context, file) {
-
     private val currentAnnotations = mutableListOf<AnnotationExpr>()
     private var mutant:Mutant? = null
 
     override fun checkContext(): Boolean {
-        if (getAnnotations(context).size > 1)
+        if (context.getAnnotations().size > 1)
             return true
         return false
     }
 
     override fun mutate(): List<Mutant> {
         val mutants = mutableListOf<Mutant>()
-
-        val mutateVisitor = MutateVisitor(this)
-        val compUnit = JavaParser.parse(file)
-        val annotations = getAnnotations(context)
+        val annotations = context.getAnnotations()
 
         val originalSequence = (0..(annotations.size-1)).toList()
         val permutations = Collections2.permutations((0..(annotations.size-1)).toMutableList())
@@ -49,11 +42,8 @@ class CHODR(context: Context, file: File) : Operator(context, file) {
                     currentAnnotations += annotations[index]
                 }
 
-                val newCompUnit = compUnit.clone()
-                locked = false
                 mutant = Mutant(OperatorsEnum.CHODR)
-                mutateVisitor.visit(newCompUnit, null)
-                mutant?.compilationUnit = newCompUnit
+                mutant?.compilationUnit = this.visit()
                 mutants += mutant!!
             }
         }
@@ -88,30 +78,35 @@ class CHODR(context: Context, file: File) : Operator(context, file) {
             fieldDeclaration: FieldDeclaration?,
             parameter: Parameter?
     ): Boolean {
-        if (classOrInterfaceDecl != null) {
-            for (annotation in classOrInterfaceDecl.annotations) { mutant?.before = mutant?.before + annotation.toString() + "\n" }
-            classOrInterfaceDecl.annotations.clear()
-            for (annotation in currentAnnotations) classOrInterfaceDecl.addAnnotation(annotation)
+        when {
+            classOrInterfaceDecl != null -> {
+                for (annotation in classOrInterfaceDecl.annotations) { mutant?.before = mutant?.before +
+                        annotation.toString() + "\n" }
+                classOrInterfaceDecl.annotations.clear()
+                for (annotation in currentAnnotations) classOrInterfaceDecl.addAnnotation(annotation)
+            }
+            methodDeclaration != null -> {
+                for (annotation in methodDeclaration.annotations) { mutant?.before = mutant?.before +
+                        annotation.toString() + "\n" }
+                methodDeclaration.annotations.clear()
+                for (annotation in currentAnnotations) methodDeclaration.addAnnotation(annotation)
+            }
+            fieldDeclaration != null -> {
+                for (annotation in fieldDeclaration.annotations) { mutant?.before = mutant?.before +
+                        annotation.toString() + "\n" }
+                fieldDeclaration.annotations.clear()
+                for (annotation in currentAnnotations) fieldDeclaration.addAnnotation(annotation)
+            }
+            parameter != null -> {
+                for (annotation in parameter.annotations) { mutant?.before = mutant?.before +
+                        annotation.toString() + "\n" }
+                parameter.annotations.clear()
+                for (annotation in currentAnnotations) parameter.addAnnotation(annotation)
+            }
+            else -> return false
         }
-        else if (methodDeclaration != null) {
-            for (annotation in methodDeclaration.annotations) { mutant?.before = mutant?.before + annotation.toString() + "\n" }
-            methodDeclaration.annotations.clear()
-            for (annotation in currentAnnotations) methodDeclaration.addAnnotation(annotation)
-        }
-        else if (fieldDeclaration != null) {
-            for (annotation in fieldDeclaration.annotations) { mutant?.before = mutant?.before + annotation.toString() + "\n" }
-            fieldDeclaration.annotations.clear()
-            for (annotation in currentAnnotations) fieldDeclaration.addAnnotation(annotation)
-        }
-        else if (parameter != null) {
-            for (annotation in parameter.annotations) { mutant?.before = mutant?.before + annotation.toString() + "\n" }
-            parameter.annotations.clear()
-            for (annotation in currentAnnotations) parameter.addAnnotation(annotation)
-        } else
-            return false
 
         for (annotation in currentAnnotations) { mutant?.after = mutant?.after + annotation.toString() + "\n" }
-        locked = true
 
         return true
     }

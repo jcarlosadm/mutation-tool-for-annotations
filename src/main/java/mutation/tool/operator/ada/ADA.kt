@@ -1,6 +1,5 @@
 package mutation.tool.operator.ada
 
-import com.github.javaparser.JavaParser
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
@@ -8,7 +7,6 @@ import com.github.javaparser.ast.body.Parameter
 import mutation.tool.annotation.AnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
-import mutation.tool.mutant.MutateVisitor
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
 import java.io.File
@@ -17,21 +15,28 @@ import java.io.File
  * Add Annotation
  */
 class ADA(context: Context, file:File): Operator(context, file) {
-
     var annotation:String? = null
     var mutant = Mutant(OperatorsEnum.ADA)
 
-    override fun checkContext(): Boolean = true
+    override fun checkContext(): Boolean {
+        if (annotation == null) return false
+
+        for (annotationContext in context.getAnnotations()) {
+            if (getName(annotation!!) == annotationContext.nameAsString) return false
+        }
+
+        return true
+    }
+
+    private fun getName(annotation: String): String? {
+        if (annotation.contains("("))
+            return annotation.substring(0, annotation.indexOf("(")).removePrefix("@")
+        return annotation.removePrefix("@")
+    }
 
     override fun mutate(): List<Mutant> {
         if (annotation == null) throw Exception("ADA with null annotation")
-
-        val mutateVisitor = MutateVisitor(this)
-        val compUnit = JavaParser.parse(file)
-
-        mutateVisitor.visit(compUnit, null)
-        mutant.compilationUnit = compUnit
-
+        mutant.compilationUnit = this.visit()
         return listOf(mutant)
     }
 
@@ -53,19 +58,16 @@ class ADA(context: Context, file:File): Operator(context, file) {
             fieldDeclaration: FieldDeclaration?,
             parameter: Parameter?
     ):Boolean {
-        if (classOrInterfaceDeclaration != null)
-            classOrInterfaceDeclaration.addAnnotation(AnnotationBuilder(annotation!!).build())
-        else if (methodDeclaration != null)
-            methodDeclaration.addAnnotation(AnnotationBuilder(annotation!!).build())
-        else if (fieldDeclaration != null)
-            fieldDeclaration.addAnnotation(AnnotationBuilder(annotation!!).build())
-        else if (parameter != null)
-            parameter.addAnnotation(AnnotationBuilder(annotation!!).build())
-        else
-            return false
+        when {
+            classOrInterfaceDeclaration != null -> classOrInterfaceDeclaration.
+                    addAnnotation(AnnotationBuilder(annotation!!).build())
+            methodDeclaration != null -> methodDeclaration.addAnnotation(AnnotationBuilder(annotation!!).build())
+            fieldDeclaration != null -> fieldDeclaration.addAnnotation(AnnotationBuilder(annotation!!).build())
+            parameter != null -> parameter.addAnnotation(AnnotationBuilder(annotation!!).build())
+            else -> return false
+        }
 
         mutant.after = annotation!!
-        locked = true
 
         return true
     }

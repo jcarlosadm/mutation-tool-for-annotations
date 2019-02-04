@@ -5,6 +5,7 @@ import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter
+import mutation.tool.context.entity.Entity
 
 class ContextCatcherVisitor:VoidVisitorAdapter<Any>() {
 
@@ -12,21 +13,21 @@ class ContextCatcherVisitor:VoidVisitorAdapter<Any>() {
 
     override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?) {
         super.visit(n, arg)
-        if (n != null) contexts.add(ClassContext(n))
+        if (n != null) contexts.add(ClassContext(Entity(n)))
     }
 
     override fun visit(n: FieldDeclaration?, arg: Any?) {
         super.visit(n, arg)
-        if (n != null) contexts.add(PropertyContext(n))
+        if (n != null) contexts.add(PropertyContext(Entity(n)))
     }
 
     override fun visit(n: MethodDeclaration?, arg: Any?) {
         super.visit(n, arg)
-        if (n != null) contexts.add(MethodContext(n))
+        if (n != null) contexts.add(MethodContext(Entity(n)))
     }
 
     override fun visit(n: Parameter?, arg: Any?) {
         super.visit(n, arg)
-        if (n != null) contexts.add(ParameterContext(n))
+        if (n != null) contexts.add(ParameterContext(Entity(n)))
     }
 }
