@@ -71,14 +71,14 @@ class ADAChecker(private val jsonFile:File) {
 
                 if (conditionJson.keySet().contains(ANNOTATIONS_KEY)) {
                     val annotations = mutableListOf<String>()
-                    for (annotationName in conditionJson.getJSONArray(ANNOTATIONS_KEY))
-                        annotations += (annotationName as String)
+                    for (annotationNameString in conditionJson.getJSONArray(ANNOTATIONS_KEY))
+                        annotations += (annotationNameString as String)
                     annotationNames = annotations
                 }
 
                 if (conditionJson.keySet().contains(PARAMS_KEY)) {
                     val paramList = mutableListOf<Param>()
-                    for (paramJson in conditionJson.getString(PARAMS_KEY)) {
+                    for (paramJson in conditionJson.getJSONArray(PARAMS_KEY)) {
                         paramJson as JSONObject
 
                         val paramObj = Param()
@@ -86,8 +86,8 @@ class ADAChecker(private val jsonFile:File) {
 
                         if (paramJson.keySet().contains(ANNOTATIONS_KEY)) {
                             val annotations = mutableListOf<String>()
-                            for (annotationName in paramJson.getJSONArray(ANNOTATIONS_KEY)) {
-                                annotations += (annotationName as String)
+                            for (annotationNameString in paramJson.getJSONArray(ANNOTATIONS_KEY)) {
+                                annotations += (annotationNameString as String)
                             }
 
                             paramObj.annotations = annotations
