@@ -8,7 +8,7 @@ import java.io.File
 
 internal class ADACheckerTest {
 
-    private val jsonFile = File("./src/test/resources/configFiles/ADA_contexts.json")
+    private val jsonFile = File("./src/test/resources/configFiles/ADA_map.json")
 
     @Test
     fun testCheck() {
@@ -19,6 +19,6 @@ internal class ADACheckerTest {
         val contexts = getListOfAnnotationContext(File(FILE1))
         val operators = checker.check(contexts, File(FILE1))
 
-        assertEquals(7, operators.size)
+        assertEquals(9, operators.size)
     }
 }
