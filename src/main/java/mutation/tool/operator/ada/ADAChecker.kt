@@ -116,10 +116,10 @@ class ADAChecker(private val jsonFile:File) {
             val otherContexts = contexts - context
 
             for (annotationName in conditions.keys) {
-                var ok = false
+                var ok = true
                 for (condition in conditions[annotationName]!!) {
-                    if (condition.check(context, true) || checkOthersContexts(otherContexts, condition)) {
-                        ok = true
+                    if (!condition.check(context, true) && !checkOthersContexts(otherContexts, condition)) {
+                        ok = false
                         break
                     }
                 }
