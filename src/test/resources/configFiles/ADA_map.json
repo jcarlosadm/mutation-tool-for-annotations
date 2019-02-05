@@ -9,6 +9,15 @@
           "return": "String"
         }
       ]
+    },
+    {
+      "name": "@Id",
+      "conditions": [
+        {
+          "isTarget": "true",
+          "contextType": "FIELD"
+        }
+      ]
     }
   ]
 }
