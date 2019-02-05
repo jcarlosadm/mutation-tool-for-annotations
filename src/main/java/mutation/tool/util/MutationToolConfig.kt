@@ -13,7 +13,11 @@ const val RPAT_FILEPATH_CONFIG = "./config/RPAT_map.json"
 const val RPAV_FILEPATH_CONFIG = "./config/RPAV_map.json"
 const val IMPORT_MAP_FILEPATH_CONFIG = "./config/import_map.json"
 
-class MutationToolConfig(val pathSources: File, val pathTests: File = File("")) {
+class MutationToolConfig(val pathSources: File, val pathTests: File) {
+
+    constructor(pathSources: File) : this(pathSources, File("")) {
+    }
+
     var projectName:String = ""
 
     var threads:Int = 1
