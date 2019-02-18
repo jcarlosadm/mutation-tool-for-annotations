@@ -27,4 +27,19 @@ internal class ADATest {
 
         assertEquals(19, mutants.size)
     }
+
+    @Test
+    fun testADAWithJavafile() {
+        val mutants = mutableListOf<Mutant>()
+        val adaChecker = ADAChecker(File("./src/test/resources/configFiles/ADA_map.json"))
+        if (!adaChecker.build()) {
+            assertEquals(0, mutants.size)
+        } else {
+            for(operator in adaChecker.check(getListOfAnnotationContext(File(FILE1)), File(FILE1))) {
+                if(operator.checkContext()) mutants += operator.mutate()
+            }
+
+            assertEquals(2, mutants.size)
+        }
+    }
 }
