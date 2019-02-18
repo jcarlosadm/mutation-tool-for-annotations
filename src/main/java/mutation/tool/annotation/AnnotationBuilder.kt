@@ -2,7 +2,18 @@ package mutation.tool.annotation
 
 import com.github.javaparser.ast.expr.*
 
+/**
+ * Creates an annotation from its string representation
+ *
+ * @property stringRepresentation string representation of the annotation
+ * @constructor creates a annotation builder
+ */
 class AnnotationBuilder(private val stringRepresentation:String) {
+
+    /**
+     * build an annotation
+     * @return an AnnotationExpr instance
+     */
     fun build(): AnnotationExpr {
         if (stringRepresentation.contains(Regex("\\((.*?)\\)"))) {
             if (stringRepresentation.contains("="))
