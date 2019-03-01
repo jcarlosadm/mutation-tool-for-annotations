@@ -1,39 +1,39 @@
 {
-	"annotations": [
-		{
-			"annotation": "@org.springframework.web.bind.annotation.RequestMapping",
-			"replaceableBy": [],
-			"targets": ["type", "method"],
-			"attributes": [
-				{
-					"name": "value",
-					"type": "java.lang.String[]",
-					"validValues": ["\"/ex/foos\""],
-					"default": "true"
-				},
-				{
-					"name": "method",
-					"type": "org.springframework.web.bind.annotation.RequestMethod[]",
-					"validValues": ["org.springframework.web.bind.annotation.RequestMethod.POST"]
-				},
-				{
-					"name": "headers",
-					"type": "java.lang.String[]",
-					"validValues": ["\"content-type=text/*\""]
-				}
-			]
-		},
-		{
-			"annotation": "@org.springframework.beans.factory.annotation.Autowired",
-			"replaceableBy": ["@org.springframework.beans.factory.annotation.Qualifier"],
-			"targets": ["field", "method"],
-			"attributes": [{}]
-		},
-		{
-			"annotation": "@org.springframework.beans.factory.annotation.Qualifier",
-			"replaceableBy": ["@org.springframework.beans.factory.annotation.Autowired"],
-			"targets": ["field", "parameter"],
-			"attributes": [{}]
-		}
-	]
+  "annotations": [
+    {
+      "annotation": "@org.springframework.web.bind.annotation.RequestMapping",
+      "replaceableBy": [],
+      "targets": ["type", "method"],
+      "attributes": [
+        {
+          "name": "value",
+          "type": "java.lang.String[]",
+          "validValues": ["\"/ex/foo\""],
+          "default": "true"
+        },
+        {
+          "name": "method",
+          "type": "org.springframework.web.bind.annotation.RequestMethod[]",
+          "validValues": ["org.springframework.web.bind.annotation.RequestMethod.POST"]
+        },
+        {
+          "name": "headers",
+          "type": "java.lang.String[]",
+          "validValues": ["\"content-type=text/*\""]
+        }
+      ]
+    },
+    {
+      "annotation": "@org.springframework.beans.factory.annotation.Autowired",
+      "replaceableBy": ["@org.springframework.beans.factory.annotation.Qualifier"],
+      "targets": ["field", "method"],
+      "attributes": [{}]
+    },
+    {
+      "annotation": "@org.springframework.beans.factory.annotation.Qualifier",
+      "replaceableBy": ["@org.springframework.beans.factory.annotation.Autowired"],
+      "targets": ["field", "parameter"],
+      "attributes": [{}]
+    }
+  ]
 }
