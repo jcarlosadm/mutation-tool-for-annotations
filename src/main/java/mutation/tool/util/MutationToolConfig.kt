@@ -7,7 +7,6 @@ import mutation.tool.util.json.AnnotationInfo
 import mutation.tool.util.json.getAnnotationInfos
 import java.io.File
 
-const val ADA_FILEPATH_CONFIG = "./config/ADA_map.json"
 const val SWTG_FILEPATH_CONFIG = "./config/SWTG_map.json"
 const val RPA_FILEPATH_CONFIG = "./config/RPA_map.json"
 const val ADAT_FILEPATH_CONFIG = "./config/ADAT_map.json"

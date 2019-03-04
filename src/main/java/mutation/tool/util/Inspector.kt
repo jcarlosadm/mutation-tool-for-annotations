@@ -18,9 +18,10 @@ fun isSameProp(context: Context, field:FieldDeclaration):Boolean = (context.getI
         InsertionPoint.PROPERTY && field.toString() == context.toString())
 
 // TODO create test
-fun isSameParameter(context: Context, parameter:Parameter): Boolean = (context.getInsertionPoint() ==
-        InsertionPoint.PARAMETER && parameter.toString() == context.toString() &&
-        parameter.range.equals(context.getRange()))
+fun isSameParameter(context: Context, parameter:Parameter): Boolean =
+        (context.getInsertionPoint() == InsertionPoint.PARAMETER && parameter.toString() == context.toString() &&
+                context.getRange().begin.line == parameter.range.get().begin.line &&
+                context.getRange().begin.column == parameter.range.get().begin.column)
 
 // TODO create test
 fun numOfAnnotationAttributes(annotation: AnnotationExpr): Int {

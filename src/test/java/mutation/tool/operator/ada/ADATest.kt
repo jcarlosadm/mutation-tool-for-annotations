@@ -3,6 +3,7 @@ package mutation.tool.operator.ada
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.FILE1
+import mutation.tool.util.json.getAnnotationInfos
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -31,15 +32,13 @@ internal class ADATest {
     @Test
     fun testADAWithJavafile() {
         val mutants = mutableListOf<Mutant>()
-        val adaChecker = ADAChecker(File("./src/test/resources/configFiles/ADA_map.json"))
-        if (!adaChecker.build()) {
-            assertEquals(0, mutants.size)
-        } else {
-            for(operator in adaChecker.check(getListOfAnnotationContext(File(FILE1)), File(FILE1))) {
-                if(operator.checkContext()) mutants += operator.mutate()
-            }
+        val adaChecker = ADAChecker(getAnnotationInfos(File("./src/test/resources/configFiles/annotations.json")))
+        adaChecker.build()
 
-            assertEquals(2, mutants.size)
+        for(operator in adaChecker.check(getListOfAnnotationContext(File(FILE1)), File(FILE1))) {
+            if(operator.checkContext()) mutants += operator.mutate()
         }
+
+        assertEquals(22, mutants.size)
     }
 }

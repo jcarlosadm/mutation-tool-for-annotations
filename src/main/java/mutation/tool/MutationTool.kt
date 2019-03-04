@@ -117,8 +117,7 @@ class MutationTool(private val config: MutationToolConfig) {
 
     private fun setADAChecker(config: MutationToolConfig) {
         if (config.operators.contains(OperatorsEnum.ADA)) {
-            val adaChecker = ADAChecker(File(ADA_FILEPATH_CONFIG))
-            if (adaChecker.build()) config.adaChecker = adaChecker
+            config.adaChecker = ADAChecker(config.annotationInfos)
         }
     }
 
