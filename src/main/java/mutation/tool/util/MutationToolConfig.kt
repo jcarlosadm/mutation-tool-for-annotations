@@ -3,6 +3,8 @@ package mutation.tool.util
 import mutation.tool.context.InsertionPoint
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.operator.ada.ADAChecker
+import mutation.tool.util.json.AnnotationInfo
+import mutation.tool.util.json.getAnnotationInfos
 import java.io.File
 
 const val ADA_FILEPATH_CONFIG = "./config/ADA_map.json"
@@ -12,6 +14,7 @@ const val ADAT_FILEPATH_CONFIG = "./config/ADAT_map.json"
 const val RPAT_FILEPATH_CONFIG = "./config/RPAT_map.json"
 const val RPAV_FILEPATH_CONFIG = "./config/RPAV_map.json"
 const val IMPORT_MAP_FILEPATH_CONFIG = "./config/import_map.json"
+const val JSON_ANNOTATION_CONFIG = "./config/annotations.json"
 
 class MutationToolConfig(val pathSources: File, val pathTests: File) {
 
@@ -46,6 +49,8 @@ class MutationToolConfig(val pathSources: File, val pathTests: File) {
     var rpavMap:Map<String, Map<String, List<String>>>? = null
 
     var importMap:Map<String, String>? = null
+
+    val annotationInfos = getAnnotationInfos(File(JSON_ANNOTATION_CONFIG))
 
     fun setDebugOn() {
         System.setProperty(org.slf4j.impl.SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "debug")
