@@ -134,7 +134,7 @@ class MutationTool(private val config: MutationToolConfig) {
     }
 
     private fun setADATMap(config: MutationToolConfig) {
-        val builder = ADATMapBuilder(File(ADAT_FILEPATH_CONFIG))
+        val builder = ADATMapBuilder(config.annotationInfos)
         builder.build()
         config.adatMap = builder.map
     }

@@ -9,7 +9,6 @@ import java.io.File
 
 const val SWTG_FILEPATH_CONFIG = "./config/SWTG_map.json"
 const val RPA_FILEPATH_CONFIG = "./config/RPA_map.json"
-const val ADAT_FILEPATH_CONFIG = "./config/ADAT_map.json"
 const val RPAT_FILEPATH_CONFIG = "./config/RPAT_map.json"
 const val RPAV_FILEPATH_CONFIG = "./config/RPAV_map.json"
 const val IMPORT_MAP_FILEPATH_CONFIG = "./config/import_map.json"
