@@ -8,7 +8,6 @@ import mutation.tool.util.json.getAnnotationInfos
 import java.io.File
 
 const val SWTG_FILEPATH_CONFIG = "./config/SWTG_map.json"
-const val RPAT_FILEPATH_CONFIG = "./config/RPAT_map.json"
 const val RPAV_FILEPATH_CONFIG = "./config/RPAV_map.json"
 const val JSON_ANNOTATION_CONFIG = "./config/annotations.json"
 

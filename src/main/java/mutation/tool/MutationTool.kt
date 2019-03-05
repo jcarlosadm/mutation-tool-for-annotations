@@ -139,7 +139,7 @@ class MutationTool(private val config: MutationToolConfig) {
     }
 
     private fun setRPATMap(config: MutationToolConfig) {
-        val builder = RPATMapBuilder(File(RPAT_FILEPATH_CONFIG))
+        val builder = RPATMapBuilder(config.annotationInfos)
         builder.build()
         config.rpatMap = builder.map
     }

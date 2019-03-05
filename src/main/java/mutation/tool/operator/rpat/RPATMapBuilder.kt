@@ -1,33 +1,25 @@
 package mutation.tool.operator.rpat
 
+import mutation.tool.util.json.AnnotationInfo
 import org.json.JSONObject
 import java.io.File
 
-class RPATMapBuilder(private val jsonFile:File) {
+class RPATMapBuilder(private val annotationInfos:List<AnnotationInfo>) {
     val map = mutableMapOf<String, Map<String, List<Map<String, String>>>>()
 
     fun build() {
-        val content = jsonFile.readText(Charsets.UTF_8)
-        val json = JSONObject(content)
-
-        for (annotation in json.getJSONArray("annotations")) {
-            annotation as JSONObject
-
-            val annotationName = annotation.getString("name")
+        for (info in annotationInfos) {
+            val name = info.name.split(".").last()
 
             val attrMap = mutableMapOf<String, List<Map<String, String>>>()
 
-            for (attribute in annotation.getJSONArray("attributes")) {
-                attribute as JSONObject
-
-                val attrName = attribute.getString("name")
+            for (attribute in info.attributes) {
+                val attrName = attribute.name
 
                 val repList = mutableListOf<Map<String, String>>()
-                for (replacement in attribute.getJSONArray("replacements")) {
-                    replacement as JSONObject
-
-                    val repName = replacement.getString("name")
-                    val repValue = replacement.getString("value")
+                for (replacement in (info.attributes - attribute)) {
+                    val repName = replacement.name
+                    val repValue = replacement.validValues[0]
 
                     repList += mapOf("name" to repName, "value" to repValue)
                 }
@@ -35,7 +27,7 @@ class RPATMapBuilder(private val jsonFile:File) {
                 if (!repList.isEmpty()) attrMap.put(attrName, repList)
             }
 
-            if (!attrMap.keys.isEmpty()) map.put(annotationName, attrMap)
+            if (!attrMap.keys.isEmpty()) map.put(name, attrMap)
         }
     }
 }
