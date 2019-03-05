@@ -75,7 +75,6 @@ class OperatorFactory(private val config: MutationToolConfig) {
         for (context in contexts) {
             val rpa = RPA(context, file)
             rpa.switchMap = config.rpaMap!!
-            rpa.importMap = config.importMap!!
             if (rpa.checkContext()) operators += rpa
         }
 

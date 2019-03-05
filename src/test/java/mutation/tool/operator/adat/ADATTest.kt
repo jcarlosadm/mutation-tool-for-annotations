@@ -3,33 +3,20 @@ package mutation.tool.operator.adat
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.FILE1
+import mutation.tool.util.json.getAnnotationInfos
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.io.File
 
 internal class ADATTest {
 
-    private val map = mapOf(
-            "RequestMapping" to listOf(
-                    mapOf(
-                            "name" to "value",
-                            "value" to "\"/ex/foos\"",
-                            "asSingle" to "true"
-                    ),
-                    mapOf(
-                            "name" to "method",
-                            "value" to "RequestMethod.POST"
-                    ),
-                    mapOf(
-                            "name" to "headers",
-                            "value" to "{\"key1=val1\", \"key2=val2\"}"
-                    )
-            )
-    )
-
     @Test
     fun testADAT() {
         val mutants = mutableListOf<Mutant>()
+
+        val builder = ADATMapBuilder(getAnnotationInfos(File("./src/test/resources/configFiles/annotations.json")))
+        builder.build()
+        val map = builder.map
 
         for (context in getListOfAnnotationContext(File(FILE1))) {
             val operator = ADAT(context, File(FILE1))

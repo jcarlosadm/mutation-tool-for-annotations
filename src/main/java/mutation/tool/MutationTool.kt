@@ -82,7 +82,6 @@ class MutationTool(private val config: MutationToolConfig) {
         this.setADATMap(config)
         this.setRPATMap(config)
         this.setRPAVMap(config)
-        this.setImportMap(config)
     }
 
     private fun testOriginalProject() {
@@ -128,7 +127,7 @@ class MutationTool(private val config: MutationToolConfig) {
     }
 
     private fun setRPAMap(config: MutationToolConfig) {
-        val builder = RPAMapBuilder(File(RPA_FILEPATH_CONFIG))
+        val builder = RPAMapBuilder(config.annotationInfos)
         builder.build()
         config.rpaMap = builder.map
     }
@@ -149,12 +148,6 @@ class MutationTool(private val config: MutationToolConfig) {
         val builder = RPAVMapBuilder(File(RPAV_FILEPATH_CONFIG))
         builder.build()
         config.rpavMap = builder.map
-    }
-
-    private fun setImportMap(config: MutationToolConfig) {
-        val importBuilder = ImportMapBuilder(File(IMPORT_MAP_FILEPATH_CONFIG))
-        importBuilder.build()
-        config.importMap = importBuilder.map
     }
 
     private fun testMutants() {

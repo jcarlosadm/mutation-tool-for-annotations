@@ -13,6 +13,7 @@ private const val PATH = "./src/test/resources/fakeProject/src"
 private const val FILENAME1 = "Main.java"
 private const val FILENAME2 = "MainTest.java"
 private const val FILENAME3 = "TarefasController.java"
+private const val FILENAME4 = "TarefasController2.java"
 
 internal class FolderOperationsTest {
 
@@ -58,9 +59,10 @@ internal class FolderOperationsTest {
     fun testGetAllJavaFiles() {
         val files = getAllJavaFiles(File(PATH))
         assertFalse(files.isEmpty())
-        assertTrue(files.size == 3)
+        assertTrue(files.size == 4)
         for (file in files) {
-            assertTrue(file.name == FILENAME1 || file.name == FILENAME2 || file.name == FILENAME3)
+            assertTrue(file.name == FILENAME1 || file.name == FILENAME2 || file.name == FILENAME3 ||
+                    file.name == FILENAME4)
         }
     }
 }

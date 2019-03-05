@@ -25,6 +25,6 @@ internal class MutantTest {
         generateMutants(validOperators, File(FILE1), Project("fakeProject",
                 File("./src/test/resources/fakeProject")), File("./src/test/resources/mutants"))
 
-        assertEquals(21, File("./src/test/resources/mutants/").listFiles().size)
+        assertEquals(45, File("./src/test/resources/mutants/").listFiles().size)
     }
 }

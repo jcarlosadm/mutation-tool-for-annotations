@@ -1,26 +1,28 @@
 package mutation.tool.operator.rpa
 
+import mutation.tool.util.json.AnnotationInfo
 import org.json.JSONObject
 import java.io.File
 
-class RPAMapBuilder(private val fileConfig:File) {
+class RPAMapBuilder(private val annotationInfos: List<AnnotationInfo>) {
     val map = mutableMapOf<String, List<String>>()
 
     fun build() {
-        val content = fileConfig.readText(Charsets.UTF_8)
-        val json = JSONObject(content)
+        for (info in annotationInfos) {
 
-        for (element in json.getJSONArray("annotations")) {
-            element as JSONObject
-            val key = element.getString("name")
+            val key = info.name
             val list = mutableListOf<String>()
 
-            for (value in element.getJSONArray("replacements")) {
-                value as String
-                list += value
+            for (value in info.replaceableBy) {
+                for (annot2 in annotationInfos) {
+                    if (annot2.name == value) {
+                        list += annot2.annotationStrings[0]
+                        break
+                    }
+                }
             }
-
-            map[key] = list
+            if (list.isNotEmpty())
+                map[key] = list
         }
     }
 }

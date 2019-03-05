@@ -17,7 +17,6 @@ import java.io.File
  */
 class RPA(context: Context, file: File) : Operator(context, file) {
     lateinit var switchMap:Map<String, List<String>>
-    lateinit var importMap:Map<String, String>
 
     private lateinit var currentMutant:Mutant
     private lateinit var currentAnnotation: AnnotationExpr
@@ -25,8 +24,24 @@ class RPA(context: Context, file: File) : Operator(context, file) {
 
     override fun checkContext(): Boolean {
         for (annotation in context.getAnnotations()){
-            if (switchMap.containsKey(annotation.nameAsString))
+            var ok = false
+            var validKey = ""
+            for (key in switchMap.keys) {
+                if (key.contains(annotation.nameAsString)) {
+                    validKey = key
+                    ok = true
+                    break
+                }
+            }
+            if (ok) {
+                for (annotation2 in context.getAnnotations()) {
+                    for (value in switchMap.getValue(validKey)) {
+                        if (value.contains(annotation2.nameAsString))
+                            return false
+                    }
+                }
                 return true
+            }
         }
 
         return false
@@ -36,11 +51,31 @@ class RPA(context: Context, file: File) : Operator(context, file) {
         val mutants = mutableListOf<Mutant>()
 
         for (annotation in context.getAnnotations()) {
-            if (!switchMap.containsKey(annotation.nameAsString) || switchMap[annotation.nameAsString] == null) continue
+            var validKey = ""
+            var ok = false
+            for (key in switchMap.keys) {
+                if (key.contains(annotation.nameAsString)) {
+                    validKey = key
+                    ok = true
+                    break
+                }
+            }
+            if (ok) {
+                for (annotation2 in context.getAnnotations()) {
+                    for (value in switchMap.getValue(validKey)) {
+                        if (value.contains(annotation2.nameAsString)) {
+                            ok = false
+                            break
+                        }
+                    }
+                    if (!ok) break
+                }
+            }
+            if (!ok) continue
 
             currentAnnotation = annotation
 
-            for (annotationRep in switchMap.getValue(annotation.nameAsString)){
+            for (annotationRep in switchMap.getValue(validKey)){
                 currentAnnotationRep = annotationRep
                 currentMutant = Mutant(OperatorsEnum.RPA)
 
@@ -67,26 +102,10 @@ class RPA(context: Context, file: File) : Operator(context, file) {
     private fun replaceAnnotation(annotations: List<AnnotationExpr>):Boolean {
         for (annotation in annotations) {
             if (annotation.toString() == currentAnnotation.toString()) {
-                val op = annotation.findCompilationUnit()
-
-                if (annotation.replace(AnnotationBuilder(currentAnnotationRep).build())){
-                    if (importMap.containsKey(this.getName(currentAnnotationRep))) {
-                        if (op.isPresent)
-                            op.get().addImport(importMap[this.getName(currentAnnotationRep)])
-                    }
-                    // TODO: if not import, warning!
-
-                    return true
-                }
+                return annotation.replace(AnnotationBuilder(currentAnnotationRep).build())
             }
         }
 
         return false
-    }
-
-    private fun getName(annotationString:String):String {
-        if (!annotationString.contains("("))
-            return annotationString.removePrefix("@")
-        return annotationString.substring(0, annotationString.indexOf("(")).removePrefix("@")
     }
 }
