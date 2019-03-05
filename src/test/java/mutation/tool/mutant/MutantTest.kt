@@ -23,8 +23,8 @@ internal class MutantTest {
 
         resetMutantFoldersNum()
         generateMutants(validOperators, File(FILE1), Project("fakeProject",
-                File("./src/test/resources/fakeProject")), File("./src/test/resources/mutants"))
+                File("./src/test/resources/fakeProject")), File("./src/test/resources/mutants2"))
 
-        assertEquals(21, File("./src/test/resources/mutants/").listFiles().size)
+        assertEquals(21, File("./src/test/resources/mutants2/").listFiles().size)
     }
 }

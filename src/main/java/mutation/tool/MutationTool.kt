@@ -82,7 +82,6 @@ class MutationTool(private val config: MutationToolConfig) {
         this.setADATMap(config)
         this.setRPATMap(config)
         this.setRPAVMap(config)
-        this.setImportMap(config)
     }
 
     private fun testOriginalProject() {
@@ -117,45 +116,38 @@ class MutationTool(private val config: MutationToolConfig) {
 
     private fun setADAChecker(config: MutationToolConfig) {
         if (config.operators.contains(OperatorsEnum.ADA)) {
-            val adaChecker = ADAChecker(File(ADA_FILEPATH_CONFIG))
-            if (adaChecker.build()) config.adaChecker = adaChecker
+            config.adaChecker = ADAChecker(config.annotationInfos)
         }
     }
 
     private fun setSWTGMap(config: MutationToolConfig) {
-        val builder = SWTGMapBuilder(File(SWTG_FILEPATH_CONFIG))
+        val builder = SWTGMapBuilder(config.annotationInfos)
         builder.build()
         config.swtgMap = builder.map
     }
 
     private fun setRPAMap(config: MutationToolConfig) {
-        val builder = RPAMapBuilder(File(RPA_FILEPATH_CONFIG))
+        val builder = RPAMapBuilder(config.annotationInfos)
         builder.build()
         config.rpaMap = builder.map
     }
 
     private fun setADATMap(config: MutationToolConfig) {
-        val builder = ADATMapBuilder(File(ADAT_FILEPATH_CONFIG))
+        val builder = ADATMapBuilder(config.annotationInfos)
         builder.build()
         config.adatMap = builder.map
     }
 
     private fun setRPATMap(config: MutationToolConfig) {
-        val builder = RPATMapBuilder(File(RPAT_FILEPATH_CONFIG))
+        val builder = RPATMapBuilder(config.annotationInfos)
         builder.build()
         config.rpatMap = builder.map
     }
 
     private fun setRPAVMap(config: MutationToolConfig) {
-        val builder = RPAVMapBuilder(File(RPAV_FILEPATH_CONFIG))
+        val builder = RPAVMapBuilder(config.annotationInfos)
         builder.build()
         config.rpavMap = builder.map
-    }
-
-    private fun setImportMap(config: MutationToolConfig) {
-        val importBuilder = ImportMapBuilder(File(IMPORT_MAP_FILEPATH_CONFIG))
-        importBuilder.build()
-        config.importMap = importBuilder.map
     }
 
     private fun testMutants() {

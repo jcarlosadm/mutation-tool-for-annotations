@@ -1,1 +1,0 @@
-see [Configuration](https://github.com/easy-software-ufal/mutation-tool-for-annotations/wiki/Json-Configuration) for more details.

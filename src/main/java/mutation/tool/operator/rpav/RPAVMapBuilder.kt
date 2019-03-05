@@ -1,32 +1,22 @@
 package mutation.tool.operator.rpav
 
+import mutation.tool.util.json.AnnotationInfo
 import org.json.JSONObject
 import java.io.File
 
-class RPAVMapBuilder(private val jsonFile:File) {
+class RPAVMapBuilder(private val annotationInfos:List<AnnotationInfo>) {
     val map = mutableMapOf<String, Map<String, List<String>>>()
 
     fun build() {
-        val content = jsonFile.readText(Charsets.UTF_8)
-        val json = JSONObject(content)
-
-        for (annotation in json.getJSONArray("annotations")) {
-            annotation as JSONObject
-            val annotationName = annotation.getString("name")
+        for (info in annotationInfos) {
+            val name = info.name.split(".").last()
 
             val attrMap = mutableMapOf<String, List<String>>()
-            for (attr in annotation.getJSONArray("attributes")) {
-                attr as JSONObject
-                val attrName = attr.getString("name")
-
-                val valueList = mutableListOf<String>()
-                for (value in attr.getJSONArray("values")) {
-                    value as String
-                    valueList += value
-                }
-                if (!valueList.isEmpty()) attrMap.put(attrName, valueList)
+            for (attr in info.attributes) {
+                attrMap.put(attr.name, attr.validValues)
             }
-            if (attrMap.isNotEmpty()) map.put(annotationName, attrMap)
+
+            if (attrMap.isNotEmpty()) map.put(name, attrMap)
         }
     }
 }

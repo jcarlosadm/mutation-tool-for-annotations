@@ -1,29 +1,27 @@
 package mutation.tool.operator.adat
 
+import mutation.tool.util.json.AnnotationInfo
 import org.json.JSONObject
 import java.io.File
 
-class ADATMapBuilder(private val mapFile:File) {
+class ADATMapBuilder(private val annotationInfos:List<AnnotationInfo>) {
     val map = mutableMapOf<String, List<Map<String, String>>>()
 
     fun build() {
-        val content = mapFile.readText(Charsets.UTF_8)
-        val json = JSONObject(content)
 
-        for (annotation in json.getJSONArray("annotations")) {
-            annotation as JSONObject
-            val annotationName = annotation.getString("name")
+        for (info in annotationInfos) {
+            if (info.attributes.isEmpty()) continue
+
+            val annotationName = info.name
 
             val attrList = mutableListOf<Map<String, String>>()
-            for (attr in annotation.getJSONArray("attributes")) {
-                attr as JSONObject
-
+            for (attr in info.attributes) {
                 val attrMap = mutableMapOf(
-                        "name" to attr.getString("name"),
-                        "value" to attr.getString("value")
+                        "name" to attr.name,
+                        "value" to attr.validValues[0]
                 )
-                if (attr.keySet().contains("asSingle")) {
-                    val asSingleValue = attr.getString("asSingle")
+                if (attr.default) {
+                    val asSingleValue = "true"
                     attrMap.put("asSingle", asSingleValue)
                 }
 
