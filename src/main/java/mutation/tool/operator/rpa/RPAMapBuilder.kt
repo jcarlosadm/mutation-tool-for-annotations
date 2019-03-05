@@ -1,8 +1,6 @@
 package mutation.tool.operator.rpa
 
 import mutation.tool.util.json.AnnotationInfo
-import org.json.JSONObject
-import java.io.File
 
 class RPAMapBuilder(private val annotationInfos: List<AnnotationInfo>) {
     val map = mutableMapOf<String, List<String>>()
@@ -10,7 +8,7 @@ class RPAMapBuilder(private val annotationInfos: List<AnnotationInfo>) {
     fun build() {
         for (info in annotationInfos) {
 
-            val key = info.name
+            val key = info.name.split(".").last()
             val list = mutableListOf<String>()
 
             for (value in info.replaceableBy) {

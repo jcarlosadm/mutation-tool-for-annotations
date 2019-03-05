@@ -14,10 +14,10 @@ internal class ADATMapBuilderTest {
         val map = builder.map
 
         assertEquals(1, map.keys.size)
-        assertTrue(map.containsKey("@org.springframework.web.bind.annotation.RequestMapping"))
-        assertEquals(3, map.getValue("@org.springframework.web.bind.annotation.RequestMapping").size)
+        assertTrue(map.containsKey("RequestMapping"))
+        assertEquals(3, map.getValue("RequestMapping").size)
 
-        for (attr in map.getValue("@org.springframework.web.bind.annotation.RequestMapping")) {
+        for (attr in map.getValue("RequestMapping")) {
             assertTrue(attr["name"] == "value" || attr["name"] == "method" || attr["name"] == "headers")
             if (attr["name"] == "value") {
                 assertTrue(attr.containsKey("asSingle"))

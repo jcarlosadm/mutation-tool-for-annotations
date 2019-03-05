@@ -26,21 +26,12 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
 
     override fun checkContext(): Boolean {
         for (annotation in context.getAnnotations()) {
-            var ok = false
-            var validKey = ""
-            for (key in map.keys) {
-                if (key.contains(annotation.nameAsString)) {
-                    ok = true
-                    validKey = key
-                    break
-                }
-            }
-            if (!ok) continue
+            if (!map.containsKey(annotation.nameAsString)) continue
 
             if (annotation.isNormalAnnotationExpr) {
                 annotation as NormalAnnotationExpr
 
-                for (attr in map.getValue(validKey)) {
+                for (attr in map.getValue(annotation.nameAsString)) {
                     var notEqual = true
                     for (pair in annotation.pairs) {
                         if (attr.getValue("name") == pair.nameAsString) {
@@ -52,7 +43,7 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
                     if (notEqual) return true
                 }
             } else if(annotation.isSingleMemberAnnotationExpr) {
-                for (attr in map.getValue(validKey)) {
+                for (attr in map.getValue(annotation.nameAsString)) {
                     if (attr.containsKey("asSingle") && attr.getValue("asSingle") == "true") return true
                 }
             }
@@ -65,22 +56,12 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
         val mutants = mutableListOf<Mutant>()
 
         for (annotation in context.getAnnotations()) {
-            var ok = false
-            var validKey = ""
-            for (key in map.keys) {
-                if (key.contains(annotation.nameAsString)) {
-                    ok = true
-                    validKey = key
-                    break
-                }
-            }
-
-            if (!ok) continue
+            if (!map.containsKey(annotation.nameAsString)) continue
 
             if (annotation.isNormalAnnotationExpr) {
                 annotation as NormalAnnotationExpr
 
-                for (attr in map.getValue(validKey)) {
+                for (attr in map.getValue(annotation.nameAsString)) {
                     var notEqual = true
                     for (pair in annotation.pairs) {
                         if (attr.getValue("name") == pair.nameAsString) {
@@ -93,7 +74,7 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
                 }
             } else if(annotation.isSingleMemberAnnotationExpr) {
                 var containsSingle = false
-                for (attr in map.getValue(validKey)) {
+                for (attr in map.getValue(annotation.nameAsString)) {
                     if (attr.containsKey("asSingle") && attr.getValue("asSingle") == "true") {
                         containsSingle = true
                         break
@@ -101,7 +82,7 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
                 }
 
                 if (containsSingle) {
-                    for (attr in map.getValue(validKey)) {
+                    for (attr in map.getValue(annotation.nameAsString)) {
                         if (!attr.containsKey("asSingle"))
                             createMutant(annotation, attr, mutants)
                     }
@@ -146,14 +127,7 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
                     annotation.addPair(currentAttr.getValue("name"), currentAttr.getValue("value"))
                     return true
                 } else {
-                    var validKey = ""
-                    for (key in map.keys) {
-                        if (key.contains(annotation.nameAsString)) {
-                            validKey = key
-                            break
-                        }
-                    }
-                    for (attr in map.getValue(validKey)) {
+                    for (attr in map.getValue(annotation.nameAsString)) {
                         if (attr.containsKey("asSingle")) {
                             val defaultValue = getValue(annotation.toString())
                             val annotationString = makeString(annotation.nameAsString, attr, defaultValue)

@@ -12,7 +12,7 @@ class ADATMapBuilder(private val annotationInfos:List<AnnotationInfo>) {
         for (info in annotationInfos) {
             if (info.attributes.isEmpty()) continue
 
-            val annotationName = info.name
+            val annotationName = info.name.split(".").last()
 
             val attrList = mutableListOf<Map<String, String>>()
             for (attr in info.attributes) {
