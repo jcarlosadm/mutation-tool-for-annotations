@@ -6,7 +6,6 @@ import mutation.tool.operator.ada.ADAChecker
 import mutation.tool.util.json.getAnnotationInfos
 import java.io.File
 
-const val SWTG_FILEPATH_CONFIG = "./config/SWTG_map.json"
 const val JSON_ANNOTATION_CONFIG = "./config/annotations.json"
 
 class MutationToolConfig(val pathSources: File, val pathTests: File) {

@@ -121,7 +121,7 @@ class MutationTool(private val config: MutationToolConfig) {
     }
 
     private fun setSWTGMap(config: MutationToolConfig) {
-        val builder = SWTGMapBuilder(File(SWTG_FILEPATH_CONFIG))
+        val builder = SWTGMapBuilder(config.annotationInfos)
         builder.build()
         config.swtgMap = builder.map
     }

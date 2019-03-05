@@ -1,32 +1,20 @@
 package mutation.tool.operator.swtg
 
 import mutation.tool.context.InsertionPoint
-import org.json.JSONObject
-import java.io.File
-import java.lang.Exception
+import mutation.tool.util.json.AnnotationInfo
 
-class SWTGMapBuilder(private val jsonFile:File) {
+class SWTGMapBuilder(private val annotationInfos: List<AnnotationInfo>) {
 
     val map = mutableMapOf<String, List<InsertionPoint>>()
 
     fun build() {
-        if (!jsonFile.exists() || jsonFile.isDirectory) throw Exception("invalid file")
+        for (info in annotationInfos) {
+            val key = info.name.split(".").last()
 
-        val content = jsonFile.readText(Charsets.UTF_8)
-        val jsonObj = JSONObject(content)
-        for (element in jsonObj.getJSONArray("annotations")) {
-            element as JSONObject
-            val key = element.getString("name")
-            val insertionPointList = mutableListOf<InsertionPoint>()
-            for (string in element.getJSONArray("insertionPoints")) {
-                for (insertionPoint in InsertionPoint.values()){
-                    if (string == insertionPoint.name)
-                        insertionPointList += insertionPoint
-                }
-            }
+            val insertionPointList = info.targets
 
-            if (!insertionPointList.isEmpty())
-                map.put(key, insertionPointList)
+            if (insertionPointList.size > 1)
+                map[key] = insertionPointList
         }
     }
 }
