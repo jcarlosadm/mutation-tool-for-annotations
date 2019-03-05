@@ -145,7 +145,7 @@ class MutationTool(private val config: MutationToolConfig) {
     }
 
     private fun setRPAVMap(config: MutationToolConfig) {
-        val builder = RPAVMapBuilder(File(RPAV_FILEPATH_CONFIG))
+        val builder = RPAVMapBuilder(config.annotationInfos)
         builder.build()
         config.rpavMap = builder.map
     }
