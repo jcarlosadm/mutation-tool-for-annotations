@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>ic.ufal.br</groupId>
     <artifactId>mutation-tool-annotations</artifactId>
-    <version>0.6.1</version>
+    <version>0.7.0</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
