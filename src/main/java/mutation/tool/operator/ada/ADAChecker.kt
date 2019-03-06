@@ -7,10 +7,19 @@ import mutation.tool.util.annotationFinder
 import mutation.tool.util.json.AnnotationInfo
 import java.io.File
 
+/**
+ * Generator of ADA operators
+ *
+ * @param annotationInfos informations about annotations
+ * @constructor create a generator of ADA operators
+ */
 class ADAChecker(private val annotationInfos:List<AnnotationInfo>) {
 
     private val targetMap = mutableMapOf<InsertionPoint, MutableList<AnnotationInfo>>()
 
+    /**
+     * build the generator on basis of information about annotations
+     */
     fun build() {
         for (info in annotationInfos) {
             for (target in info.targets) {
@@ -36,6 +45,11 @@ class ADAChecker(private val annotationInfos:List<AnnotationInfo>) {
         return false
     }
 
+    /**
+     * Generate ADA operators on basis of contexts
+     * @param contexts list of contexts
+     * @return list of operators
+     */
     fun check(contexts:List<Context>, javaFile:File): List<Operator> {
         val operators = mutableListOf<Operator>()
 

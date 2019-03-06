@@ -13,9 +13,21 @@ import java.io.File
 
 /**
  * Add Annotation
+ *
+ * @param context context of this operator
+ * @param file source file
+ * @constructor create a ADA operator
  */
 class ADA(context: Context, file:File): Operator(context, file) {
+
+    /**
+     * annotation of this operator
+     */
     var annotation:String? = null
+
+    /**
+     * temporary mutant
+     */
     var mutant = Mutant(OperatorsEnum.ADA)
 
     override fun checkContext(): Boolean {

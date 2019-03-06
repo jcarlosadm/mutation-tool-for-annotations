@@ -7,6 +7,9 @@ import java.io.File
 
 /**
  * Get list of contexts of a java file. These contexts are possible locations for annotations.
+ *
+ * @param javaFile Source file.
+ * @return A list of contexts.
  */
 fun getListOfAnnotationContext(javaFile: File):List<Context> {
     val compilationUnit = JavaParser.parse(javaFile)
