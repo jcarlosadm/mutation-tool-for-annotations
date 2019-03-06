@@ -3,6 +3,7 @@ package mutation.tool.operator.ada
 import mutation.tool.context.Context
 import mutation.tool.context.InsertionPoint
 import mutation.tool.operator.Operator
+import mutation.tool.util.annotationFinder
 import mutation.tool.util.json.AnnotationInfo
 import java.io.File
 
@@ -13,16 +14,16 @@ class ADAChecker(private val annotationInfos:List<AnnotationInfo>) {
     fun build() {
         for (info in annotationInfos) {
             for (target in info.targets) {
-                var annotInfos:MutableList<AnnotationInfo>
+                var annotationInfos:MutableList<AnnotationInfo>
                 if (targetMap.containsKey(target)) {
                     if (this.listContainsInfo(targetMap.getValue(target), info)) continue
-                    annotInfos = targetMap.getValue(target)
+                    annotationInfos = targetMap.getValue(target)
                 } else {
-                    annotInfos = mutableListOf()
-                    targetMap.put(target, annotInfos)
+                    annotationInfos = mutableListOf()
+                    targetMap[target] = annotationInfos
                 }
 
-                annotInfos.add(info)
+                annotationInfos.add(info)
             }
         }
     }
@@ -42,15 +43,11 @@ class ADAChecker(private val annotationInfos:List<AnnotationInfo>) {
             if (!targetMap.containsKey(context.getInsertionPoint())) continue
 
             for (info in targetMap.getValue(context.getInsertionPoint())) {
-                var name:String
-                if (info.name.contains("."))
-                    name = info.name.split(".").last().removePrefix("@")
-                else
-                    name = info.name.removePrefix("@")
+                val name = info.name
 
                 var ok = true
                 for (annotation in context.getAnnotations()) {
-                    if (annotation.nameAsString == name){
+                    if (annotationFinder(annotation, name)){
                         ok = false
                         break
                     }

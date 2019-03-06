@@ -14,19 +14,19 @@ internal class SWTGMapBuilderTest {
         builder.build()
         assertFalse(builder.map.isEmpty())
 
-        assertTrue(builder.map.containsKey("Autowired"))
-        assertTrue(builder.map.containsKey("RequestMapping"))
-        assertTrue(builder.map.containsKey("Qualifier"))
+        assertTrue(builder.map.containsKey("@org.springframework.beans.factory.annotation.Autowired"))
+        assertTrue(builder.map.containsKey("@org.springframework.web.bind.annotation.RequestMapping"))
+        assertTrue(builder.map.containsKey("@org.springframework.beans.factory.annotation.Qualifier"))
 
-        for (insertionPoint in builder.map.getValue("Autowired")) {
+        for (insertionPoint in builder.map.getValue("@org.springframework.beans.factory.annotation.Autowired")) {
             assertTrue(insertionPoint == InsertionPoint.PROPERTY || insertionPoint == InsertionPoint.METHOD)
         }
 
-        for (insertionPoint in builder.map.getValue("RequestMapping")) {
+        for (insertionPoint in builder.map.getValue("@org.springframework.web.bind.annotation.RequestMapping")) {
             assertTrue(insertionPoint == InsertionPoint.CLASS || insertionPoint == InsertionPoint.METHOD)
         }
 
-        for (insertionPoint in builder.map.getValue("Qualifier")) {
+        for (insertionPoint in builder.map.getValue("@org.springframework.beans.factory.annotation.Qualifier")) {
             assertTrue(insertionPoint == InsertionPoint.PROPERTY || insertionPoint == InsertionPoint.PARAMETER)
         }
     }

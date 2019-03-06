@@ -14,16 +14,16 @@ internal class RPAVMapBuilderTest {
         val map = builder.map
 
         assertEquals(1, map.keys.size)
-        assertTrue(map.containsKey("RequestMapping"))
-        assertEquals(3, map.getValue("RequestMapping").keys.size)
+        assertTrue(map.containsKey("@org.springframework.web.bind.annotation.RequestMapping"))
+        assertEquals(3, map.getValue("@org.springframework.web.bind.annotation.RequestMapping").keys.size)
 
-        for (attr in map.getValue("RequestMapping").getValue("value"))
+        for (attr in map.getValue("@org.springframework.web.bind.annotation.RequestMapping").getValue("value"))
             assertEquals("\"/ex/foo\"", attr)
 
-        for (attr in map.getValue("RequestMapping").getValue("headers"))
+        for (attr in map.getValue("@org.springframework.web.bind.annotation.RequestMapping").getValue("headers"))
             assertEquals("\"content-type=text/*\"", attr)
 
-        for (attr in map.getValue("RequestMapping").getValue("method"))
+        for (attr in map.getValue("@org.springframework.web.bind.annotation.RequestMapping").getValue("method"))
             assertEquals("org.springframework.web.bind.annotation.RequestMethod.POST", attr)
     }
 }

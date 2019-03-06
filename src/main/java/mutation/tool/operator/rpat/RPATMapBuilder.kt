@@ -1,15 +1,13 @@
 package mutation.tool.operator.rpat
 
 import mutation.tool.util.json.AnnotationInfo
-import org.json.JSONObject
-import java.io.File
 
 class RPATMapBuilder(private val annotationInfos:List<AnnotationInfo>) {
     val map = mutableMapOf<String, Map<String, List<Map<String, String>>>>()
 
     fun build() {
         for (info in annotationInfos) {
-            val name = info.name.split(".").last()
+            val name = info.name
 
             val attrMap = mutableMapOf<String, List<Map<String, String>>>()
 
@@ -24,10 +22,15 @@ class RPATMapBuilder(private val annotationInfos:List<AnnotationInfo>) {
                     repList += mapOf("name" to repName, "value" to repValue)
                 }
 
-                if (!repList.isEmpty()) attrMap.put(attrName, repList)
+                if (!repList.isEmpty()) {
+                    attrMap[attrName] = repList
+                    if (attribute.default) {
+                        attrMap[""] = repList
+                    }
+                }
             }
 
-            if (!attrMap.keys.isEmpty()) map.put(name, attrMap)
+            if (!attrMap.keys.isEmpty()) map[name] = attrMap
         }
     }
 }
