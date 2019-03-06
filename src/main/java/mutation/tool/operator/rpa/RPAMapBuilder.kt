@@ -8,7 +8,7 @@ class RPAMapBuilder(private val annotationInfos: List<AnnotationInfo>) {
     fun build() {
         for (info in annotationInfos) {
 
-            val key = info.name.split(".").last()
+            val key = info.name
             val list = mutableListOf<String>()
 
             for (value in info.replaceableBy) {

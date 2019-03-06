@@ -12,6 +12,7 @@ import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
+import mutation.tool.util.annotationFinder
 import java.io.File
 
 /**
@@ -27,31 +28,34 @@ class RPAV(context: Context, file: File) : Operator(context, file) {
 
     override fun checkContext(): Boolean {
         for (annotation in context.getAnnotations()) {
-            if (!map.containsKey(annotation.nameAsString) || annotation.isMarkerAnnotationExpr) continue
+            var ok = false
+            var validKey = ""
+            map.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            if (!ok || annotation.isMarkerAnnotationExpr) continue
 
-            if ((annotation.isSingleMemberAnnotationExpr && map.getValue(annotation.nameAsString).containsKey("") &&
-                            checkSingleAnnotation(annotation)) ||
-                    (annotation.isNormalAnnotationExpr && checkNormalAnnotation(annotation)))
+            if ((annotation.isSingleMemberAnnotationExpr && map.getValue(validKey).containsKey("") &&
+                            checkSingleAnnotation(annotation, validKey)) ||
+                    (annotation.isNormalAnnotationExpr && checkNormalAnnotation(annotation, validKey)))
                 return true
         }
 
         return false
     }
 
-    private fun checkNormalAnnotation(annotation: AnnotationExpr): Boolean {
+    private fun checkNormalAnnotation(annotation: AnnotationExpr, validKey:String): Boolean {
         for (pair in (annotation as NormalAnnotationExpr).pairs) {
-            if (map.getValue(annotation.nameAsString).containsKey(pair.nameAsString))
-                for(value in map.getValue(annotation.nameAsString).getValue(pair.nameAsString))
+            if (map.getValue(validKey).containsKey(pair.nameAsString))
+                for(value in map.getValue(validKey).getValue(pair.nameAsString))
                     if (value != pair.value.toString()) return true
         }
         return false
     }
 
-    private fun checkSingleAnnotation(annotation: AnnotationExpr): Boolean {
+    private fun checkSingleAnnotation(annotation: AnnotationExpr, validKey: String): Boolean {
         annotation as SingleMemberAnnotationExpr
         val value = annotation.memberValue.toString()
 
-        for (mapValue in map.getValue(annotation.nameAsString).getValue(""))
+        for (mapValue in map.getValue(validKey).getValue(""))
             if (value != mapValue) return true
 
         return false
@@ -61,12 +65,16 @@ class RPAV(context: Context, file: File) : Operator(context, file) {
         val mutants = mutableListOf<Mutant>()
 
         for (annotation in context.getAnnotations()) {
-            if (!map.containsKey(annotation.nameAsString) || annotation.isMarkerAnnotationExpr) continue
+            var ok = false
+            var validKey = ""
+            map.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
 
-            if (annotation.isSingleMemberAnnotationExpr && map.getValue(annotation.nameAsString).containsKey("") &&
-                    this.checkSingleAnnotation(annotation)) {
+            if (!ok || annotation.isMarkerAnnotationExpr) continue
 
-                for (attrValue in map.getValue(annotation.nameAsString).getValue("")) {
+            if (annotation.isSingleMemberAnnotationExpr && map.getValue(validKey).containsKey("") &&
+                    this.checkSingleAnnotation(annotation, validKey)) {
+
+                for (attrValue in map.getValue(validKey).getValue("")) {
                     if (attrValue != (annotation as SingleMemberAnnotationExpr).memberValue.toString())
                         genMutant(annotation, "", attrValue, mutants)
                 }
@@ -74,8 +82,8 @@ class RPAV(context: Context, file: File) : Operator(context, file) {
             }
             else if (annotation.isNormalAnnotationExpr) {
                 for (pair in (annotation as NormalAnnotationExpr).pairs) {
-                    if (map.getValue(annotation.nameAsString).containsKey(pair.nameAsString)) {
-                        for (attrValue in map.getValue(annotation.nameAsString).getValue(pair.nameAsString)) {
+                    if (map.getValue(validKey).containsKey(pair.nameAsString)) {
+                        for (attrValue in map.getValue(validKey).getValue(pair.nameAsString)) {
                             if (attrValue != pair.value.toString())
                                 genMutant(annotation, pair.nameAsString, attrValue, mutants)
                         }

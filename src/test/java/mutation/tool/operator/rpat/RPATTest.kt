@@ -46,6 +46,6 @@ internal class RPATTest {
             if (operator.checkContext()) mutants += operator.mutate()
         }
 
-        assertEquals(2, mutants.size)
+        assertEquals(14, mutants.size)
     }
 }

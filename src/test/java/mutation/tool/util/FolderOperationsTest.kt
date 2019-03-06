@@ -14,6 +14,7 @@ private const val FILENAME1 = "Main.java"
 private const val FILENAME2 = "MainTest.java"
 private const val FILENAME3 = "TarefasController.java"
 private const val FILENAME4 = "TarefasController2.java"
+private const val FILENAME5 = "TarefasController3.java"
 
 internal class FolderOperationsTest {
 
@@ -59,10 +60,10 @@ internal class FolderOperationsTest {
     fun testGetAllJavaFiles() {
         val files = getAllJavaFiles(File(PATH))
         assertFalse(files.isEmpty())
-        assertTrue(files.size == 4)
+        assertTrue(files.size == 5)
         for (file in files) {
             assertTrue(file.name == FILENAME1 || file.name == FILENAME2 || file.name == FILENAME3 ||
-                    file.name == FILENAME4)
+                    file.name == FILENAME4 || file.name == FILENAME5)
         }
     }
 }

@@ -1,8 +1,6 @@
 package mutation.tool.operator.adat
 
 import mutation.tool.util.json.AnnotationInfo
-import org.json.JSONObject
-import java.io.File
 
 class ADATMapBuilder(private val annotationInfos:List<AnnotationInfo>) {
     val map = mutableMapOf<String, List<Map<String, String>>>()
@@ -12,7 +10,7 @@ class ADATMapBuilder(private val annotationInfos:List<AnnotationInfo>) {
         for (info in annotationInfos) {
             if (info.attributes.isEmpty()) continue
 
-            val annotationName = info.name.split(".").last()
+            val annotationName = info.name
 
             val attrList = mutableListOf<Map<String, String>>()
             for (attr in info.attributes) {
@@ -22,13 +20,13 @@ class ADATMapBuilder(private val annotationInfos:List<AnnotationInfo>) {
                 )
                 if (attr.default) {
                     val asSingleValue = "true"
-                    attrMap.put("asSingle", asSingleValue)
+                    attrMap["asSingle"] = asSingleValue
                 }
 
                 attrList += attrMap
             }
 
-            if (!attrList.isEmpty()) map.put(annotationName, attrList)
+            if (!attrList.isEmpty()) map[annotationName] = attrList
         }
     }
 }

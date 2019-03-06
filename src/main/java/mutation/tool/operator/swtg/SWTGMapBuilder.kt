@@ -9,12 +9,7 @@ class SWTGMapBuilder(private val annotationInfos: List<AnnotationInfo>) {
 
     fun build() {
         for (info in annotationInfos) {
-            val key = info.name.split(".").last()
-
-            val insertionPointList = info.targets
-
-            if (insertionPointList.size > 1)
-                map[key] = insertionPointList
+            if (info.targets.size > 1) map[info.name] = info.targets
         }
     }
 }

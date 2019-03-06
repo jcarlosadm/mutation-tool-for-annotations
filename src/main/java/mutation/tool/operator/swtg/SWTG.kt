@@ -28,8 +28,12 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
 
     override fun checkContext(): Boolean {
         for (annotation in context.getAnnotations()) {
-            if (mapContextType.containsKey(annotation.nameAsString) && mapContextType[annotation.nameAsString] != null) {
-                for (insertionPoint in mapContextType.getValue(annotation.nameAsString)) {
+            var ok = false
+            var validKey = ""
+            mapContextType.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+
+            if (ok && mapContextType[validKey] != null) {
+                for (insertionPoint in mapContextType.getValue(validKey)) {
                     if (context.getInsertionPoint() != insertionPoint)
                         return true
                 }
@@ -43,10 +47,13 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
         val mutants = mutableListOf<Mutant>()
 
         for (annotation in context.getAnnotations()) {
-            if (!mapContextType.containsKey(annotation.nameAsString) || mapContextType[annotation.nameAsString] == null)
-                continue
+            var ok = false
+            var validKey = ""
+            mapContextType.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
 
-            for (insertionPoint in mapContextType.getValue(annotation.nameAsString)) {
+            if (!ok || mapContextType[validKey] == null) continue
+
+            for (insertionPoint in mapContextType.getValue(validKey)) {
                 if (context.getInsertionPoint() == insertionPoint) continue
 
                 for (otherContext in allContexts) {

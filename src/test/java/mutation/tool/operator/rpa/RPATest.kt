@@ -2,9 +2,8 @@ package mutation.tool.operator.rpa
 
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.mutant.Mutant
-import mutation.tool.operator.FILE1
 import mutation.tool.util.json.getAnnotationInfos
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.io.File
 

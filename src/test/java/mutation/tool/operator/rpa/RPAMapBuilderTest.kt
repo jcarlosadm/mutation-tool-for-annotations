@@ -17,10 +17,10 @@ internal class RPAMapBuilderTest {
 
         assertEquals(2, map.keys.size)
 
-        for (rep in map.getValue("Autowired"))
+        for (rep in map.getValue("@org.springframework.beans.factory.annotation.Autowired"))
             assertEquals("@org.springframework.beans.factory.annotation.Qualifier", rep)
 
-        for (rep in map.getValue("Qualifier"))
+        for (rep in map.getValue("@org.springframework.beans.factory.annotation.Qualifier"))
             assertEquals("@org.springframework.beans.factory.annotation.Autowired", rep)
     }
 }

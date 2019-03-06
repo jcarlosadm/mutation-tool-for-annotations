@@ -12,6 +12,7 @@ import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
+import mutation.tool.util.annotationFinder
 import java.io.File
 
 /**
@@ -28,18 +29,21 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
 
     override fun checkContext(): Boolean {
         for (annotation in context.getAnnotations()){
-            if (!map.containsKey(annotation.nameAsString)) continue
+            var ok = false
+            var validKey = ""
+            map.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            if (!ok) continue
 
-            if (annotation.isSingleMemberAnnotationExpr && map.getValue(annotation.nameAsString).containsKey(""))
+            if (annotation.isSingleMemberAnnotationExpr && map.getValue(validKey).containsKey(""))
                 return true
             else if (annotation.isNormalAnnotationExpr){
                 annotation as NormalAnnotationExpr
                 // check each attr of annotation
                 for (pair in annotation.pairs) {
                     // if present on map
-                    if (!map.getValue(annotation.nameAsString).containsKey(pair.nameAsString)) continue
+                    if (!map.getValue(validKey).containsKey(pair.nameAsString)) continue
 
-                    for (attrMap in map.getValue(annotation.nameAsString).getValue(pair.nameAsString)) {
+                    for (attrMap in map.getValue(validKey).getValue(pair.nameAsString)) {
                         var notContain = true
 
                         for (anotherPair in annotation.pairs) {
@@ -62,19 +66,22 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
         val mutants = mutableListOf<Mutant>()
 
         for (annotation in context.getAnnotations()) {
-            if (!map.containsKey(annotation.nameAsString)) continue
+            var ok = false
+            var validKey = ""
+            map.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            if (!ok) continue
 
-            if (annotation.isSingleMemberAnnotationExpr && map.getValue(annotation.nameAsString).containsKey("")) {
-                for (attrMap in map.getValue(annotation.nameAsString).getValue(""))
+            if (annotation.isSingleMemberAnnotationExpr && map.getValue(validKey).containsKey("")) {
+                for (attrMap in map.getValue(validKey).getValue(""))
                     createMutant(annotation, "", attrMap, mutants)
             }
             else if (annotation.isNormalAnnotationExpr) {
                 annotation as NormalAnnotationExpr
 
                 for (pair in annotation.pairs) {
-                    if (!map.getValue(annotation.nameAsString).contains(pair.nameAsString)) continue
+                    if (!map.getValue(validKey).contains(pair.nameAsString)) continue
 
-                    for (attrMap in map.getValue(annotation.nameAsString).getValue(pair.nameAsString)) {
+                    for (attrMap in map.getValue(validKey).getValue(pair.nameAsString)) {
                         var notContain = true
 
                         for (anotherPair in annotation.pairs) {
