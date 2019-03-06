@@ -5,8 +5,9 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
-import com.github.javaparser.ast.expr.*
-import com.github.javaparser.utils.Pair
+import com.github.javaparser.ast.expr.AnnotationExpr
+import com.github.javaparser.ast.expr.NormalAnnotationExpr
+import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
 import mutation.tool.annotation.AnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.Mutant
@@ -136,10 +137,10 @@ class RPAV(context: Context, file: File) : Operator(context, file) {
                     val pairs = annotation.pairs
                     for (i in 0..(pairs.size - 1)) {
                         val pair = pairs[i]
-                        if (pair.nameAsString == currentAttr) {
-                            string += "$currentAttr = $currentAttrValue"
+                        string += if (pair.nameAsString == currentAttr) {
+                            "$currentAttr = $currentAttrValue"
                         } else {
-                            string += "${pair.nameAsString} = ${pair.value}"
+                            "${pair.nameAsString} = ${pair.value}"
                         }
 
                         if (i < (pairs.size - 1))

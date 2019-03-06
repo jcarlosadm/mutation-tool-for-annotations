@@ -80,33 +80,23 @@ class CHODR(context: Context, file: File) : Operator(context, file) {
     ): Boolean {
         when {
             classOrInterfaceDecl != null -> {
-                for (annotation in classOrInterfaceDecl.annotations) { mutant?.before = mutant?.before +
-                        annotation.toString() + "\n" }
                 classOrInterfaceDecl.annotations.clear()
                 for (annotation in currentAnnotations) classOrInterfaceDecl.addAnnotation(annotation)
             }
             methodDeclaration != null -> {
-                for (annotation in methodDeclaration.annotations) { mutant?.before = mutant?.before +
-                        annotation.toString() + "\n" }
                 methodDeclaration.annotations.clear()
                 for (annotation in currentAnnotations) methodDeclaration.addAnnotation(annotation)
             }
             fieldDeclaration != null -> {
-                for (annotation in fieldDeclaration.annotations) { mutant?.before = mutant?.before +
-                        annotation.toString() + "\n" }
                 fieldDeclaration.annotations.clear()
                 for (annotation in currentAnnotations) fieldDeclaration.addAnnotation(annotation)
             }
             parameter != null -> {
-                for (annotation in parameter.annotations) { mutant?.before = mutant?.before +
-                        annotation.toString() + "\n" }
                 parameter.annotations.clear()
                 for (annotation in currentAnnotations) parameter.addAnnotation(annotation)
             }
             else -> return false
         }
-
-        for (annotation in currentAnnotations) { mutant?.after = mutant?.after + annotation.toString() + "\n" }
 
         return true
     }

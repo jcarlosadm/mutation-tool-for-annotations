@@ -62,15 +62,12 @@ class RMAT(context: Context, file: File) : Operator(context, file) {
     private fun removeAttribute(annotations:List<AnnotationExpr>):Boolean {
         for (annotation in annotations) {
             if (annotation.toString() == currentAnnotation.toString()) {
-                currentMutant?.before = annotation.toString()
                 when (annotation) {
                     is SingleMemberAnnotationExpr -> {
                         annotation.replace(MarkerAnnotationExpr(Name(annotation.nameAsString + "()")))
-                        currentMutant?.after = "@${annotation.nameAsString}()"
                     }
                     is NormalAnnotationExpr -> {
                         annotation.pairs.removeAt(currentIndex!!)
-                        currentMutant?.after = annotation.toString()
                     }
                 }
 

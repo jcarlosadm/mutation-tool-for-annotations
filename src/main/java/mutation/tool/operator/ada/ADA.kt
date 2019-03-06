@@ -79,8 +79,6 @@ class ADA(context: Context, file:File): Operator(context, file) {
             else -> return false
         }
 
-        mutant.after = annotation!!
-
         return true
     }
 }
