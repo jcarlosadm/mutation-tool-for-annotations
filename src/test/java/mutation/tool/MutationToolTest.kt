@@ -33,7 +33,7 @@ internal class MutationToolTest {
     fun testMutantTool() {
         val config = MutationToolConfig(File(sourcePath))
         config.projectName = "fakeProject"
-        config.operators.addAll(listOf(OperatorsEnum.RMA, OperatorsEnum.RMAT))
+        config.operators.addAll(OperatorsEnum.values())
         config.mutantsFolder = "./src/test/resources/mutants"
         config.threads = 2
         config.setDebugOn()

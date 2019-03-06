@@ -7,8 +7,14 @@ import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter
 import mutation.tool.context.entity.Entity
 
+/**
+ * Visitor which collect contexts from source file
+ */
 class ContextCatcherVisitor:VoidVisitorAdapter<Any>() {
 
+    /**
+     * Collected contexts
+     */
     val contexts = mutableListOf<Context>()
 
     override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?) {

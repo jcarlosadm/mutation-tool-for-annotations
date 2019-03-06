@@ -25,8 +25,8 @@ fun deleteTempFolder():Boolean = File("./$TEMP_FOLDER").deleteRecursively()
 /**
  * Check if folder1 is subfolder of folder2, and vice versa
  *
- * @param folder1: first folder
- * @param folder2: second folder
+ * @param folder1 first folder
+ * @param folder2 second folder
  */
 fun isSubFolder(folder1:File, folder2:File):Boolean = (folder1.absolutePath.contains(folder2.absolutePath) ||
         folder2.absolutePath.contains(folder1.absolutePath))

@@ -51,7 +51,6 @@ class RMA(context: Context, file: File) : Operator(context, file) {
 
         for (annotation in annotations) {
             if (annotation.toString() == currentAnnotation?.toString()) {
-                currentMutant?.before = annotation.toString()
                 annotation.remove()
                 return true
             }
