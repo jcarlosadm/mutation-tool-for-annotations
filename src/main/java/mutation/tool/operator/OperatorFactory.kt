@@ -12,7 +12,22 @@ import mutation.tool.operator.swtg.SWTG
 import mutation.tool.util.MutationToolConfig
 import java.io.File
 
+/**
+ * Factory of operators
+ * 
+ * @param config mutation tool configuration class
+ * @constructor create a factory instance
+ */
 class OperatorFactory(private val config: MutationToolConfig) {
+
+    /**
+     * Get a list of operators
+     *
+     * @param operatorEnum operator type
+     * @param contexts contexts of source file
+     * @param file source file
+     * @return a list of operators
+     */
     fun getOperators(operatorEnum: OperatorsEnum, contexts:List<Context>, file:File):List<Operator> =
         when(operatorEnum) {
             OperatorsEnum.RMA -> this.getRMAOperators(contexts, file)

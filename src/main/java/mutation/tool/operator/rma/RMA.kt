@@ -13,6 +13,10 @@ import java.io.File
 
 /**
  * Remove Annotation Operator
+ *
+ * @param context context of this operator
+ * @param file source file
+ * @constructor create a RMA operator
  */
 class RMA(context: Context, file: File) : Operator(context, file) {
     private var currentMutant:Mutant? = null

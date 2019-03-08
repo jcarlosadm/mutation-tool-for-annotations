@@ -18,8 +18,19 @@ import java.io.File
 
 /**
  * Replace a code annotation attribute value by another
+ * 
+ * @param context context of the operator
+ * @param file source file
+ * @constructor Create a RPAV operator instance
  */
 class RPAV(context: Context, file: File) : Operator(context, file) {
+
+    /**
+     * map that will help the RPAV operator to build the mutants
+     * 
+     * Structure of map:
+     * annotation -> map (attributeName -> list ( attributeValue ) )
+     */
     lateinit var map:Map<String, Map<String, List<String>>>
 
     private lateinit var currentAnnotation: AnnotationExpr

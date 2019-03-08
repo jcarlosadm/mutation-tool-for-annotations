@@ -17,8 +17,21 @@ import java.io.File
 
 /**
  * Replace a code annotation attribute by another
+ *
+ * @param context context of the operator
+ * @param file source file
+ * @constructor Create a RPAT operator instance
  */
 class RPAT(context: Context, file: File) : Operator(context, file) {
+
+    /**
+     * map that will help the RPAT operator to build the mutants
+     * 
+     * Structure of map:
+     * annotation -> map (attribute -> list ( 
+     *                                   map (attributeName -> attributeValue)
+     *                                      ))
+     */
     lateinit var map: Map<String, Map<String, List<Map<String, String>>>>
 
     private lateinit var currentMutant:Mutant

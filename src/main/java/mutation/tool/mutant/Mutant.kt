@@ -34,7 +34,7 @@ fun generateMutants(operators: List<Operator>, javaFile: File, project: Project,
 	File("$mutantFolder/info.json").bufferedWriter().use { out -> writeReport(out) }
 }
 
-fun writeReport(out: BufferedWriter) {
+private fun writeReport(out: BufferedWriter) {
 	val json = JSONObject()
 
 	json.put("number of mutants", mutantNum)

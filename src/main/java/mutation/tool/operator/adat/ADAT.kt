@@ -17,8 +17,22 @@ import java.io.File
 
 /**
  * Add valid attribute to annotation
+ * 
+ * @param context context of the operator
+ * @param file source file
+ * @constructor Create a ADAT operator instance
  */
 class ADAT(context: Context, file:File) : Operator(context, file) {
+    
+    /**
+     * map that will help the ADAT operator to build the mutants
+     * 
+     * Structure of map:
+     * annotation -> list (map (attribute name -> attribute value))
+     * example: 
+     * RequestMapping -> list (map (name -> method,
+     *                              value -> RequestMapping.POST))
+     */
     lateinit var map:Map<String, List<Map<String, String>>>
 
     private lateinit var currentMutant:Mutant

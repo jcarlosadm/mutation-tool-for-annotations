@@ -2,9 +2,27 @@ package mutation.tool.operator.rpat
 
 import mutation.tool.util.json.AnnotationInfo
 
+/**
+ * Build the RPAT map
+ * 
+ * @param annotationInfos information about annotations
+ * @constructor Creates the builder
+ */
 class RPATMapBuilder(private val annotationInfos:List<AnnotationInfo>) {
+
+    /**
+     * map that will help the RPAT operator to build the mutants
+     * 
+     * Structure of map:
+     * annotation -> map (attribute -> list ( 
+     *                                   map (attributeName -> attributeValue)
+     *                                      ))
+     */
     val map = mutableMapOf<String, Map<String, List<Map<String, String>>>>()
 
+    /**
+     * build the map
+     */
     fun build() {
         for (info in annotationInfos) {
             val name = info.name

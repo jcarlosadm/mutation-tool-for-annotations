@@ -14,6 +14,10 @@ import java.io.File
 
 /**
  * Removes an attribute from a code annotation
+ * 
+ * @param context context of this operator
+ * @param file source file
+ * @constructor create a RMAT operator
  */
 class RMAT(context: Context, file: File) : Operator(context, file) {
     private var currentMutant:Mutant? = null
