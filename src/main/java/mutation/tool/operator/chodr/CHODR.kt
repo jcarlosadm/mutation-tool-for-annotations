@@ -14,6 +14,10 @@ import java.io.File
 
 /**
  * Change order of annotations
+ *
+ * @param context context of this operator
+ * @param file source file
+ * @constructor create a CHODR operator
  */
 class CHODR(context: Context, file: File) : Operator(context, file) {
     private val currentAnnotations = mutableListOf<AnnotationExpr>()

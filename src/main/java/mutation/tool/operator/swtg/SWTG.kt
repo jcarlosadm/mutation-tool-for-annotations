@@ -16,9 +16,19 @@ import java.io.File
 
 /**
  * Switch the annotation to another valid target
+ *
+ * @param context context of the operator
+ * @param file source file
+ * @constructor Create a SWTG operator instance
  */
 class SWTG(context: Context, file:File, private val allContexts: List<Context>): Operator(context, file) {
 
+    /**
+     * map that will help the SWTG operator to build the mutants
+     * 
+     * Structure of map:
+     * annotation -> list ( target )
+     */
     lateinit var mapContextType:Map<String, List<InsertionPoint>>
 
     private lateinit var currentMutant: Mutant

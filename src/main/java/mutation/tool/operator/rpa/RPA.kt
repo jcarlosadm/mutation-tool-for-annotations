@@ -15,8 +15,19 @@ import java.io.File
 
 /**
  * Replace an annotation for another
+ * 
+ * @param context context of the operator
+ * @param file source file
+ * @constructor Create a RPA operator instance
  */
 class RPA(context: Context, file: File) : Operator(context, file) {
+
+    /**
+     * map that will help the RPA operator to build the mutants
+     * 
+     * Structure of map:
+     * annotation -> list (annotation)
+     */
     lateinit var switchMap:Map<String, List<String>>
 
     private lateinit var currentMutant:Mutant

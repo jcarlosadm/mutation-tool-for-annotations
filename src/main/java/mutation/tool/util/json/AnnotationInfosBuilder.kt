@@ -4,6 +4,12 @@ import mutation.tool.context.InsertionPoint
 import org.json.JSONObject
 import java.io.File
 
+/**
+ * Build a list of informations about annotations
+ * 
+ * @param jsonConfig json file with the information about annotations
+ * @return list of informations about annotation
+ */
 fun getAnnotationInfos(jsonConfig:File):List<AnnotationInfo> {
     val annotationInfos = mutableListOf<AnnotationInfo>()
 
