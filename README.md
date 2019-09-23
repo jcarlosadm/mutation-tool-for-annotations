@@ -49,6 +49,8 @@ To use this project, it is necessary to choose one or more of these operators.
 
 ## Configuration
 
+You will need the srcML tool: [https://www.srcml.org/](https://www.srcml.org/). Install on your OS.
+
 First, create a *Maven* project with java.
 
 On *pom.xml*, Add the [Jitpack](https://jitpack.io/) repository:
