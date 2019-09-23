@@ -1,6 +1,8 @@
 package mutation.tool.parser
 
+import mutation.tool.context.InsertionPoint
+
 interface AnnotationProcessor {
     val annotation: String
-    fun process()
+    fun process(insertionPoint: InsertionPoint)
 }
