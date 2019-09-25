@@ -1,18 +1,36 @@
 package mutation.tool.parser
 
 import mutation.tool.context.InsertionPoint
+import mutation.tool.util.xml.getAllTagNodes
+import mutation.tool.util.xml.getTagNode
 import org.w3c.dom.Node
 import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
 private fun printNode(node:Node) {
 
-    //println(node.nodeName)
+    /*//println(node.nodeName)
     if (node.nodeName == "attribute") {
         val insertionPoint = findParent(node)
         println(node.textContent + " >>> " + insertionPoint)
         // find target (class, function, decl_stmt, parameter)
+    }*/
+
+    /*if (node.nodeName == "class") {
+        println(getTagValue(node, "name", true))
+    }*/
+
+    if (node.nodeName == "class") {
+        println(getTagNode(node, "name", false)?.attributes?.getNamedItem("pos:column")?.textContent)
     }
+
+    /*if (node.nodeName == "parameter") {
+        val list = getAllTagNodes(node, "attribute", listOf("decl_stmt", "function", "class"))
+        for (item in list) {
+            println(item.textContent)
+        }
+        if(list.isNotEmpty()) println("-----------------")
+    }*/
 
     for (i in 0 until node.childNodes.length) {
         printNode(node.childNodes.item(i))
