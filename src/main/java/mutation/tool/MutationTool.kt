@@ -95,15 +95,19 @@ class MutationTool(private val config: MutationToolConfig) {
         logger.info { "generating mutants" }
         val executor = Executors.newFixedThreadPool(config.threads)
 
-        for(javaFile in getAllJavaFiles(config.pathSources)){
+        val validFiles = when(config.language) {
+            Language.JAVA -> getAllJavaFiles(config.pathSources)
+            Language.C_SHARP -> getAllCSharpFiles(config.pathSources)
+        }
 
+        for(validFile in validFiles){
             val worker = Runnable {
-                synchronized(this) { logger.info { "check java file: $javaFile" } }
+                synchronized(this) { logger.info { "check source file: $validFile" } }
 
-                val operators = getValidOperators(getListOfAnnotationContext(javaFile), javaFile, config)
-                generateMutants(operators, javaFile, project!!, File(config.mutantsFolder))
+                val operators = getValidOperators(getListOfAnnotationContext(validFile, config), validFile, config)
+                generateMutants(operators, validFile, project!!, File(config.mutantsFolder))
 
-                synchronized(this) { logger.info { "java file checked: $javaFile" } }
+                synchronized(this) { logger.info { "source file checked: $validFile" } }
             }
             executor.execute(worker)
         }

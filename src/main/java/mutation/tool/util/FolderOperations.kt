@@ -42,3 +42,5 @@ fun isSubFolder(folder1:File, folder2:File):Boolean = (folder1.absolutePath.cont
  * @return list of Java files
  */
 fun getAllJavaFiles(dir: File):List<File> = FileUtils.listFiles(dir, arrayOf("java"), true).toList()
+
+fun getAllCSharpFiles(dir: File):List<File> = FileUtils.listFiles(dir, arrayOf("cs"), true).toList()

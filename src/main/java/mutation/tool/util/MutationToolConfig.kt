@@ -93,6 +93,11 @@ class MutationToolConfig(val pathSources: File, val pathTests: File) {
     val annotationInfos = getAnnotationInfos(File(JSON_ANNOTATION_CONFIG))
 
     /**
+     * Language processing
+     */
+    var language = Language.JAVA
+
+    /**
      * turn on debug information
      */
     fun setDebugOn() {
