@@ -1,6 +1,7 @@
 package mutation.tool.operator.ada
 
 import mutation.tool.annotation.getListOfAnnotationContext
+import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.FILE1
 import mutation.tool.util.json.getAnnotationInfos
@@ -20,7 +21,7 @@ internal class ADATest {
         )
 
         val mutants = mutableListOf<Mutant>()
-        for (context in getListOfAnnotationContext(File(FILE1))) {
+        for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             val operator = ADA(context, File(FILE1))
             operator.annotation = annotations[(0..(annotations.size - 1)).random()]
             mutants += operator.mutate()
@@ -35,7 +36,7 @@ internal class ADATest {
         val adaChecker = ADAChecker(getAnnotationInfos(File("./src/test/resources/configFiles/annotations.json")))
         adaChecker.build()
 
-        for(operator in adaChecker.check(getListOfAnnotationContext(File(FILE1)), File(FILE1))) {
+        for(operator in adaChecker.check(getListOfAnnotationContext(File(FILE1), JavaStrategy()), File(FILE1))) {
             if(operator.checkContext()) mutants += operator.mutate()
         }
 

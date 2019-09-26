@@ -2,6 +2,8 @@ package mutation.tool
 
 import mu.KotlinLogging
 import mutation.tool.annotation.getListOfAnnotationContext
+import mutation.tool.annotation.visitor.CSharpStrategy
+import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.mutant.generateMutants
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.operator.ada.ADAChecker
@@ -104,7 +106,12 @@ class MutationTool(private val config: MutationToolConfig) {
             val worker = Runnable {
                 synchronized(this) { logger.info { "check source file: $validFile" } }
 
-                val operators = getValidOperators(getListOfAnnotationContext(validFile, config), validFile, config)
+                val visitor = when(config.language) {
+                    Language.JAVA -> JavaStrategy()
+                    Language.C_SHARP -> CSharpStrategy()
+                }
+
+                val operators = getValidOperators(getListOfAnnotationContext(validFile, visitor), validFile, config)
                 generateMutants(operators, validFile, project!!, File(config.mutantsFolder))
 
                 synchronized(this) { logger.info { "source file checked: $validFile" } }
@@ -113,7 +120,7 @@ class MutationTool(private val config: MutationToolConfig) {
         }
 
         executor.shutdown()
-        while (!executor.isTerminated){}
+        while (!executor.isTerminated){ Thread.sleep(100) }
 
         logger.info { "generation of mutants ended" }
     }

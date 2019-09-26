@@ -1,6 +1,7 @@
 package mutation.tool.operator.adat
 
 import mutation.tool.annotation.getListOfAnnotationContext
+import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.FILE1
 import mutation.tool.util.json.getAnnotationInfos
@@ -18,7 +19,7 @@ internal class ADATTest {
         builder.build()
         val map = builder.map
 
-        for (context in getListOfAnnotationContext(File(FILE1))) {
+        for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             val operator = ADAT(context, File(FILE1))
             operator.map = map
             if (operator.checkContext()) mutants += operator.mutate()

@@ -1,6 +1,7 @@
 package mutation.tool.util
 
 import mutation.tool.annotation.getListOfAnnotationContext
+import mutation.tool.annotation.visitor.JavaStrategy
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -17,7 +18,7 @@ internal class AnnotationFinderKtTest {
                 "@org.springframework.stereotype.Controller")
 
         val contexts = getListOfAnnotationContext(
-                File("./src/test/resources/fakeProject/src/main/java/TarefasController3.java"))
+                File("./src/test/resources/fakeProject/src/main/java/TarefasController3.java"), JavaStrategy())
         for (context in contexts) {
             for (annotation in context.getAnnotations()) {
                 val index = when(annotation.nameAsString) {

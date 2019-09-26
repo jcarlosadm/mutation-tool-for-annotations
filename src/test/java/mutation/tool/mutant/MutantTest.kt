@@ -1,6 +1,7 @@
 package mutation.tool.mutant
 
 import mutation.tool.annotation.getListOfAnnotationContext
+import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.operator.FILE1
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.operator.getValidOperators
@@ -14,7 +15,7 @@ internal class MutantTest {
 
     @Test
     fun testGenerateMutants() {
-        val contexts = getListOfAnnotationContext(File(FILE1))
+        val contexts = getListOfAnnotationContext(File(FILE1), JavaStrategy())
 
         val config = MutationToolConfig(File(""), File(""))
         config.operators += listOf(OperatorsEnum.RMA, OperatorsEnum.RMAT)

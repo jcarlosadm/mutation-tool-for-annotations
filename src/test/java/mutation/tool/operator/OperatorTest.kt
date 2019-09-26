@@ -1,6 +1,7 @@
 package mutation.tool.operator
 
 import mutation.tool.annotation.getListOfAnnotationContext
+import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.util.MutationToolConfig
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -14,7 +15,7 @@ internal class OperatorTest {
     fun testGetValidOperators() {
         val config = MutationToolConfig(File(""), File(""))
         config.operators += listOf(OperatorsEnum.RMA, OperatorsEnum.RMAT)
-        val validOperators = getValidOperators(getListOfAnnotationContext(File(FILE1)), File(FILE1), config)
+        val validOperators = getValidOperators(getListOfAnnotationContext(File(FILE1), JavaStrategy()), File(FILE1), config)
 
         assertEquals(19, validOperators.size)
     }

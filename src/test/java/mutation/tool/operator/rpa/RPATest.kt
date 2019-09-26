@@ -1,6 +1,7 @@
 package mutation.tool.operator.rpa
 
 import mutation.tool.annotation.getListOfAnnotationContext
+import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.mutant.Mutant
 import mutation.tool.util.json.getAnnotationInfos
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -14,7 +15,7 @@ internal class RPATest {
     @Test
     fun testRPA() {
         val mutants = mutableListOf<Mutant>()
-        val contexts = getListOfAnnotationContext(File(FILE2))
+        val contexts = getListOfAnnotationContext(File(FILE2), JavaStrategy())
         val builder = RPAMapBuilder(getAnnotationInfos(File("./src/test/resources/configFiles/annotations.json")))
         builder.build()
         val map = builder.map

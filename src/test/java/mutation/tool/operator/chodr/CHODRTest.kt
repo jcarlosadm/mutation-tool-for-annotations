@@ -1,6 +1,7 @@
 package mutation.tool.operator.chodr
 
 import mutation.tool.annotation.getListOfAnnotationContext
+import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.FILE1
 import org.junit.jupiter.api.Assertions.*
@@ -13,7 +14,7 @@ internal class CHODRTest {
     fun testCHODR() {
         val mutants = mutableListOf<Mutant>()
 
-        for(context in getListOfAnnotationContext(File(FILE1))) {
+        for(context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             val operator = CHODR(context, File(FILE1))
             if (operator.checkContext())
                 mutants += operator.mutate()

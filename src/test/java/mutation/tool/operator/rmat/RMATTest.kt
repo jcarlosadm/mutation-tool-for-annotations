@@ -1,6 +1,7 @@
 package mutation.tool.operator.rmat
 
 import mutation.tool.annotation.getListOfAnnotationContext
+import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.mutant.Mutant
 import mutation.tool.operator.FILE1
 import org.junit.jupiter.api.Assertions.*
@@ -12,7 +13,7 @@ internal class RMATTest {
     @Test
     fun testRMAT() {
         val mutants = mutableListOf<Mutant>()
-        for (context in getListOfAnnotationContext(File(FILE1))) {
+        for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             val operator = RMAT(context, File(FILE1))
 
             var count = 0

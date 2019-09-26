@@ -8,6 +8,7 @@ import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter
 import mutation.tool.annotation.getListOfAnnotationContext
+import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.context.InsertionPoint
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -22,7 +23,7 @@ internal class InspectorTest {
     fun testGetAnnotations() {
         val annotations = mutableListOf<AnnotationExpr>()
 
-        for (context in getListOfAnnotationContext(File(FILE1))) {
+        for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             annotations.addAll(context.getAnnotations())
         }
 
@@ -32,7 +33,7 @@ internal class InspectorTest {
 
     @Test
     fun testIsSameClass() {
-        for (context in getListOfAnnotationContext(File(FILE1))) {
+        for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             if (context.getInsertionPoint() != InsertionPoint.CLASS || context.getName() != "TarefasController")
                 continue
 
@@ -48,7 +49,7 @@ internal class InspectorTest {
 
     @Test
     fun testIsSameMethod() {
-        for (context in getListOfAnnotationContext(File(FILE1))) {
+        for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             if (context.getInsertionPoint() != InsertionPoint.METHOD) continue
             val string = context.toString()
 
@@ -64,7 +65,7 @@ internal class InspectorTest {
 
     @Test
     fun testIsSameProp() {
-        for (context in getListOfAnnotationContext(File(FILE1))) {
+        for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             if (context.getInsertionPoint() != InsertionPoint.PROPERTY) continue
             val string = context.toString()
 
@@ -80,7 +81,7 @@ internal class InspectorTest {
 
     @Test
     fun testIsSameParameter() {
-        for (context in getListOfAnnotationContext(File(FILE1))) {
+        for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             if (context.getInsertionPoint() != InsertionPoint.PARAMETER) continue
             val string = context.toString()
             val line = context.getRange().begin.line
@@ -99,7 +100,7 @@ internal class InspectorTest {
 
     @Test
     fun testNumOfAnnotationsAttributes() {
-        for (context in getListOfAnnotationContext(File(FILE1))) {
+        for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             for (annotation in context.getAnnotations()) {
                 if (!annotation.toString().contains("("))
                     assertEquals(0, numOfAnnotationAttributes(annotation))

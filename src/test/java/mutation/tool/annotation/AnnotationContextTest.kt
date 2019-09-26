@@ -1,6 +1,7 @@
 package mutation.tool.annotation
 
 import com.github.javaparser.ast.expr.AnnotationExpr
+import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.context.*
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
@@ -16,7 +17,7 @@ internal class AnnotationContextTest {
     @Test
     fun testGetListOfAnnotationContext() {
         val file = File(PATH)
-        val list = getListOfAnnotationContext(file)
+        val list = getListOfAnnotationContext(file, JavaStrategy())
 
         assertEquals(19, list.size)
 
