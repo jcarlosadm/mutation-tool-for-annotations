@@ -5,7 +5,7 @@ class BasicAttributeDemo
 {
 
     [Obsolete]
-    string name;
+    private string name;
 
     [Obsolete]
     public void MyFirstdeprecatedMethod([Obsolete] string a)
