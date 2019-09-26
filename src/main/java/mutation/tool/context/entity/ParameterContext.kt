@@ -8,6 +8,24 @@ import org.w3c.dom.Node
 
 // TODO move to context package
 class ParameterContext:Context {
+    override val name: String
+        get() = TODO("not implemented")
+    override val beginLine: Int
+        get() = TODO("not implemented")
+    override val beginColumn: Int
+        get() = TODO("not implemented")
+    override val annotations: List<AnnotationAdapter>
+        get() = TODO("not implemented")
+    override val accessModifiers: List<ModifierAdapter>?
+        get() = TODO("not implemented")
+    override val parameters: List<ParameterContext>?
+        get() = TODO("not implemented")
+    override val returnType: String?
+        get() = TODO("not implemented")
+    override val type: String?
+        get() = TODO("not implemented")
+    private val stringRepresentation:String
+        get() = TODO("not implemented")
 
     constructor(paramenter: Parameter) {
         TODO("not implemented")
@@ -17,37 +35,7 @@ class ParameterContext:Context {
         TODO("not implemented")
     }
 
-    override fun getName(): String {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getBeginLine(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getBeginColumn(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getAnnotations(): List<AnnotationAdapter> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getAccessModifiers(): List<ModifierAdapter>? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getParameters(): List<ParameterContext>? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getReturnType(): String? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun getType(): String? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun getInsertionPoint(): InsertionPoint = InsertionPoint.PARAMETER
+
+    override fun toString(): String = this.stringRepresentation
 }

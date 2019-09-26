@@ -10,18 +10,21 @@ import org.w3c.dom.Node
 
 // TODO move to context package
 class ClassContext:Context {
-    private var name:String
-    private var beginLine = 0
-    private var beginColumn = 0
-    private var annotations = mutableListOf<AnnotationAdapter>()
-    private var accessModifiers = mutableListOf<ModifierAdapter>()
-    private var string: String
+    override val name:String
+    override val beginLine:Int
+    override val beginColumn:Int
+    override val annotations = mutableListOf<AnnotationAdapter>()
+    override val accessModifiers = mutableListOf<ModifierAdapter>()
+    override val parameters: List<ParameterContext>? = null
+    override val returnType: String? = null
+    override val type: String? = null
+    private val stringRepresentation: String
 
     constructor(classOrInterfaceDeclaration: ClassOrInterfaceDeclaration) {
         this.name = classOrInterfaceDeclaration.nameAsString
         this.beginLine = classOrInterfaceDeclaration.range.get().begin.line
         this.beginColumn = classOrInterfaceDeclaration.range.get().begin.column
-        this.string = classOrInterfaceDeclaration.toString()
+        this.stringRepresentation = classOrInterfaceDeclaration.toString()
 
         for (annotation in classOrInterfaceDeclaration.annotations) {
             this.annotations.add(AnnotationAdapter(annotation))
@@ -36,7 +39,7 @@ class ClassContext:Context {
         this.name = nameNode.textContent
         this.beginLine = Integer.parseInt(nameNode.attributes.getNamedItem("pos:line").textContent)
         this.beginColumn = Integer.parseInt(nameNode.attributes.getNamedItem("pos:column").textContent)
-        this.string = node.textContent
+        this.stringRepresentation = node.textContent
 
         for (attrNode in getAllTagNodes(node, "attribute", listOf("decl_stmt", "function", "parameter"))) {
             this.annotations.add(AnnotationAdapter(attrNode))
@@ -46,14 +49,7 @@ class ClassContext:Context {
         if (mod != null) this.accessModifiers.add(ModifierAdapter(mod))
     }
 
-    override fun getName(): String = this.name
-    override fun getBeginLine(): Int = this.beginLine
-    override fun getBeginColumn(): Int = this.beginColumn
-    override fun getAnnotations(): List<AnnotationAdapter> = annotations
-    override fun getAccessModifiers(): List<ModifierAdapter>? = accessModifiers
-    override fun getParameters(): List<ParameterContext>? = null
-    override fun getReturnType(): String? = null
-    override fun getType(): String? = null
-    override fun toString(): String = this.string
     override fun getInsertionPoint(): InsertionPoint = InsertionPoint.CLASS
+
+    override fun toString(): String = this.stringRepresentation
 }

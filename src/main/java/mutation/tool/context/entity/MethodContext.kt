@@ -10,26 +10,29 @@ import org.w3c.dom.Node
 
 // TODO move to context package
 class MethodContext:Context {
-    private var name:String
-    private var beginLine = 0
-    private var beginColumn = 0
-    private var annotations = mutableListOf<AnnotationAdapter>()
-    private var modifiers = mutableListOf<ModifierAdapter>()
-    private var parameters = mutableListOf<ParameterContext>()
-    private var returnType:String
+    override val name:String
+    override val beginLine:Int
+    override val beginColumn:Int
+    override val annotations = mutableListOf<AnnotationAdapter>()
+    override val accessModifiers = mutableListOf<ModifierAdapter>()
+    override val parameters = mutableListOf<ParameterContext>()
+    override val returnType:String
+    override val type: String? = null
+    private val stringRepresentation: String
 
     constructor(methodDeclaration: MethodDeclaration) {
         this.name = methodDeclaration.nameAsString
         this.beginLine = methodDeclaration.range.get().begin.line
         this.beginColumn = methodDeclaration.range.get().begin.column
         this.returnType = methodDeclaration.typeAsString
+        this.stringRepresentation = methodDeclaration.toString()
 
         for (annotation in methodDeclaration.annotations) {
             annotations.add(AnnotationAdapter(annotation))
         }
 
         for (modifier in methodDeclaration.modifiers) {
-            modifiers.add(ModifierAdapter(modifier))
+            accessModifiers.add(ModifierAdapter(modifier))
         }
 
         for (parameter in methodDeclaration.parameters) {
@@ -45,25 +48,20 @@ class MethodContext:Context {
         val typeNode = getTagNode(node, "type", false)!!
         val typeNameNode = getTagNode(typeNode, "name", false)!!
         this.returnType = typeNameNode.textContent
+        this.stringRepresentation = node.textContent
 
         for (attrNode in getAllTagNodes(node, "attribute", listOf("class", "decl_stmt", "parameter"))) {
             annotations.add(AnnotationAdapter(attrNode))
         }
 
-        this.modifiers.add(ModifierAdapter(getTagNode(node, "specifier", false)!!))
+        this.accessModifiers.add(ModifierAdapter(getTagNode(node, "specifier", false)!!))
 
         for (paramNode in getAllTagNodes(node, "parameter", listOf("class", "decl_stmt"))) {
             this.parameters.add(ParameterContext(paramNode))
         }
     }
 
-    override fun getName(): String = this.name
-    override fun getBeginLine(): Int = this.beginLine
-    override fun getBeginColumn(): Int = this.beginColumn
-    override fun getAnnotations(): List<AnnotationAdapter> = this.annotations
-    override fun getAccessModifiers(): List<ModifierAdapter>? = this.modifiers
-    override fun getParameters(): List<ParameterContext>? = this.parameters
-    override fun getReturnType(): String? = this.returnType
-    override fun getType(): String? = null
     override fun getInsertionPoint(): InsertionPoint = InsertionPoint.METHOD
+
+    override fun toString(): String = this.stringRepresentation
 }

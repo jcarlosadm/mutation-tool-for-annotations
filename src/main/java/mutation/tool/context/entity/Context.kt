@@ -6,13 +6,15 @@ import mutation.tool.context.adapter.ModifierAdapter
 
 // TODO move to context package
 interface Context {
-    fun getName():String
-    fun getBeginLine():Int
-    fun getBeginColumn():Int
-    fun getAnnotations():List<AnnotationAdapter>
-    fun getAccessModifiers():List<ModifierAdapter>?
-    fun getParameters():List<ParameterContext>?
-    fun getReturnType():String?
-    fun getType():String?
+    val name:String
+    val beginLine:Int
+    val beginColumn:Int
+    val annotations:List<AnnotationAdapter>
+    val accessModifiers:List<ModifierAdapter>?
+    val parameters:List<ParameterContext>?
+    val returnType:String?
+    val type:String?
+
     fun getInsertionPoint():InsertionPoint
+    override fun toString():String
 }
