@@ -60,7 +60,7 @@ class ADAChecker(private val annotationInfos:List<AnnotationInfo>) {
                 val name = info.name
 
                 var ok = true
-                for (annotation in context.getAnnotations()) {
+                for (annotation in context.annotations) {
                     if (annotationFinder(annotation, name)){
                         ok = false
                         break

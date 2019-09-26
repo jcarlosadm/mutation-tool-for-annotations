@@ -33,8 +33,8 @@ class ADA(context: Context, file:File): Operator(context, file) {
     override fun checkContext(): Boolean {
         if (annotation == null) return false
 
-        for (annotationContext in context.getAnnotations()) {
-            if (getName(annotation!!) == annotationContext.nameAsString) return false
+        for (annotationContext in context.annotations) {
+            if (getName(annotation!!) == annotationContext.name) return false
         }
 
         return true

@@ -40,14 +40,14 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
     private lateinit var currentAttr:Map<String, String>
 
     override fun checkContext(): Boolean {
-        for (annotation in context.getAnnotations()) {
+        for (annotation in context.annotations) {
             var ok = false
             var validKey = ""
             map.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (!ok) continue
 
             if (annotation.isNormalAnnotationExpr) {
-                annotation as NormalAnnotationExpr
+                //annotation as NormalAnnotationExpr
 
                 for (attr in map.getValue(validKey)) {
                     var notEqual = true

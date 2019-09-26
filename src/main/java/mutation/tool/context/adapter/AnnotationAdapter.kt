@@ -5,6 +5,11 @@ import org.w3c.dom.Node
 
 class AnnotationAdapter {
 
+    val name:String
+        get() = TODO("not implemented")
+    val isNormalAnnotationExpr:Boolean
+        get() = TODO("not implemented")
+
     constructor(annotationExpr: AnnotationExpr) {
         TODO("not implemented")
     }
@@ -13,5 +18,4 @@ class AnnotationAdapter {
         TODO("not implemented")
     }
 
-    // TODO: implement methods
 }
