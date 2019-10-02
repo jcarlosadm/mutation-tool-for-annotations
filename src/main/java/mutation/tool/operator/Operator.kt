@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import mutation.tool.context.Context
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.mutant.MutateVisitor
 import mutation.tool.util.*
 import java.io.File
@@ -36,7 +36,7 @@ abstract class Operator(val context:Context, val file:File) {
      *
      * @return a list of mutants
      */
-    abstract fun mutate():List<Mutant>
+    abstract fun mutate():List<JavaMutant>
 
     /**
      * Visit and change the ast of the source file

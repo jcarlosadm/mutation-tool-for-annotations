@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import com.google.common.collect.Collections2
 import mutation.tool.context.Context
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
 import java.io.File
@@ -21,7 +21,7 @@ import java.io.File
  */
 class CHODR(context: Context, file: File) : Operator(context, file) {
     private val currentAnnotations = mutableListOf<AnnotationExpr>()
-    private var mutant:Mutant? = null
+    private var javaMutant:JavaMutant? = null
 
     override fun checkContext(): Boolean {
         if (context.getAnnotations().size > 1)
@@ -29,8 +29,8 @@ class CHODR(context: Context, file: File) : Operator(context, file) {
         return false
     }
 
-    override fun mutate(): List<Mutant> {
-        val mutants = mutableListOf<Mutant>()
+    override fun mutate(): List<JavaMutant> {
+        val mutants = mutableListOf<JavaMutant>()
         val annotations = context.getAnnotations()
 
         val originalSequence = (0..(annotations.size-1)).toList()
@@ -46,9 +46,9 @@ class CHODR(context: Context, file: File) : Operator(context, file) {
                     currentAnnotations += annotations[index]
                 }
 
-                mutant = Mutant(OperatorsEnum.CHODR)
-                mutant?.compilationUnit = this.visit()
-                mutants += mutant!!
+                javaMutant = JavaMutant(OperatorsEnum.CHODR)
+                javaMutant?.compilationUnit = this.visit()
+                mutants += javaMutant!!
             }
         }
 

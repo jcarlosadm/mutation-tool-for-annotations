@@ -6,9 +6,10 @@ import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
+import mutation.tool.annotation.finder.javaAnnotationFinder
 import mutation.tool.context.Context
 import mutation.tool.context.InsertionPoint
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.util.*
@@ -31,7 +32,7 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
      */
     lateinit var mapContextType:Map<String, List<InsertionPoint>>
 
-    private lateinit var currentMutant: Mutant
+    private lateinit var currentJavaMutant: JavaMutant
     private lateinit var currentAnnotation: AnnotationExpr
     private lateinit var currentOtherContext: Context
     private var lockedInsert = false
@@ -40,7 +41,7 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
         for (annotation in context.getAnnotations()) {
             var ok = false
             var validKey = ""
-            mapContextType.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            mapContextType.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
 
             if (ok && mapContextType[validKey] != null) {
                 for (insertionPoint in mapContextType.getValue(validKey)) {
@@ -53,13 +54,13 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
         return false
     }
 
-    override fun mutate(): List<Mutant> {
-        val mutants = mutableListOf<Mutant>()
+    override fun mutate(): List<JavaMutant> {
+        val mutants = mutableListOf<JavaMutant>()
 
         for (annotation in context.getAnnotations()) {
             var ok = false
             var validKey = ""
-            mapContextType.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            mapContextType.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
 
             if (!ok || mapContextType[validKey] == null) continue
 
@@ -70,12 +71,12 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
                     if (otherContext.getInsertionPoint() != insertionPoint) continue
 
                     lockedInsert = false
-                    currentMutant = Mutant(OperatorsEnum.SWTG)
+                    currentJavaMutant = JavaMutant(OperatorsEnum.SWTG)
                     currentAnnotation = annotation
                     currentOtherContext = otherContext
 
-                    currentMutant.compilationUnit = this.visit()
-                    mutants += currentMutant
+                    currentJavaMutant.compilationUnit = this.visit()
+                    mutants += currentJavaMutant
                 }
             }
         }

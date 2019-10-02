@@ -6,7 +6,7 @@ import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.*
 import mutation.tool.context.Context
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.util.numOfAnnotationAttributes
@@ -20,7 +20,7 @@ import java.io.File
  * @constructor create a RMAT operator
  */
 class RMAT(context: Context, file: File) : Operator(context, file) {
-    private var currentMutant:Mutant? = null
+    private var currentJavaMutant:JavaMutant? = null
     private var currentAnnotation:AnnotationExpr? = null
     private var currentIndex:Int? = null
 
@@ -34,17 +34,17 @@ class RMAT(context: Context, file: File) : Operator(context, file) {
         return false
     }
 
-    override fun mutate(): List<Mutant> {
-        val mutants = mutableListOf<Mutant>()
+    override fun mutate(): List<JavaMutant> {
+        val mutants = mutableListOf<JavaMutant>()
 
         for (annotation in context.getAnnotations()) {
             val nAttr = numOfAnnotationAttributes(annotation)
             for (index in 0..(nAttr-1)) {
                 currentAnnotation = annotation
                 currentIndex = index
-                currentMutant = Mutant(OperatorsEnum.RMAT)
-                currentMutant!!.compilationUnit = this.visit()
-                mutants.add(currentMutant!!)
+                currentJavaMutant = JavaMutant(OperatorsEnum.RMAT)
+                currentJavaMutant!!.compilationUnit = this.visit()
+                mutants.add(currentJavaMutant!!)
             }
         }
 

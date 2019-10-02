@@ -3,7 +3,7 @@ package mutation.tool.operator.swtg
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.context.InsertionPoint
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.FILE1
 import mutation.tool.util.json.getAnnotationInfos
 import org.junit.jupiter.api.Assertions.*
@@ -14,7 +14,7 @@ internal class SWTGTest {
 
     @Test
     fun testSWTG() {
-        val mutants = mutableListOf<Mutant>()
+        val mutants = mutableListOf<JavaMutant>()
         val contexts = getListOfAnnotationContext(File(FILE1), JavaStrategy())
         val map = mapOf(
                 "Autowired" to listOf(InsertionPoint.PROPERTY, InsertionPoint.METHOD),
@@ -33,7 +33,7 @@ internal class SWTGTest {
 
     @Test
     fun testSWTGWithFile() {
-        val mutants = mutableListOf<Mutant>()
+        val mutants = mutableListOf<JavaMutant>()
         val contexts = getListOfAnnotationContext(File(FILE1), JavaStrategy())
         val builder = SWTGMapBuilder(getAnnotationInfos(File("./src/test/resources/configFiles/annotations.json")))
         builder.build()

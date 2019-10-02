@@ -3,7 +3,7 @@ package mutation.tool.operator.ada
 import mutation.tool.context.Context
 import mutation.tool.context.InsertionPoint
 import mutation.tool.operator.Operator
-import mutation.tool.util.annotationFinder
+import mutation.tool.annotation.finder.javaAnnotationFinder
 import mutation.tool.util.json.AnnotationInfo
 import java.io.File
 
@@ -61,7 +61,7 @@ class ADAChecker(private val annotationInfos:List<AnnotationInfo>) {
 
                 var ok = true
                 for (annotation in context.annotations) {
-                    if (annotationFinder(annotation, name)){
+                    if (javaAnnotationFinder(annotation, name)){
                         ok = false
                         break
                     }

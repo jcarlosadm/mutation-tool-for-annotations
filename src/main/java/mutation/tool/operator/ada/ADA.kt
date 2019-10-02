@@ -4,9 +4,9 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
-import mutation.tool.annotation.AnnotationBuilder
+import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
 import java.io.File
@@ -28,7 +28,7 @@ class ADA(context: Context, file:File): Operator(context, file) {
     /**
      * temporary mutant
      */
-    var mutant = Mutant(OperatorsEnum.ADA)
+    var mutant = JavaMutant(OperatorsEnum.ADA)
 
     override fun checkContext(): Boolean {
         if (annotation == null) return false
@@ -46,7 +46,7 @@ class ADA(context: Context, file:File): Operator(context, file) {
         return annotation.removePrefix("@")
     }
 
-    override fun mutate(): List<Mutant> {
+    override fun mutate(): List<JavaMutant> {
         if (annotation == null) throw Exception("ADA with null annotation")
         mutant.compilationUnit = this.visit()
         return listOf(mutant)
@@ -72,10 +72,10 @@ class ADA(context: Context, file:File): Operator(context, file) {
     ):Boolean {
         when {
             classOrInterfaceDeclaration != null -> classOrInterfaceDeclaration.
-                    addAnnotation(AnnotationBuilder(annotation!!).build())
-            methodDeclaration != null -> methodDeclaration.addAnnotation(AnnotationBuilder(annotation!!).build())
-            fieldDeclaration != null -> fieldDeclaration.addAnnotation(AnnotationBuilder(annotation!!).build())
-            parameter != null -> parameter.addAnnotation(AnnotationBuilder(annotation!!).build())
+                    addAnnotation(JavaAnnotationBuilder(annotation!!).build())
+            methodDeclaration != null -> methodDeclaration.addAnnotation(JavaAnnotationBuilder(annotation!!).build())
+            fieldDeclaration != null -> fieldDeclaration.addAnnotation(JavaAnnotationBuilder(annotation!!).build())
+            parameter != null -> parameter.addAnnotation(JavaAnnotationBuilder(annotation!!).build())
             else -> return false
         }
 

@@ -1,11 +1,7 @@
 package mutation.tool.annotation
 
-import com.github.javaparser.JavaParser
 import mutation.tool.annotation.visitor.VisitorStrategy
 import mutation.tool.context.Context
-import mutation.tool.context.ContextCatcherVisitor
-import mutation.tool.util.Language
-import mutation.tool.util.MutationToolConfig
 import java.io.File
 
 /**

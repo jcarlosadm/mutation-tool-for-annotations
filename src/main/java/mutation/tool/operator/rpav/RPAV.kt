@@ -8,12 +8,12 @@ import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import com.github.javaparser.ast.expr.NormalAnnotationExpr
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
-import mutation.tool.annotation.AnnotationBuilder
+import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.util.annotationFinder
+import mutation.tool.annotation.finder.javaAnnotationFinder
 import java.io.File
 
 /**
@@ -36,13 +36,13 @@ class RPAV(context: Context, file: File) : Operator(context, file) {
     private lateinit var currentAnnotation: AnnotationExpr
     private lateinit var currentAttr: String
     private lateinit var currentAttrValue: String
-    private lateinit var currentMutant: Mutant
+    private lateinit var currentJavaMutant: JavaMutant
 
     override fun checkContext(): Boolean {
         for (annotation in context.getAnnotations()) {
             var ok = false
             var validKey = ""
-            map.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            map.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (!ok || annotation.isMarkerAnnotationExpr) continue
 
             if ((annotation.isSingleMemberAnnotationExpr && map.getValue(validKey).containsKey("") &&
@@ -73,13 +73,13 @@ class RPAV(context: Context, file: File) : Operator(context, file) {
         return false
     }
 
-    override fun mutate(): List<Mutant> {
-        val mutants = mutableListOf<Mutant>()
+    override fun mutate(): List<JavaMutant> {
+        val mutants = mutableListOf<JavaMutant>()
 
         for (annotation in context.getAnnotations()) {
             var ok = false
             var validKey = ""
-            map.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            map.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
 
             if (!ok || annotation.isMarkerAnnotationExpr) continue
 
@@ -112,15 +112,15 @@ class RPAV(context: Context, file: File) : Operator(context, file) {
             annotation: AnnotationExpr,
             attr: String,
             attrValue: String,
-            mutants: MutableList<Mutant>
+            javaMutants: MutableList<JavaMutant>
     ) {
         currentAnnotation = annotation
         currentAttr = attr
         currentAttrValue = attrValue
-        currentMutant = Mutant(OperatorsEnum.RPAV)
+        currentJavaMutant = JavaMutant(OperatorsEnum.RPAV)
 
-        currentMutant.compilationUnit = this.visit()
-        mutants += currentMutant
+        currentJavaMutant.compilationUnit = this.visit()
+        javaMutants += currentJavaMutant
     }
 
     override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?): Boolean = super.visit(n, arg) &&
@@ -139,7 +139,7 @@ class RPAV(context: Context, file: File) : Operator(context, file) {
         for (annotation in annotations) {
             if (annotation.nameAsString == currentAnnotation.nameAsString) {
                 if (annotation.isSingleMemberAnnotationExpr) {
-                    annotation.replace(AnnotationBuilder("@${annotation.nameAsString}" +
+                    annotation.replace(JavaAnnotationBuilder("@${annotation.nameAsString}" +
                             "($currentAttrValue)").build())
                 }
                 else {
@@ -159,7 +159,7 @@ class RPAV(context: Context, file: File) : Operator(context, file) {
                     }
                     string += ")"
 
-                    annotation.replace(AnnotationBuilder(string).build())
+                    annotation.replace(JavaAnnotationBuilder(string).build())
                 }
 
                 return true

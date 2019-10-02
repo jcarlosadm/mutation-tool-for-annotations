@@ -7,12 +7,12 @@ import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import com.github.javaparser.ast.expr.NormalAnnotationExpr
-import mutation.tool.annotation.AnnotationBuilder
+import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.util.annotationFinder
+import mutation.tool.annotation.finder.javaAnnotationFinder
 import java.io.File
 
 /**
@@ -34,7 +34,7 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
      */
     lateinit var map: Map<String, Map<String, List<Map<String, String>>>>
 
-    private lateinit var currentMutant:Mutant
+    private lateinit var currentJavaMutant:JavaMutant
     private lateinit var currentAnnotation: AnnotationExpr
     private lateinit var currentAttr:String
     private lateinit var currentAttrRep:String
@@ -44,7 +44,7 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
         for (annotation in context.getAnnotations()){
             var ok = false
             var validKey = ""
-            map.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            map.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (!ok) continue
 
             if (annotation.isSingleMemberAnnotationExpr && map.getValue(validKey).containsKey(""))
@@ -75,13 +75,13 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
         return false
     }
 
-    override fun mutate(): List<Mutant> {
-        val mutants = mutableListOf<Mutant>()
+    override fun mutate(): List<JavaMutant> {
+        val mutants = mutableListOf<JavaMutant>()
 
         for (annotation in context.getAnnotations()) {
             var ok = false
             var validKey = ""
-            map.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            map.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (!ok) continue
 
             if (annotation.isSingleMemberAnnotationExpr && map.getValue(validKey).containsKey("")) {
@@ -118,16 +118,16 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
             annotation: AnnotationExpr,
             attr: String,
             attrMap: Map<String, String>,
-            mutants: MutableList<Mutant>
+            javaMutants: MutableList<JavaMutant>
     ) {
         currentAnnotation = annotation
-        currentMutant = Mutant(OperatorsEnum.RPAT)
+        currentJavaMutant = JavaMutant(OperatorsEnum.RPAT)
         currentAttr = attr
         currentAttrRep = attrMap.getValue("name")
         currentAttrRepVal = attrMap.getValue("value")
 
-        currentMutant.compilationUnit = this.visit()
-        mutants += currentMutant
+        currentJavaMutant.compilationUnit = this.visit()
+        javaMutants += currentJavaMutant
     }
 
     override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?): Boolean = super.visit(n, arg) &&
@@ -158,7 +158,7 @@ class RPAT(context: Context, file: File) : Operator(context, file) {
 
                 annotation.addPair(currentAttrRep, currentAttrRepVal)
             } else {
-                annotation.replace(AnnotationBuilder("@${annotation.nameAsString}(" +
+                annotation.replace(JavaAnnotationBuilder("@${annotation.nameAsString}(" +
                         "$currentAttrRep = $currentAttrRepVal)").build())
             }
 

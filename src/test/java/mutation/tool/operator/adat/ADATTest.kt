@@ -2,7 +2,7 @@ package mutation.tool.operator.adat
 
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.annotation.visitor.JavaStrategy
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.FILE1
 import mutation.tool.util.json.getAnnotationInfos
 import org.junit.jupiter.api.Assertions.*
@@ -13,7 +13,7 @@ internal class ADATTest {
 
     @Test
     fun testADAT() {
-        val mutants = mutableListOf<Mutant>()
+        val mutants = mutableListOf<JavaMutant>()
 
         val builder = ADATMapBuilder(getAnnotationInfos(File("./src/test/resources/configFiles/annotations.json")))
         builder.build()

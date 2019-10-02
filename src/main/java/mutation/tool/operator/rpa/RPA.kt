@@ -5,12 +5,12 @@ import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
-import mutation.tool.annotation.AnnotationBuilder
+import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.util.annotationFinder
+import mutation.tool.annotation.finder.javaAnnotationFinder
 import java.io.File
 
 /**
@@ -30,7 +30,7 @@ class RPA(context: Context, file: File) : Operator(context, file) {
      */
     lateinit var switchMap:Map<String, List<String>>
 
-    private lateinit var currentMutant:Mutant
+    private lateinit var currentJavaMutant:JavaMutant
     private lateinit var currentAnnotation: AnnotationExpr
     private lateinit var currentAnnotationRep: String
 
@@ -38,11 +38,11 @@ class RPA(context: Context, file: File) : Operator(context, file) {
         for (annotation in context.getAnnotations()){
             var ok = false
             var validKey = ""
-            switchMap.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            switchMap.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (ok) {
                 for (annotation2 in (context.getAnnotations() - annotation)) {
                     ok = true
-                    switchMap.getValue(validKey).forEach { if (annotationFinder(annotation2, it)) ok = false }
+                    switchMap.getValue(validKey).forEach { if (javaAnnotationFinder(annotation2, it)) ok = false }
                     if (!ok) return false
                 }
                 return true
@@ -52,18 +52,18 @@ class RPA(context: Context, file: File) : Operator(context, file) {
         return false
     }
 
-    override fun mutate(): List<Mutant> {
-        val mutants = mutableListOf<Mutant>()
+    override fun mutate(): List<JavaMutant> {
+        val mutants = mutableListOf<JavaMutant>()
 
         for (annotation in context.getAnnotations()) {
             var ok = false
             var validKey = ""
-            switchMap.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            switchMap.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (!ok || switchMap[validKey] == null) continue
 
             ok = true
             for (annotation2 in (context.getAnnotations() - annotation)) {
-                switchMap.getValue(validKey).forEach { if (annotationFinder(annotation2, it)) ok = false }
+                switchMap.getValue(validKey).forEach { if (javaAnnotationFinder(annotation2, it)) ok = false }
             }
             if (!ok) continue
 
@@ -71,10 +71,10 @@ class RPA(context: Context, file: File) : Operator(context, file) {
 
             for (annotationRep in switchMap.getValue(validKey)){
                 currentAnnotationRep = annotationRep
-                currentMutant = Mutant(OperatorsEnum.RPA)
+                currentJavaMutant = JavaMutant(OperatorsEnum.RPA)
 
-                currentMutant.compilationUnit = this.visit()
-                mutants += currentMutant
+                currentJavaMutant.compilationUnit = this.visit()
+                mutants += currentJavaMutant
             }
         }
 
@@ -96,7 +96,7 @@ class RPA(context: Context, file: File) : Operator(context, file) {
     private fun replaceAnnotation(annotations: List<AnnotationExpr>):Boolean {
         for (annotation in annotations) {
             if (annotation.toString() == currentAnnotation.toString()) {
-                return annotation.replace(AnnotationBuilder(currentAnnotationRep).build())
+                return annotation.replace(JavaAnnotationBuilder(currentAnnotationRep).build())
             }
         }
 

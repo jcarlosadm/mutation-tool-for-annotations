@@ -1,15 +1,16 @@
-package mutation.tool.context
+package mutation.tool.context.visitor
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter
+import mutation.tool.context.*
 
 /**
  * Visitor which collect contexts from source file
  */
-class ContextCatcherVisitor:VoidVisitorAdapter<Any>() {
+class ContextCatcherJavaVisitor:VoidVisitorAdapter<Any>() {
 
     /**
      * Collected contexts

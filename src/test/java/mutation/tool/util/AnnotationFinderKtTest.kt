@@ -1,5 +1,6 @@
 package mutation.tool.util
 
+import mutation.tool.annotation.finder.javaAnnotationFinder
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.annotation.visitor.JavaStrategy
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -31,7 +32,7 @@ internal class AnnotationFinderKtTest {
                     else -> -1
                 }
 
-                assertTrue(annotationFinder(annotation, names[index]))
+                assertTrue(javaAnnotationFinder(annotation, names[index]))
             }
         }
     }

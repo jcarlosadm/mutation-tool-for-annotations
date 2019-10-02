@@ -7,12 +7,12 @@ import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import com.github.javaparser.ast.expr.NormalAnnotationExpr
-import mutation.tool.annotation.AnnotationBuilder
+import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
-import mutation.tool.util.annotationFinder
+import mutation.tool.annotation.finder.javaAnnotationFinder
 import java.io.File
 
 /**
@@ -35,7 +35,7 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
      */
     lateinit var map:Map<String, List<Map<String, String>>>
 
-    private lateinit var currentMutant:Mutant
+    private lateinit var currentJavaMutant:JavaMutant
     private lateinit var currentAnnotation:AnnotationExpr
     private lateinit var currentAttr:Map<String, String>
 
@@ -43,7 +43,7 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
         for (annotation in context.annotations) {
             var ok = false
             var validKey = ""
-            map.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            map.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (!ok) continue
 
             if (annotation.isNormalAnnotationExpr) {
@@ -70,13 +70,13 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
         return false
     }
 
-    override fun mutate(): List<Mutant> {
-        val mutants = mutableListOf<Mutant>()
+    override fun mutate(): List<JavaMutant> {
+        val mutants = mutableListOf<JavaMutant>()
 
         for (annotation in context.getAnnotations()) {
             var ok = false
             var validKey = ""
-            map.keys.forEach { if (annotationFinder(annotation, it)) {ok = true; validKey = it} }
+            map.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (!ok) continue
 
             if (annotation.isNormalAnnotationExpr) {
@@ -117,14 +117,14 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
     private fun createMutant(
             annotation: AnnotationExpr,
             attr: Map<String, String>,
-            mutants: MutableList<Mutant>
+            javaMutants: MutableList<JavaMutant>
     ) {
-        currentMutant = Mutant(OperatorsEnum.ADAT)
+        currentJavaMutant = JavaMutant(OperatorsEnum.ADAT)
         currentAnnotation = annotation
         currentAttr = attr
 
-        currentMutant.compilationUnit = this.visit()
-        mutants += currentMutant
+        currentJavaMutant.compilationUnit = this.visit()
+        javaMutants += currentJavaMutant
     }
 
     override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?): Boolean = super.visit(n, arg) &&
@@ -149,12 +149,12 @@ class ADAT(context: Context, file:File) : Operator(context, file) {
                     return true
                 } else {
                     var validKey = ""
-                    map.keys.forEach { if (annotationFinder(annotation, it)) validKey = it }
+                    map.keys.forEach { if (javaAnnotationFinder(annotation, it)) validKey = it }
                     for (attr in map.getValue(validKey)) {
                         if (attr.containsKey("asSingle")) {
                             val defaultValue = getValue(annotation.toString())
                             val annotationString = makeString(annotation.nameAsString, attr, defaultValue)
-                            val otherAnnotation = AnnotationBuilder(annotationString).build()
+                            val otherAnnotation = JavaAnnotationBuilder(annotationString).build()
 
                             otherAnnotation as NormalAnnotationExpr
                             otherAnnotation.addPair(currentAttr.getValue("name"), currentAttr.getValue("value"))

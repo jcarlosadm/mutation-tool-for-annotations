@@ -2,7 +2,7 @@ package mutation.tool.operator.ada
 
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.annotation.visitor.JavaStrategy
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.FILE1
 import mutation.tool.util.json.getAnnotationInfos
 import org.junit.jupiter.api.Assertions.*
@@ -20,7 +20,7 @@ internal class ADATest {
                 "@a(file=\"err\", name = \"ee\")"
         )
 
-        val mutants = mutableListOf<Mutant>()
+        val mutants = mutableListOf<JavaMutant>()
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             val operator = ADA(context, File(FILE1))
             operator.annotation = annotations[(0..(annotations.size - 1)).random()]
@@ -32,7 +32,7 @@ internal class ADATest {
 
     @Test
     fun testADAWithJavafile() {
-        val mutants = mutableListOf<Mutant>()
+        val mutants = mutableListOf<JavaMutant>()
         val adaChecker = ADAChecker(getAnnotationInfos(File("./src/test/resources/configFiles/annotations.json")))
         adaChecker.build()
 

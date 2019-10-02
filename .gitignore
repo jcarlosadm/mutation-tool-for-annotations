@@ -2,7 +2,7 @@ app.log
 *pid*
 
 /data/
-/src/test/resources/mutants/
+/src/test/resources/javaMutants/
 /src/test/resources/mutants2/
 
 

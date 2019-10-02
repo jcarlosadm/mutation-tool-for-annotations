@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import kotlin.test.assertEquals
 
-internal class MutantTest {
+internal class JavaMutantTest {
 
     @Test
     fun testGenerateMutants() {

@@ -6,7 +6,7 @@ import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import mutation.tool.context.Context
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.Operator
 import mutation.tool.operator.OperatorsEnum
 import java.io.File
@@ -19,19 +19,19 @@ import java.io.File
  * @constructor create a RMA operator
  */
 class RMA(context: Context, file: File) : Operator(context, file) {
-    private var currentMutant:Mutant? = null
+    private var currentJavaMutant:JavaMutant? = null
     private var currentAnnotation:AnnotationExpr? = null
 
     override fun checkContext(): Boolean = (context.getAnnotations()).isNotEmpty()
 
-    override fun mutate(): List<Mutant> {
-        val mutants = mutableListOf<Mutant>()
+    override fun mutate(): List<JavaMutant> {
+        val mutants = mutableListOf<JavaMutant>()
 
         for (annotation in context.getAnnotations()) {
             currentAnnotation = annotation
-            currentMutant = Mutant(OperatorsEnum.RMA)
-            currentMutant?.compilationUnit = this.visit()
-            mutants.add(currentMutant!!)
+            currentJavaMutant = JavaMutant(OperatorsEnum.RMA)
+            currentJavaMutant?.compilationUnit = this.visit()
+            mutants.add(currentJavaMutant!!)
         }
 
         return mutants

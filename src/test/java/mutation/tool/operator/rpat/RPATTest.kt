@@ -2,7 +2,7 @@ package mutation.tool.operator.rpat
 
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.annotation.visitor.JavaStrategy
-import mutation.tool.mutant.Mutant
+import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.FILE1
 import mutation.tool.util.json.getAnnotationInfos
 import org.junit.jupiter.api.Assertions.*
@@ -24,7 +24,7 @@ internal class RPATTest {
 
     @Test
     fun testRPAT() {
-        val mutants = mutableListOf<Mutant>()
+        val mutants = mutableListOf<JavaMutant>()
 
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             val operator = RPAT(context, File(FILE1))
@@ -37,7 +37,7 @@ internal class RPATTest {
 
     @Test
     fun testRPATWithFile() {
-        val mutants = mutableListOf<Mutant>()
+        val mutants = mutableListOf<JavaMutant>()
         val builder = RPATMapBuilder(getAnnotationInfos(File("./src/test/resources/configFiles/annotations.json")))
         builder.build()
 
