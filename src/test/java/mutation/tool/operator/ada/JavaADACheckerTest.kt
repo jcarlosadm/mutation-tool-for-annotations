@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.io.File
 
-internal class ADACheckerTest {
+internal class JavaADACheckerTest {
 
     private val jsonFile = File("./src/test/resources/configFiles/annotations.json")
 

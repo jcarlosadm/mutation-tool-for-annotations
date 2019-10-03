@@ -42,7 +42,9 @@ class OperatorFactory(private val config: MutationToolConfig) {
         }
     }
 
-    fun getCSharpOperators(operatorEnum: OperatorsEnum, contexts: List<Context>, file: File):List
+    fun getCSharpOperators(operatorEnum: OperatorsEnum, contexts: List<Context>, file: File):List<CSharpOperator> {
+        TODO("not implemented")
+    }
 
     private fun getJavaRPAVOperators(contexts: List<Context>, file: File): List<JavaOperator> {
         val operators = mutableListOf<JavaOperator>()

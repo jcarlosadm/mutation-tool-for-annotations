@@ -70,7 +70,7 @@ class ADAChecker(private val annotationInfos:List<AnnotationInfo>) {
                 if (!ok) continue
 
                 for (string in info.annotationStrings) {
-                    val operator = ADA(context, javaFile)
+                    val operator = JavaADA(context, javaFile)
                     operator.annotation = string
                     operators += operator
                 }

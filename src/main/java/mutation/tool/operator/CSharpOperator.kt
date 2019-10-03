@@ -1,4 +1,5 @@
 package mutation.tool.operator
 
-class CSharpOperator {
+// TODO not implemented
+abstract class CSharpOperator {
 }

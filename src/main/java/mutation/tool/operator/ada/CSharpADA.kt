@@ -1,4 +1,6 @@
 package mutation.tool.operator.ada
 
-class CSharpADA {
+import mutation.tool.operator.CSharpOperator
+
+class CSharpADA:CSharpOperator() {
 }

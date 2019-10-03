@@ -18,7 +18,7 @@ import java.io.File
  * @param file source file
  * @constructor create a ADA operator
  */
-class ADA(context: Context, file:File): JavaOperator(context, file) {
+class JavaADA(context: Context, file:File): JavaOperator(context, file) {
 
     /**
      * annotation of this operator
