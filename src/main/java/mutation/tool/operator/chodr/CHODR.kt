@@ -8,7 +8,7 @@ import com.github.javaparser.ast.expr.AnnotationExpr
 import com.google.common.collect.Collections2
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
-import mutation.tool.operator.Operator
+import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import java.io.File
 
@@ -19,7 +19,7 @@ import java.io.File
  * @param file source file
  * @constructor create a CHODR operator
  */
-class CHODR(context: Context, file: File) : Operator(context, file) {
+class CHODR(context: Context, file: File) : JavaOperator(context, file) {
     private val currentAnnotations = mutableListOf<AnnotationExpr>()
     private var javaMutant:JavaMutant? = null
 

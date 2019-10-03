@@ -1,6 +1,6 @@
 package mutation.tool.mutant
 
-import mutation.tool.operator.Operator
+import mutation.tool.operator.JavaOperator
 import mutation.tool.project.Project
 import org.json.JSONObject
 import java.io.BufferedWriter
@@ -13,13 +13,13 @@ private var mutantNum = 0
 /**
  * Generate mutants
  *
- * @param operators list of operators
+ * @param javaOperators list of operators
  * @param javaFile source file
  * @param project information about the original project
  * @param mutantFolder Directory where the mutants are generated
  */
-fun generateMutants(operators: List<Operator>, javaFile: File, project: Project, mutantFolder:File) {
-	for (operator in operators) {
+fun generateMutants(javaOperators: List<JavaOperator>, javaFile: File, project: Project, mutantFolder:File) {
+	for (operator in javaOperators) {
 		val mutants = operator.mutate()
 		for (mutant in mutants) {
 			val path = "$mutantFolder/${mutant.operator.name}/${getNum()}"

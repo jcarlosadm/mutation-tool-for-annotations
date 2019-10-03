@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
-import mutation.tool.operator.Operator
+import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import java.io.File
 
@@ -18,7 +18,7 @@ import java.io.File
  * @param file source file
  * @constructor create a RMA operator
  */
-class RMA(context: Context, file: File) : Operator(context, file) {
+class RMA(context: Context, file: File) : JavaOperator(context, file) {
     private var currentJavaMutant:JavaMutant? = null
     private var currentAnnotation:AnnotationExpr? = null
 

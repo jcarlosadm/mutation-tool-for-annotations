@@ -2,7 +2,7 @@ package mutation.tool.operator.ada
 
 import mutation.tool.context.Context
 import mutation.tool.context.InsertionPoint
-import mutation.tool.operator.Operator
+import mutation.tool.operator.JavaOperator
 import mutation.tool.annotation.finder.javaAnnotationFinder
 import mutation.tool.util.json.AnnotationInfo
 import java.io.File
@@ -50,8 +50,8 @@ class ADAChecker(private val annotationInfos:List<AnnotationInfo>) {
      * @param contexts list of contexts
      * @return list of operators
      */
-    fun check(contexts:List<Context>, javaFile:File): List<Operator> {
-        val operators = mutableListOf<Operator>()
+    fun check(contexts:List<Context>, javaFile:File): List<JavaOperator> {
+        val operators = mutableListOf<JavaOperator>()
 
         for (context in contexts) {
             if (!targetMap.containsKey(context.getInsertionPoint())) continue

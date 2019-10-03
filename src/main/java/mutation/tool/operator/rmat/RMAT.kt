@@ -7,7 +7,7 @@ import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.*
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
-import mutation.tool.operator.Operator
+import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.util.numOfAnnotationAttributes
 import java.io.File
@@ -19,7 +19,7 @@ import java.io.File
  * @param file source file
  * @constructor create a RMAT operator
  */
-class RMAT(context: Context, file: File) : Operator(context, file) {
+class RMAT(context: Context, file: File) : JavaOperator(context, file) {
     private var currentJavaMutant:JavaMutant? = null
     private var currentAnnotation:AnnotationExpr? = null
     private var currentIndex:Int? = null

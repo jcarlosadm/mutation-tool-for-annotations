@@ -10,7 +10,7 @@ import mutation.tool.annotation.finder.javaAnnotationFinder
 import mutation.tool.context.Context
 import mutation.tool.context.InsertionPoint
 import mutation.tool.mutant.JavaMutant
-import mutation.tool.operator.Operator
+import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.util.*
 import java.io.File
@@ -22,7 +22,7 @@ import java.io.File
  * @param file source file
  * @constructor Create a SWTG operator instance
  */
-class SWTG(context: Context, file:File, private val allContexts: List<Context>): Operator(context, file) {
+class SWTG(context: Context, file:File, private val allContexts: List<Context>): JavaOperator(context, file) {
 
     /**
      * map that will help the SWTG operator to build the mutants

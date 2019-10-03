@@ -19,7 +19,7 @@ import java.io.File
  * @param file source file
  * @constructor create an Operator instance
  */
-abstract class Operator(val context:Context, val file:File) {
+abstract class JavaOperator(val context:Context, val file:File) {
     @Suppress("LeakingThis")
     private val mutateVisitor = MutateVisitor(this)
     private val compUnit = JavaParser.parse(file)
@@ -105,27 +105,13 @@ abstract class Operator(val context:Context, val file:File) {
  * @param config configuration
  * @return list of operators
  */
-fun getValidOperators(contexts: List<Context>, javaFile: File, config: MutationToolConfig):List<Operator> {
-    val validOperators = mutableListOf<Operator>()
+fun getValidOperators(contexts: List<Context>, javaFile: File, config: MutationToolConfig):List<JavaOperator> {
+    val validOperators = mutableListOf<JavaOperator>()
     val operatorsEnum = config.operators
     val factory = OperatorFactory(config)
 
-    for (operatorEnum in operatorsEnum) validOperators += factory.getOperators(operatorEnum, contexts, javaFile)
+    for (operatorEnum in operatorsEnum) validOperators += factory.getJavaOperators(operatorEnum, contexts, javaFile)
 
     return validOperators
 }
 
-/**
- * Operators
- */
-enum class OperatorsEnum {
-    ADA,
-    ADAT,
-    CHODR,
-    RMA,
-    RMAT,
-    RPA,
-    RPAT,
-    RPAV,
-    SWTG
-}

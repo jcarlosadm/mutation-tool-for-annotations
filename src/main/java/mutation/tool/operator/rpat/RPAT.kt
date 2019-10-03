@@ -10,7 +10,7 @@ import com.github.javaparser.ast.expr.NormalAnnotationExpr
 import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
-import mutation.tool.operator.Operator
+import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.annotation.finder.javaAnnotationFinder
 import java.io.File
@@ -22,7 +22,7 @@ import java.io.File
  * @param file source file
  * @constructor Create a RPAT operator instance
  */
-class RPAT(context: Context, file: File) : Operator(context, file) {
+class RPAT(context: Context, file: File) : JavaOperator(context, file) {
 
     /**
      * map that will help the RPAT operator to build the mutants

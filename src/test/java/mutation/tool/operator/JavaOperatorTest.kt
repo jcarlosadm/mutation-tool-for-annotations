@@ -9,7 +9,7 @@ import java.io.File
 
 const val FILE1 = "./src/test/resources/fakeProject/src/main/java/TarefasController.java"
 
-internal class OperatorTest {
+internal class JavaOperatorTest {
 
     @Test
     fun testGetValidOperators() {

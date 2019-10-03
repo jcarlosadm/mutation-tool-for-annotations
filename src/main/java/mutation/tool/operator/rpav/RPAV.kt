@@ -11,7 +11,7 @@ import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
 import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
-import mutation.tool.operator.Operator
+import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.annotation.finder.javaAnnotationFinder
 import java.io.File
@@ -23,7 +23,7 @@ import java.io.File
  * @param file source file
  * @constructor Create a RPAV operator instance
  */
-class RPAV(context: Context, file: File) : Operator(context, file) {
+class RPAV(context: Context, file: File) : JavaOperator(context, file) {
 
     /**
      * map that will help the RPAV operator to build the mutants
