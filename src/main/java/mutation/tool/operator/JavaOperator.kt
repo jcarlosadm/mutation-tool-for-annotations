@@ -8,7 +8,8 @@ import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
-import mutation.tool.mutant.MutateVisitor
+import mutation.tool.mutant.CSharpMutateVisitor
+import mutation.tool.mutant.JavaMutateVisitor
 import mutation.tool.util.*
 import java.io.File
 
@@ -21,7 +22,7 @@ import java.io.File
  */
 abstract class JavaOperator(val context:Context, val file:File) {
     @Suppress("LeakingThis")
-    private val mutateVisitor = MutateVisitor(this)
+    private val mutateVisitor = JavaMutateVisitor(this)
     private val compUnit = JavaParser.parse(file)
     private var locked = false
 
@@ -105,7 +106,7 @@ abstract class JavaOperator(val context:Context, val file:File) {
  * @param config configuration
  * @return list of operators
  */
-fun getValidOperators(contexts: List<Context>, javaFile: File, config: MutationToolConfig):List<JavaOperator> {
+fun getValidJavaOperators(contexts: List<Context>, javaFile: File, config: MutationToolConfig):List<JavaOperator> {
     val validOperators = mutableListOf<JavaOperator>()
     val operatorsEnum = config.operators
     val factory = OperatorFactory(config)

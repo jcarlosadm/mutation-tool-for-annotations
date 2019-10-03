@@ -1,5 +1,6 @@
 package mutation.tool.mutant
 
+import mutation.tool.operator.CSharpOperator
 import mutation.tool.operator.JavaOperator
 import mutation.tool.project.Project
 import org.json.JSONObject
@@ -18,7 +19,7 @@ private var mutantNum = 0
  * @param project information about the original project
  * @param mutantFolder Directory where the mutants are generated
  */
-fun generateMutants(javaOperators: List<JavaOperator>, javaFile: File, project: Project, mutantFolder:File) {
+fun generateJavaMutants(javaOperators: List<JavaOperator>, javaFile: File, project: Project, mutantFolder:File) {
 	for (operator in javaOperators) {
 		val mutants = operator.mutate()
 		for (mutant in mutants) {
@@ -26,6 +27,28 @@ fun generateMutants(javaOperators: List<JavaOperator>, javaFile: File, project: 
 			File(path).mkdirs()
 			File("$path/${javaFile.name}").writeText(mutant.toString())
 			File("$path/info.json").bufferedWriter().use { out -> writeJson(out, project, javaFile, mutant) }
+		}
+	}
+
+	File("$mutantFolder/info.json").bufferedWriter().use { out -> writeReport(out) }
+}
+
+/**
+ * Generate mutants
+ *
+ * @param cSharpOperators list of operators
+ * @param file source file
+ * @param project information about the original project
+ * @param mutantFolder Directory where the mutants are generated
+ */
+fun generateCSharpMutants(cSharpOperators: List<CSharpOperator>, file: File, project: Project, mutantFolder:File) {
+	for (operator in cSharpOperators) {
+		val mutants = operator.mutate()
+		for (mutant in mutants) {
+			val path = "$mutantFolder/${mutant.operator.name}/${getNum()}"
+			File(path).mkdirs()
+			File("$path/${file.name}").writeText(mutant.toString())
+			File("$path/info.json").bufferedWriter().use { out -> writeJson(out, project, file, mutant) }
 		}
 	}
 

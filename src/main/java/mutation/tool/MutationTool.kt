@@ -4,11 +4,11 @@ import mu.KotlinLogging
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.annotation.visitor.CSharpStrategy
 import mutation.tool.annotation.visitor.JavaStrategy
-import mutation.tool.mutant.generateMutants
+import mutation.tool.mutant.generateJavaMutants
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.operator.ada.ADAChecker
 import mutation.tool.operator.adat.ADATMapBuilder
-import mutation.tool.operator.getValidOperators
+import mutation.tool.operator.getValidJavaOperators
 import mutation.tool.operator.rpa.RPAMapBuilder
 import mutation.tool.operator.rpat.RPATMapBuilder
 import mutation.tool.operator.rpav.RPAVMapBuilder
@@ -111,8 +111,8 @@ class MutationTool(private val config: MutationToolConfig) {
                     Language.C_SHARP -> CSharpStrategy()
                 }
 
-                val operators = getValidOperators(getListOfAnnotationContext(validFile, visitor), validFile, config)
-                generateMutants(operators, validFile, project!!, File(config.mutantsFolder))
+                val operators = getValidJavaOperators(getListOfAnnotationContext(validFile, visitor), validFile, config)
+                generateJavaMutants(operators, validFile, project!!, File(config.mutantsFolder))
 
                 synchronized(this) { logger.info { "source file checked: $validFile" } }
             }

@@ -13,7 +13,7 @@ import mutation.tool.operator.JavaOperator
  * @param javaOperator operator to build the mutant
  * @constructor create a visitor
  */
-class MutateVisitor(private val javaOperator:JavaOperator):VoidVisitorAdapter<Any>() {
+class JavaMutateVisitor(private val javaOperator:JavaOperator):VoidVisitorAdapter<Any>() {
     override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?) {
         super.visit(n, arg)
         if (javaOperator.visit(n, arg)) javaOperator.lock()
