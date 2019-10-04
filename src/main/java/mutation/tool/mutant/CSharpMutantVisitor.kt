@@ -1,10 +1,11 @@
 package mutation.tool.mutant
 
 import mutation.tool.operator.CSharpOperator
+import mutation.tool.util.xml.NodeVisitor
 import org.w3c.dom.Node
 
+class CSharpMutateVisitor(private val cSharpOperator: CSharpOperator): NodeVisitor() {
 
-class CSharpMutateVisitor(private val cSharpOperator: CSharpOperator):NodeVisitor() {
     override fun visitClass(node: Node) {
         if (cSharpOperator.visitClass(node)) cSharpOperator.lock()
     }
@@ -19,17 +20,5 @@ class CSharpMutateVisitor(private val cSharpOperator: CSharpOperator):NodeVisito
 
     override fun visitParameter(node: Node) {
         if (cSharpOperator.visitParameter(node)) cSharpOperator.lock()
-    }
-}
-
-abstract class NodeVisitor {
-
-    abstract fun visitClass(node: Node)
-    abstract fun visitMethod(node: Node)
-    abstract fun visitProperty(node: Node)
-    abstract fun visitParameter(node: Node)
-
-    fun visit(rootNode: Node) {
-        TODO("not implemented")
     }
 }

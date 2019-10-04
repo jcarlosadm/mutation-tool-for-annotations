@@ -1,6 +1,6 @@
 package mutation.tool.util
 
-enum class Language {
-    JAVA,
-    C_SHARP
+enum class Language(val string: String) {
+    JAVA("Java"),
+    C_SHARP("C#")
 }

@@ -53,14 +53,19 @@ fun findParent(node: Node): InsertionPoint? {
 class CSharpParser(private val file:File) {
 
     fun processAnnotations(insertionPoints: List<InsertionPoint>, processor:AnnotationProcessor?){
-        val destPath = file.absolutePath + ".xml"
+        /*val destPath = file.absolutePath + ".xml"
         val process = Runtime.getRuntime().exec("srcml " + file.absolutePath + " -o " + destPath +
                 " --position")
         process.waitFor()
-        val xmlFile = File(destPath)
+
+        val xmlFile = File(destPath)*/
+
+        val process = Runtime.getRuntime().exec("srcml " + file.absolutePath +
+                " --position")
+        process.waitFor()
 
         val builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-        val doc = builder.parse(xmlFile)
+        val doc = builder.parse(process.inputStream)
         for (i in 0 until doc.childNodes.length) {
             printNode(doc.childNodes.item(i))
         }

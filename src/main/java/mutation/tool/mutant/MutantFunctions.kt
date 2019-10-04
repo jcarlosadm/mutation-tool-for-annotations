@@ -2,6 +2,7 @@ package mutation.tool.mutant
 
 import mutation.tool.operator.CSharpOperator
 import mutation.tool.operator.JavaOperator
+import mutation.tool.operator.OperatorsEnum
 import mutation.tool.project.Project
 import org.json.JSONObject
 import java.io.BufferedWriter
@@ -26,7 +27,8 @@ fun generateJavaMutants(javaOperators: List<JavaOperator>, javaFile: File, proje
 			val path = "$mutantFolder/${mutant.operator.name}/${getNum()}"
 			File(path).mkdirs()
 			File("$path/${javaFile.name}").writeText(mutant.toString())
-			File("$path/info.json").bufferedWriter().use { out -> writeJson(out, project, javaFile, mutant) }
+			File("$path/info.json").bufferedWriter().use { out -> writeJson(out, project, javaFile,
+					mutant.operator) }
 		}
 	}
 
@@ -48,7 +50,8 @@ fun generateCSharpMutants(cSharpOperators: List<CSharpOperator>, file: File, pro
 			val path = "$mutantFolder/${mutant.operator.name}/${getNum()}"
 			File(path).mkdirs()
 			File("$path/${file.name}").writeText(mutant.toString())
-			File("$path/info.json").bufferedWriter().use { out -> writeJson(out, project, file, mutant) }
+			File("$path/info.json").bufferedWriter().use { out -> writeJson(out, project, file,
+					mutant.operator) }
 		}
 	}
 
@@ -62,12 +65,12 @@ private fun writeReport(out: BufferedWriter) {
 	out.write(json.toString(4))
 }
 
-private fun writeJson(out:BufferedWriter, project:Project, javaFile: File, javaMutant: JavaMutant) {
+private fun writeJson(out:BufferedWriter, project:Project, javaFile: File, operatorsEnum: OperatorsEnum) {
     val json = JSONObject()
 
     json.put("projectName", project.name)
     json.put("originalFile", javaFile.path)
-    json.put("operator", javaMutant.operator.name)
+    json.put("operator", operatorsEnum.name)
 
     out.write(json.toString(4))
 }
