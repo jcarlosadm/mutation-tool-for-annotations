@@ -8,7 +8,6 @@ import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
-import mutation.tool.mutant.CSharpMutateVisitor
 import mutation.tool.mutant.JavaMutateVisitor
 import mutation.tool.util.*
 import java.io.File
@@ -21,8 +20,7 @@ import java.io.File
  * @constructor create an Operator instance
  */
 abstract class JavaOperator(val context:Context, val file:File) {
-    @Suppress("LeakingThis")
-    private val mutateVisitor = JavaMutateVisitor(this)
+    abstract val mutateVisitor:JavaMutateVisitor
     private val compUnit = JavaParser.parse(file)
     private var locked = false
 

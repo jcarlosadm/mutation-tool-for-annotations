@@ -7,6 +7,7 @@ import com.github.javaparser.ast.body.Parameter
 import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
+import mutation.tool.mutant.JavaMutateVisitor
 import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import java.io.File
@@ -18,7 +19,8 @@ import java.io.File
  * @param file source file
  * @constructor create a ADA operator
  */
-class JavaADA(context: Context, file:File): JavaOperator(context, file) {
+class JavaADA(context: Context, file:File, override val mutateVisitor: JavaMutateVisitor):
+        JavaOperator(context, file) {
 
     /**
      * annotation of this operator

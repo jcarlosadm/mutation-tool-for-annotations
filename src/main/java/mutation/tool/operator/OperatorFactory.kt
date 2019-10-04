@@ -1,7 +1,7 @@
 package mutation.tool.operator
 
 import mutation.tool.context.Context
-import mutation.tool.operator.adat.ADAT
+import mutation.tool.operator.adat.JavaADAT
 import mutation.tool.operator.chodr.CHODR
 import mutation.tool.operator.rma.RMA
 import mutation.tool.operator.rmat.RMAT
@@ -71,7 +71,7 @@ class OperatorFactory(private val config: MutationToolConfig) {
     private fun getJavaADATOperators(contexts: List<Context>, file: File): List<JavaOperator> {
         val operators = mutableListOf<JavaOperator>()
         for (context in contexts) {
-            val operator = ADAT(context, file)
+            val operator = JavaADAT(context, file)
             operator.map = config.adatMap!!
             if (operator.checkContext()) operators += operator
         }

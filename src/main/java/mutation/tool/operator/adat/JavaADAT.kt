@@ -7,12 +7,14 @@ import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import com.github.javaparser.ast.expr.NormalAnnotationExpr
+import mutation.tool.annotation.AnnotationType
 import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.annotation.finder.javaAnnotationFinder
+import mutation.tool.mutant.JavaMutateVisitor
 import java.io.File
 
 /**
@@ -22,7 +24,8 @@ import java.io.File
  * @param file source file
  * @constructor Create a ADAT operator instance
  */
-class ADAT(context: Context, file:File) : JavaOperator(context, file) {
+class JavaADAT(context: Context, file:File, override val mutateVisitor: JavaMutateVisitor) :
+        JavaOperator(context, file) {
     
     /**
      * map that will help the ADAT operator to build the mutants
@@ -46,7 +49,7 @@ class ADAT(context: Context, file:File) : JavaOperator(context, file) {
             map.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (!ok) continue
 
-            if (annotation.isNormalAnnotationExpr) {
+            if (annotation.annotationType?.equals(AnnotationType.NORMAL)!!) {
                 //annotation as NormalAnnotationExpr
 
                 for (attr in map.getValue(validKey)) {

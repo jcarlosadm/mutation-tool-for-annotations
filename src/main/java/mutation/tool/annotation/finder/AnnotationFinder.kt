@@ -37,5 +37,7 @@ fun javaAnnotationFinder(annotation: AnnotationAdapter, name:String):Boolean {
  * @return true if the annotation is equal to name.
  */
 fun cSharpAnnotationFinder(annotation: AnnotationAdapter, name: String): Boolean {
-    TODO("not implemented")
+    if (annotation.name == name || name.contains(annotation.name))
+        return true
+    return false
 }

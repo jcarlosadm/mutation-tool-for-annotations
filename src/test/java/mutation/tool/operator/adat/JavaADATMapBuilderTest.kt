@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.io.File
 
-internal class ADATMapBuilderTest {
+internal class JavaADATMapBuilderTest {
 
     @Test
     fun testGetMap() {
