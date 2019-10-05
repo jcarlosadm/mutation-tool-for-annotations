@@ -8,12 +8,14 @@ import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import com.github.javaparser.ast.expr.NormalAnnotationExpr
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr
+import mutation.tool.annotation.AnnotationType
 import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.annotation.finder.javaAnnotationFinder
+import mutation.tool.mutant.JavaMutateVisitor
 import java.io.File
 
 /**
@@ -24,6 +26,7 @@ import java.io.File
  * @constructor Create a RPAV operator instance
  */
 class RPAV(context: Context, file: File) : JavaOperator(context, file) {
+    override val mutateVisitor = JavaMutateVisitor(this)
 
     /**
      * map that will help the RPAV operator to build the mutants
@@ -39,15 +42,18 @@ class RPAV(context: Context, file: File) : JavaOperator(context, file) {
     private lateinit var currentJavaMutant: JavaMutant
 
     override fun checkContext(): Boolean {
-        for (annotation in context.getAnnotations()) {
+        for (annotation in context.annotations) {
             var ok = false
             var validKey = ""
             map.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
-            if (!ok || annotation.isMarkerAnnotationExpr) continue
+            if (!ok || annotation.annotationType?.equals(AnnotationType.MARKER)!!) continue
 
-            if ((annotation.isSingleMemberAnnotationExpr && map.getValue(validKey).containsKey("") &&
-                            checkSingleAnnotation(annotation, validKey)) ||
-                    (annotation.isNormalAnnotationExpr && checkNormalAnnotation(annotation, validKey)))
+            val builder = JavaAnnotationBuilder(annotation.string)
+            builder.build()
+            if ((annotation.annotationType?.equals(AnnotationType.SINGLE)!! && map.getValue(validKey).containsKey("") &&
+                            checkSingleAnnotation(builder.annotationExpr!!, validKey)) ||
+                    (annotation.annotationType?.equals(AnnotationType.NORMAL)!! &&
+                            checkNormalAnnotation(builder.annotationExpr!!, validKey)))
                 return true
         }
 
@@ -76,28 +82,31 @@ class RPAV(context: Context, file: File) : JavaOperator(context, file) {
     override fun mutate(): List<JavaMutant> {
         val mutants = mutableListOf<JavaMutant>()
 
-        for (annotation in context.getAnnotations()) {
+        for (annotation in context.annotations) {
             var ok = false
             var validKey = ""
             map.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
 
-            if (!ok || annotation.isMarkerAnnotationExpr) continue
+            if (!ok || annotation.annotationType?.equals(AnnotationType.MARKER)!!) continue
 
-            if (annotation.isSingleMemberAnnotationExpr && map.getValue(validKey).containsKey("") &&
-                    this.checkSingleAnnotation(annotation, validKey)) {
+            val builder = JavaAnnotationBuilder(annotation.string)
+            builder.build()
+            val annotationExpr = builder.annotationExpr!!
+            if (annotation.annotationType?.equals(AnnotationType.SINGLE)!! && map.getValue(validKey).containsKey("") &&
+                    this.checkSingleAnnotation(builder.annotationExpr!!, validKey)) {
 
                 for (attrValue in map.getValue(validKey).getValue("")) {
-                    if (attrValue != (annotation as SingleMemberAnnotationExpr).memberValue.toString())
-                        genMutant(annotation, "", attrValue, mutants)
+                    if (attrValue != (annotationExpr as SingleMemberAnnotationExpr).memberValue.toString())
+                        genMutant(annotationExpr, "", attrValue, mutants)
                 }
 
             }
-            else if (annotation.isNormalAnnotationExpr) {
-                for (pair in (annotation as NormalAnnotationExpr).pairs) {
+            else if (annotationExpr.isNormalAnnotationExpr) {
+                for (pair in (annotationExpr as NormalAnnotationExpr).pairs) {
                     if (map.getValue(validKey).containsKey(pair.nameAsString)) {
                         for (attrValue in map.getValue(validKey).getValue(pair.nameAsString)) {
                             if (attrValue != pair.value.toString())
-                                genMutant(annotation, pair.nameAsString, attrValue, mutants)
+                                genMutant(annotationExpr, pair.nameAsString, attrValue, mutants)
                         }
                     }
                 }
@@ -139,14 +148,16 @@ class RPAV(context: Context, file: File) : JavaOperator(context, file) {
         for (annotation in annotations) {
             if (annotation.nameAsString == currentAnnotation.nameAsString) {
                 if (annotation.isSingleMemberAnnotationExpr) {
-                    annotation.replace(JavaAnnotationBuilder("@${annotation.nameAsString}" +
-                            "($currentAttrValue)").build())
+                    val builder = JavaAnnotationBuilder("@${annotation.nameAsString}" +
+                            "($currentAttrValue)")
+                    builder.build()
+                    annotation.replace(builder.annotationExpr!!)
                 }
                 else {
                     annotation as NormalAnnotationExpr
                     var string = "@${annotation.nameAsString}("
                     val pairs = annotation.pairs
-                    for (i in 0..(pairs.size - 1)) {
+                    for (i in 0 until pairs.size) {
                         val pair = pairs[i]
                         string += if (pair.nameAsString == currentAttr) {
                             "$currentAttr = $currentAttrValue"
@@ -159,7 +170,10 @@ class RPAV(context: Context, file: File) : JavaOperator(context, file) {
                     }
                     string += ")"
 
-                    annotation.replace(JavaAnnotationBuilder(string).build())
+                    val builder = JavaAnnotationBuilder(string)
+                    builder.build()
+
+                    annotation.replace(builder.annotationExpr!!)
                 }
 
                 return true

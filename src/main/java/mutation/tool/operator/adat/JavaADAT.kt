@@ -14,6 +14,7 @@ import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.annotation.finder.javaAnnotationFinder
+import mutation.tool.context.adapter.AnnotationAdapter
 import mutation.tool.mutant.JavaMutateVisitor
 import java.io.File
 
@@ -24,9 +25,9 @@ import java.io.File
  * @param file source file
  * @constructor Create a ADAT operator instance
  */
-class JavaADAT(context: Context, file:File, override val mutateVisitor: JavaMutateVisitor) :
-        JavaOperator(context, file) {
-    
+class JavaADAT(context: Context, file:File) : JavaOperator(context, file) {
+    override val mutateVisitor = JavaMutateVisitor(this)
+
     /**
      * map that will help the ADAT operator to build the mutants
      * 
@@ -39,7 +40,7 @@ class JavaADAT(context: Context, file:File, override val mutateVisitor: JavaMuta
     lateinit var map:Map<String, List<Map<String, String>>>
 
     private lateinit var currentJavaMutant:JavaMutant
-    private lateinit var currentAnnotation:AnnotationExpr
+    private lateinit var currentAnnotation:String
     private lateinit var currentAttr:Map<String, String>
 
     override fun checkContext(): Boolean {
@@ -63,7 +64,7 @@ class JavaADAT(context: Context, file:File, override val mutateVisitor: JavaMuta
 
                     if (notEqual) return true
                 }
-            } else if(annotation.isSingleMemberAnnotationExpr) {
+            } else if(annotation.annotationType?.equals(AnnotationType.SINGLE)!!) {
                 for (attr in map.getValue(validKey)) {
                     if (attr.containsKey("asSingle") && attr.getValue("asSingle") == "true") return true
                 }
@@ -76,14 +77,14 @@ class JavaADAT(context: Context, file:File, override val mutateVisitor: JavaMuta
     override fun mutate(): List<JavaMutant> {
         val mutants = mutableListOf<JavaMutant>()
 
-        for (annotation in context.getAnnotations()) {
+        for (annotation in context.annotations) {
             var ok = false
             var validKey = ""
             map.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (!ok) continue
 
-            if (annotation.isNormalAnnotationExpr) {
-                annotation as NormalAnnotationExpr
+            if (annotation.annotationType?.equals(AnnotationType.NORMAL)!!) {
+                //annotation as NormalAnnotationExpr
 
                 for (attr in map.getValue(validKey)) {
                     var notEqual = true
@@ -96,7 +97,7 @@ class JavaADAT(context: Context, file:File, override val mutateVisitor: JavaMuta
 
                     if (notEqual) createMutant(annotation, attr, mutants)
                 }
-            } else if(annotation.isSingleMemberAnnotationExpr) {
+            } else if(annotation.annotationType?.equals(AnnotationType.SINGLE)!!) {
                 var containsSingle = false
                 for (attr in map.getValue(validKey)) {
                     if (attr.containsKey("asSingle") && attr.getValue("asSingle") == "true") {
@@ -118,12 +119,12 @@ class JavaADAT(context: Context, file:File, override val mutateVisitor: JavaMuta
     }
 
     private fun createMutant(
-            annotation: AnnotationExpr,
+            annotation: AnnotationAdapter,
             attr: Map<String, String>,
             javaMutants: MutableList<JavaMutant>
     ) {
         currentJavaMutant = JavaMutant(OperatorsEnum.ADAT)
-        currentAnnotation = annotation
+        currentAnnotation = annotation.name
         currentAttr = attr
 
         currentJavaMutant.compilationUnit = this.visit()
@@ -144,7 +145,7 @@ class JavaADAT(context: Context, file:File, override val mutateVisitor: JavaMuta
 
     private fun addAttr(annotations: NodeList<AnnotationExpr>): Boolean {
         for (annotation in annotations) {
-            if (annotation.nameAsString == currentAnnotation.nameAsString) {
+            if (annotation.nameAsString == currentAnnotation) {
                 if (annotation.isNormalAnnotationExpr) {
                     annotation as NormalAnnotationExpr
 
@@ -152,12 +153,14 @@ class JavaADAT(context: Context, file:File, override val mutateVisitor: JavaMuta
                     return true
                 } else {
                     var validKey = ""
-                    map.keys.forEach { if (javaAnnotationFinder(annotation, it)) validKey = it }
+                    map.keys.forEach { if (javaAnnotationFinder(AnnotationAdapter(annotation), it)) validKey = it }
                     for (attr in map.getValue(validKey)) {
                         if (attr.containsKey("asSingle")) {
                             val defaultValue = getValue(annotation.toString())
                             val annotationString = makeString(annotation.nameAsString, attr, defaultValue)
-                            val otherAnnotation = JavaAnnotationBuilder(annotationString).build()
+                            val builder = JavaAnnotationBuilder(annotationString)
+                            builder.build()
+                            val otherAnnotation = builder.annotationExpr
 
                             otherAnnotation as NormalAnnotationExpr
                             otherAnnotation.addPair(currentAttr.getValue("name"), currentAttr.getValue("value"))

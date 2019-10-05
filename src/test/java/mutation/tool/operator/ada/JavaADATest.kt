@@ -11,7 +11,7 @@ import java.io.File
 
 internal class JavaADATest {
 
-    @Test
+    /*@Test
     fun testADA() {
         val annotations = listOf(
                 "@a",
@@ -41,5 +41,5 @@ internal class JavaADATest {
         }
 
         assertEquals(22, mutants.size)
-    }
+    }*/
 }

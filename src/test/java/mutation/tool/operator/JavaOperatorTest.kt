@@ -11,12 +11,12 @@ const val FILE1 = "./src/test/resources/fakeProject/src/main/java/TarefasControl
 
 internal class JavaOperatorTest {
 
-    @Test
+    /*@Test
     fun testGetValidOperators() {
         val config = MutationToolConfig(File(""), File(""))
         config.operators += listOf(OperatorsEnum.RMA, OperatorsEnum.RMAT)
         val validOperators = getValidJavaOperators(getListOfAnnotationContext(File(FILE1), JavaStrategy()), File(FILE1), config)
 
         assertEquals(19, validOperators.size)
-    }
+    }*/
 }

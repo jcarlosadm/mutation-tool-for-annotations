@@ -6,8 +6,10 @@ import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import com.google.common.collect.Collections2
+import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
+import mutation.tool.mutant.JavaMutateVisitor
 import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import java.io.File
@@ -20,20 +22,21 @@ import java.io.File
  * @constructor create a CHODR operator
  */
 class CHODR(context: Context, file: File) : JavaOperator(context, file) {
+    override val mutateVisitor = JavaMutateVisitor(this)
     private val currentAnnotations = mutableListOf<AnnotationExpr>()
     private var javaMutant:JavaMutant? = null
 
     override fun checkContext(): Boolean {
-        if (context.getAnnotations().size > 1)
+        if (context.annotations.size > 1)
             return true
         return false
     }
 
     override fun mutate(): List<JavaMutant> {
         val mutants = mutableListOf<JavaMutant>()
-        val annotations = context.getAnnotations()
+        val annotations = context.annotations
 
-        val originalSequence = (0..(annotations.size-1)).toList()
+        val originalSequence = (0 until annotations.size).toList()
         val permutations = Collections2.permutations((0..(annotations.size-1)).toMutableList())
 
         var originalDetected = false
@@ -43,7 +46,9 @@ class CHODR(context: Context, file: File) : JavaOperator(context, file) {
             } else {
                 currentAnnotations.clear()
                 for (index in sequence) {
-                    currentAnnotations += annotations[index]
+                    val builder = JavaAnnotationBuilder(annotations[index].string)
+                    builder.build()
+                    currentAnnotations += builder.annotationExpr!!
                 }
 
                 javaMutant = JavaMutant(OperatorsEnum.CHODR)
@@ -56,7 +61,7 @@ class CHODR(context: Context, file: File) : JavaOperator(context, file) {
     }
 
     private fun isOriginalSequence(sequence: List<Int>, originalSequence: List<Int>): Boolean {
-        for (index in (0..(sequence.size - 1))) {
+        for (index in (0 until sequence.size)) {
             if (sequence[index] != originalSequence[index])
                 return false
         }

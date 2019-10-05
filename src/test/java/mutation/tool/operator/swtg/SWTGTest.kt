@@ -12,7 +12,7 @@ import java.io.File
 
 internal class SWTGTest {
 
-    @Test
+    /*@Test
     fun testSWTG() {
         val mutants = mutableListOf<JavaMutant>()
         val contexts = getListOfAnnotationContext(File(FILE1), JavaStrategy())
@@ -46,5 +46,5 @@ internal class SWTGTest {
         }
 
         assertEquals(23, mutants.size)
-    }
+    }*/
 }

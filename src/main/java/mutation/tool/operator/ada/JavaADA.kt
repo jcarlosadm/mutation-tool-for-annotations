@@ -19,8 +19,8 @@ import java.io.File
  * @param file source file
  * @constructor create a ADA operator
  */
-class JavaADA(context: Context, file:File, override val mutateVisitor: JavaMutateVisitor):
-        JavaOperator(context, file) {
+class JavaADA(context: Context, file:File):JavaOperator(context, file) {
+    override val mutateVisitor = JavaMutateVisitor(this)
 
     /**
      * annotation of this operator

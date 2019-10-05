@@ -7,12 +7,14 @@ import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
 import com.github.javaparser.ast.expr.NormalAnnotationExpr
+import mutation.tool.annotation.AnnotationType
 import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.annotation.finder.javaAnnotationFinder
+import mutation.tool.mutant.JavaMutateVisitor
 import java.io.File
 
 /**
@@ -23,6 +25,7 @@ import java.io.File
  * @constructor Create a RPAT operator instance
  */
 class RPAT(context: Context, file: File) : JavaOperator(context, file) {
+    override val mutateVisitor = JavaMutateVisitor(this)
 
     /**
      * map that will help the RPAT operator to build the mutants
@@ -41,16 +44,16 @@ class RPAT(context: Context, file: File) : JavaOperator(context, file) {
     private lateinit var currentAttrRepVal: String
 
     override fun checkContext(): Boolean {
-        for (annotation in context.getAnnotations()){
+        for (annotation in context.annotations){
             var ok = false
             var validKey = ""
             map.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (!ok) continue
 
-            if (annotation.isSingleMemberAnnotationExpr && map.getValue(validKey).containsKey(""))
+            if (annotation.annotationType?.equals(AnnotationType.SINGLE)!! && map.getValue(validKey).containsKey(""))
                 return true
-            else if (annotation.isNormalAnnotationExpr){
-                annotation as NormalAnnotationExpr
+            else if (annotation.annotationType?.equals(AnnotationType.NORMAL)!!){
+                //annotation as NormalAnnotationExpr
                 // check each attr of annotation
                 for (pair in annotation.pairs) {
                     // if present on map
@@ -78,18 +81,21 @@ class RPAT(context: Context, file: File) : JavaOperator(context, file) {
     override fun mutate(): List<JavaMutant> {
         val mutants = mutableListOf<JavaMutant>()
 
-        for (annotation in context.getAnnotations()) {
+        for (annotation in context.annotations) {
             var ok = false
             var validKey = ""
             map.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (!ok) continue
 
-            if (annotation.isSingleMemberAnnotationExpr && map.getValue(validKey).containsKey("")) {
-                for (attrMap in map.getValue(validKey).getValue(""))
-                    createMutant(annotation, "", attrMap, mutants)
+            if (annotation.annotationType?.equals(AnnotationType.SINGLE)!! && map.getValue(validKey).containsKey("")) {
+                for (attrMap in map.getValue(validKey).getValue("")) {
+                    val builder = JavaAnnotationBuilder(annotation.string)
+                    builder.build()
+                    createMutant(builder.annotationExpr!!, "", attrMap, mutants)
+                }
             }
-            else if (annotation.isNormalAnnotationExpr) {
-                annotation as NormalAnnotationExpr
+            else if (annotation.annotationType?.equals(AnnotationType.NORMAL)!!) {
+                //annotation as NormalAnnotationExpr
 
                 for (pair in annotation.pairs) {
                     if (!map.getValue(validKey).contains(pair.nameAsString)) continue
@@ -104,8 +110,11 @@ class RPAT(context: Context, file: File) : JavaOperator(context, file) {
                             }
                         }
 
-                        if (notContain)
-                            createMutant(annotation, pair.nameAsString, attrMap, mutants)
+                        if (notContain) {
+                            val builder = JavaAnnotationBuilder(annotation.string)
+                            builder.build()
+                            createMutant(builder.annotationExpr!!, pair.nameAsString, attrMap, mutants)
+                        }
                     }
                 }
             }
@@ -158,8 +167,10 @@ class RPAT(context: Context, file: File) : JavaOperator(context, file) {
 
                 annotation.addPair(currentAttrRep, currentAttrRepVal)
             } else {
-                annotation.replace(JavaAnnotationBuilder("@${annotation.nameAsString}(" +
-                        "$currentAttrRep = $currentAttrRepVal)").build())
+                val builder = JavaAnnotationBuilder("@${annotation.nameAsString}(" +
+                        "$currentAttrRep = $currentAttrRepVal)")
+                builder.build()
+                annotation.replace(builder.annotationExpr!!)
             }
 
             return true

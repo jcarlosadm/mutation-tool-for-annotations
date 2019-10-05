@@ -6,10 +6,12 @@ import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.AnnotationExpr
+import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.annotation.finder.javaAnnotationFinder
 import mutation.tool.context.Context
 import mutation.tool.context.InsertionPoint
 import mutation.tool.mutant.JavaMutant
+import mutation.tool.mutant.JavaMutateVisitor
 import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.util.*
@@ -23,6 +25,7 @@ import java.io.File
  * @constructor Create a SWTG operator instance
  */
 class SWTG(context: Context, file:File, private val allContexts: List<Context>): JavaOperator(context, file) {
+    override val mutateVisitor = JavaMutateVisitor(this)
 
     /**
      * map that will help the SWTG operator to build the mutants
@@ -38,7 +41,7 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
     private var lockedInsert = false
 
     override fun checkContext(): Boolean {
-        for (annotation in context.getAnnotations()) {
+        for (annotation in context.annotations) {
             var ok = false
             var validKey = ""
             mapContextType.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
@@ -57,7 +60,7 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
     override fun mutate(): List<JavaMutant> {
         val mutants = mutableListOf<JavaMutant>()
 
-        for (annotation in context.getAnnotations()) {
+        for (annotation in context.annotations) {
             var ok = false
             var validKey = ""
             mapContextType.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
@@ -70,9 +73,12 @@ class SWTG(context: Context, file:File, private val allContexts: List<Context>):
                 for (otherContext in allContexts) {
                     if (otherContext.getInsertionPoint() != insertionPoint) continue
 
+                    val builder = JavaAnnotationBuilder(annotation.string)
+                    builder.build()
+
                     lockedInsert = false
                     currentJavaMutant = JavaMutant(OperatorsEnum.SWTG)
-                    currentAnnotation = annotation
+                    currentAnnotation = builder.annotationExpr!!
                     currentOtherContext = otherContext
 
                     currentJavaMutant.compilationUnit = this.visit()

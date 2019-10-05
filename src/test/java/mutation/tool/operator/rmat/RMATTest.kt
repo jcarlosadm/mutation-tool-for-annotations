@@ -10,7 +10,7 @@ import java.io.File
 
 internal class RMATTest {
 
-    @Test
+    /*@Test
     fun testRMAT() {
         val mutants = mutableListOf<JavaMutant>()
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
@@ -30,5 +30,5 @@ internal class RMATTest {
         }
 
         assertEquals(10, mutants.size)
-    }
+    }*/
 }

@@ -11,6 +11,7 @@ import mutation.tool.mutant.JavaMutant
 import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.annotation.finder.javaAnnotationFinder
+import mutation.tool.mutant.JavaMutateVisitor
 import java.io.File
 
 /**
@@ -21,6 +22,7 @@ import java.io.File
  * @constructor Create a RPA operator instance
  */
 class RPA(context: Context, file: File) : JavaOperator(context, file) {
+    override val mutateVisitor = JavaMutateVisitor(this)
 
     /**
      * map that will help the RPA operator to build the mutants
@@ -35,12 +37,12 @@ class RPA(context: Context, file: File) : JavaOperator(context, file) {
     private lateinit var currentAnnotationRep: String
 
     override fun checkContext(): Boolean {
-        for (annotation in context.getAnnotations()){
+        for (annotation in context.annotations){
             var ok = false
             var validKey = ""
             switchMap.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (ok) {
-                for (annotation2 in (context.getAnnotations() - annotation)) {
+                for (annotation2 in (context.annotations - annotation)) {
                     ok = true
                     switchMap.getValue(validKey).forEach { if (javaAnnotationFinder(annotation2, it)) ok = false }
                     if (!ok) return false
@@ -55,19 +57,21 @@ class RPA(context: Context, file: File) : JavaOperator(context, file) {
     override fun mutate(): List<JavaMutant> {
         val mutants = mutableListOf<JavaMutant>()
 
-        for (annotation in context.getAnnotations()) {
+        for (annotation in context.annotations) {
             var ok = false
             var validKey = ""
             switchMap.keys.forEach { if (javaAnnotationFinder(annotation, it)) {ok = true; validKey = it} }
             if (!ok || switchMap[validKey] == null) continue
 
             ok = true
-            for (annotation2 in (context.getAnnotations() - annotation)) {
+            for (annotation2 in (context.annotations - annotation)) {
                 switchMap.getValue(validKey).forEach { if (javaAnnotationFinder(annotation2, it)) ok = false }
             }
             if (!ok) continue
 
-            currentAnnotation = annotation
+            val builder = JavaAnnotationBuilder(annotation.string)
+            builder.build()
+            currentAnnotation = builder.annotationExpr!!
 
             for (annotationRep in switchMap.getValue(validKey)){
                 currentAnnotationRep = annotationRep
@@ -96,7 +100,9 @@ class RPA(context: Context, file: File) : JavaOperator(context, file) {
     private fun replaceAnnotation(annotations: List<AnnotationExpr>):Boolean {
         for (annotation in annotations) {
             if (annotation.toString() == currentAnnotation.toString()) {
-                return annotation.replace(JavaAnnotationBuilder(currentAnnotationRep).build())
+                val builder = JavaAnnotationBuilder(currentAnnotationRep)
+                builder.build()
+                return annotation.replace(builder.annotationExpr)
             }
         }
 
