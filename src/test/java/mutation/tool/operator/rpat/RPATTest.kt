@@ -22,7 +22,7 @@ internal class RPATTest {
             )
     )
 
-    @Test
+    /*@Test
     fun testRPAT() {
         val mutants = mutableListOf<JavaMutant>()
 
@@ -49,5 +49,5 @@ internal class RPATTest {
         }
 
         assertEquals(14, mutants.size)
-    }
+    }*/
 }

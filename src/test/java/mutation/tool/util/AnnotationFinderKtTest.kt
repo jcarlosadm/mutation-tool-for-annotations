@@ -9,7 +9,7 @@ import java.io.File
 
 internal class AnnotationFinderKtTest {
 
-    @Test
+   /* @Test
     fun testAnnotationFinder() {
         val names = listOf(
                 "@org.springframework.web.bind.annotation.RequestMapping",
@@ -35,5 +35,5 @@ internal class AnnotationFinderKtTest {
                 assertTrue(javaAnnotationFinder(annotation, names[index]))
             }
         }
-    }
+    }*/
 }

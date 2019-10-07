@@ -7,7 +7,7 @@ class BasicAttributeDemo
     [Obsolete]
     private string name;
 
-    [Obsolete]
+    [method: Obsolete]
     public void MyFirstdeprecatedMethod([Obsolete] string a)
     {
         Console.WriteLine("Called MyFirstdeprecatedMethod().");

@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.io.File
 
-internal class ADATTest {
+internal class JavaADATTest {
 
-    @Test
+   /* @Test
     fun testADAT() {
         val mutants = mutableListOf<JavaMutant>()
 
@@ -20,11 +20,11 @@ internal class ADATTest {
         val map = builder.map
 
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
-            val operator = ADAT(context, File(FILE1))
+            val operator = JavaADAT(context, File(FILE1))
             operator.map = map
             if (operator.checkContext()) mutants += operator.mutate()
         }
 
         assertEquals(13, mutants.size)
-    }
+    }*/
 }

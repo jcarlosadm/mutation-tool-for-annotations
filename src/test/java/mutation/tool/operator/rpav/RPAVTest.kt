@@ -18,7 +18,7 @@ internal class RPAVTest {
             )
     )
 
-    @Test
+    /*@Test
     fun testRPAV(){
         val mutants = mutableListOf<JavaMutant>()
 
@@ -44,5 +44,5 @@ internal class RPAVTest {
         }
 
         assertEquals(2, mutants.size)
-    }
+    }*/
 }

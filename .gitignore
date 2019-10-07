@@ -4,7 +4,7 @@ app.log
 /data/
 /src/test/resources/javaMutants/
 /src/test/resources/mutants2/
-
+/src/test/resources/mutants/
 
 
 # Created by https://www.gitignore.io/api/java,code,maven,kotlin,intellij,visualstudiocode

@@ -7,7 +7,7 @@ import java.io.File
 
 private const val FILEPATH = "./src/test/resources/configFiles/annotations.json"
 
-internal class RPAMapBuilderTest {
+internal class JavaRPAMapBuilderTest {
 
     @Test
     fun testGetMap() {

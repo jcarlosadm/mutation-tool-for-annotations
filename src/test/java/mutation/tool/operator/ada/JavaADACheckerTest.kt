@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.io.File
 
-internal class ADACheckerTest {
+internal class JavaADACheckerTest {
 
     private val jsonFile = File("./src/test/resources/configFiles/annotations.json")
 
-    @Test
+    /*@Test
     fun testCheck() {
         val annotationInfos = getAnnotationInfos(jsonFile)
         val checker = ADAChecker(annotationInfos)
@@ -22,5 +22,5 @@ internal class ADACheckerTest {
         val operators = checker.check(contexts, File(FILE1))
 
         assertEquals(22, operators.size)
-    }
+    }*/
 }

@@ -10,12 +10,12 @@ import mutation.tool.context.*
 /**
  * Visitor which collect contexts from source file
  */
-class ContextCatcherJavaVisitor:VoidVisitorAdapter<Any>() {
+class ContextCatcherJavaVisitor:VoidVisitorAdapter<Any>(),ContextCatcherVisitor {
 
     /**
      * Collected contexts
      */
-    val contexts = mutableListOf<Context>()
+    override val contexts = mutableListOf<Context>()
 
     override fun visit(n: ClassOrInterfaceDeclaration?, arg: Any?) {
         super.visit(n, arg)

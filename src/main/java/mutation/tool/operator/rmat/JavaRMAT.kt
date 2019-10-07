@@ -5,9 +5,12 @@ import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
 import com.github.javaparser.ast.expr.*
+import mutation.tool.annotation.builder.AnnotationBuilder
+import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
-import mutation.tool.operator.Operator
+import mutation.tool.mutant.JavaMutateVisitor
+import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.util.numOfAnnotationAttributes
 import java.io.File
@@ -19,14 +22,15 @@ import java.io.File
  * @param file source file
  * @constructor create a RMAT operator
  */
-class RMAT(context: Context, file: File) : Operator(context, file) {
+class JavaRMAT(context: Context, file: File) : JavaOperator(context, file) {
+    override val mutateVisitor = JavaMutateVisitor(this)
     private var currentJavaMutant:JavaMutant? = null
     private var currentAnnotation:AnnotationExpr? = null
     private var currentIndex:Int? = null
 
     override fun checkContext(): Boolean {
-        for (annotation in context.getAnnotations()) {
-            if (annotation.toString().contains(Regex("\\((.*?)\\)"))) {
+        for (annotation in context.annotations) {
+            if (annotation.string.contains(Regex("\\((.*?)\\)"))) {
                 return true
             }
         }
@@ -37,10 +41,12 @@ class RMAT(context: Context, file: File) : Operator(context, file) {
     override fun mutate(): List<JavaMutant> {
         val mutants = mutableListOf<JavaMutant>()
 
-        for (annotation in context.getAnnotations()) {
-            val nAttr = numOfAnnotationAttributes(annotation)
-            for (index in 0..(nAttr-1)) {
-                currentAnnotation = annotation
+        for (annotation in context.annotations) {
+            val builder = JavaAnnotationBuilder(annotation.string)
+            builder.build()
+            val nAttr = numOfAnnotationAttributes(builder.annotationExpr!!)
+            for (index in 0 until nAttr) {
+                currentAnnotation = builder.annotationExpr
                 currentIndex = index
                 currentJavaMutant = JavaMutant(OperatorsEnum.RMAT)
                 currentJavaMutant!!.compilationUnit = this.visit()

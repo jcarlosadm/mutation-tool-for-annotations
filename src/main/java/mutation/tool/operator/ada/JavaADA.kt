@@ -7,7 +7,8 @@ import com.github.javaparser.ast.body.Parameter
 import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
-import mutation.tool.operator.Operator
+import mutation.tool.mutant.JavaMutateVisitor
+import mutation.tool.operator.JavaOperator
 import mutation.tool.operator.OperatorsEnum
 import java.io.File
 
@@ -18,7 +19,8 @@ import java.io.File
  * @param file source file
  * @constructor create a ADA operator
  */
-class ADA(context: Context, file:File): Operator(context, file) {
+class JavaADA(context: Context, file:File):JavaOperator(context, file) {
+    override val mutateVisitor = JavaMutateVisitor(this)
 
     /**
      * annotation of this operator
@@ -70,12 +72,14 @@ class ADA(context: Context, file:File): Operator(context, file) {
             fieldDeclaration: FieldDeclaration?,
             parameter: Parameter?
     ):Boolean {
+        val annotationBuilder = JavaAnnotationBuilder(annotation!!)
+        annotationBuilder.build()
         when {
             classOrInterfaceDeclaration != null -> classOrInterfaceDeclaration.
-                    addAnnotation(JavaAnnotationBuilder(annotation!!).build())
-            methodDeclaration != null -> methodDeclaration.addAnnotation(JavaAnnotationBuilder(annotation!!).build())
-            fieldDeclaration != null -> fieldDeclaration.addAnnotation(JavaAnnotationBuilder(annotation!!).build())
-            parameter != null -> parameter.addAnnotation(JavaAnnotationBuilder(annotation!!).build())
+                    addAnnotation(annotationBuilder.annotationExpr)
+            methodDeclaration != null -> methodDeclaration.addAnnotation(annotationBuilder.annotationExpr)
+            fieldDeclaration != null -> fieldDeclaration.addAnnotation(annotationBuilder.annotationExpr)
+            parameter != null -> parameter.addAnnotation(annotationBuilder.annotationExpr)
             else -> return false
         }
 
