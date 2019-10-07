@@ -8,7 +8,7 @@ import mutation.tool.util.xml.fileToDocument
 import org.w3c.dom.Node
 import java.io.File
 
-abstract class CSharpOperator(val context:Context, val file:File) {
+abstract class CSharpOperator(val context:Context, val file:File):Operator {
     abstract val mutateVisitor:CSharpMutateVisitor
     private val rootNode = fileToDocument(file, Language.C_SHARP)
     private var locked = false
@@ -17,7 +17,7 @@ abstract class CSharpOperator(val context:Context, val file:File) {
      * Check if this operator can be applicable to context
      * @return true if can be aplicable
      */
-    abstract fun checkContext():Boolean
+    abstract override fun checkContext():Boolean
 
     /**
      * Generate mutants
@@ -57,12 +57,12 @@ abstract class CSharpOperator(val context:Context, val file:File) {
     /**
      * allow actions when visiting an ast
      */
-    open fun unlock() { locked = false }
+    override fun unlock() { locked = false }
 
     /**
      * preventing actions when visiting an ast
      */
-    open fun lock() { locked = true }
+    override fun lock() { locked = true }
 }
 
 fun getValidCSharpOperators(contexts: List<Context>, cSharpFile: File, config: MutationToolConfig):List<CSharpOperator> {

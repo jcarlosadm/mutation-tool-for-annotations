@@ -24,7 +24,7 @@ import java.io.File
  * @param file source file
  * @constructor Create a SWTG operator instance
  */
-class SWTG(context: Context, file:File, private val allContexts: List<Context>): JavaOperator(context, file) {
+class JavaSWTG(context: Context, file:File, private val allContexts: List<Context>): JavaOperator(context, file) {
     override val mutateVisitor = JavaMutateVisitor(this)
 
     /**

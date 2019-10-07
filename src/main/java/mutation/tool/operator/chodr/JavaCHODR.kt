@@ -21,7 +21,7 @@ import java.io.File
  * @param file source file
  * @constructor create a CHODR operator
  */
-class CHODR(context: Context, file: File) : JavaOperator(context, file) {
+class JavaCHODR(context: Context, file: File) : JavaOperator(context, file) {
     override val mutateVisitor = JavaMutateVisitor(this)
     private val currentAnnotations = mutableListOf<AnnotationExpr>()
     private var javaMutant:JavaMutant? = null

@@ -1,9 +1,11 @@
 package mutation.tool.operator.ada
 
+import mutation.tool.annotation.finder.cSharpAnnotationFinder
 import mutation.tool.context.Context
 import mutation.tool.context.InsertionPoint
 import mutation.tool.operator.JavaOperator
 import mutation.tool.annotation.finder.javaAnnotationFinder
+import mutation.tool.operator.CSharpOperator
 import mutation.tool.util.json.AnnotationInfo
 import java.io.File
 
@@ -71,6 +73,36 @@ class ADAChecker(private val annotationInfos:List<AnnotationInfo>) {
 
                 for (string in info.annotationStrings) {
                     val operator = JavaADA(context, javaFile)
+                    operator.annotation = string
+                    operators += operator
+                }
+            }
+        }
+
+        return operators
+    }
+
+    fun checkCSharp(contexts:List<Context>, file:File): List<CSharpOperator> {
+        val operators = mutableListOf<CSharpOperator>()
+
+        for (context in contexts) {
+            if (!targetMap.containsKey(context.getInsertionPoint())) continue
+
+            for (info in targetMap.getValue(context.getInsertionPoint())) {
+                val name = info.name
+
+                var ok = true
+                for (annotation in context.annotations) {
+                    if (cSharpAnnotationFinder(annotation, name)){
+                        ok = false
+                        break
+                    }
+                }
+
+                if (!ok) continue
+
+                for (string in info.annotationStrings) {
+                    val operator = CSharpADA(context, file)
                     operator.annotation = string
                     operators += operator
                 }

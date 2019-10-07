@@ -6,12 +6,12 @@ import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
 fun fileToDocument(file:File, language: Language):Document {
-    val process = getProcess("srcml " + file.absolutePath + " --position -l \"" + language.string + "\"")
+    val process = getProcess("srcml --position -l ${language.string} ${file.absolutePath}")
     return getDocument(process)!!
 }
 
 fun codeToDocument(code:String, language: Language):Document {
-    val process = getProcess("srcml -t \"" + code + "\" + l + \"" + language.string + "\"")
+    val process = getProcess("srcml --position -l ${language.string} -t \"$code\"")
     return getDocument(process)!!
 }
 

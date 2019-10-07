@@ -21,7 +21,7 @@ import java.io.File
  * @param file source file
  * @constructor create a RMA operator
  */
-class RMA(context: Context, file: File) : JavaOperator(context, file) {
+class JavaRMA(context: Context, file: File) : JavaOperator(context, file) {
     override val mutateVisitor = JavaMutateVisitor(this)
     private var currentJavaMutant:JavaMutant? = null
     private var currentAnnotation:AnnotationExpr? = null

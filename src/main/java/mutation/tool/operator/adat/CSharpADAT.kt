@@ -6,7 +6,11 @@ import mutation.tool.mutant.CSharpMutateVisitor
 import mutation.tool.operator.CSharpOperator
 import java.io.File
 
-class CSharpADAT(context: Context, file: File, override val mutateVisitor: CSharpMutateVisitor) : CSharpOperator(context, file) {
+class CSharpADAT(context: Context, file: File) : CSharpOperator(context, file) {
+    override val mutateVisitor = CSharpMutateVisitor(this)
+
+    lateinit var map:Map<String, List<Map<String, String>>>
+
     override fun checkContext(): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }

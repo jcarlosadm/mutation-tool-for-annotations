@@ -21,7 +21,7 @@ import java.io.File
  * @param file source file
  * @constructor Create a RPA operator instance
  */
-class RPA(context: Context, file: File) : JavaOperator(context, file) {
+class JavaRPA(context: Context, file: File) : JavaOperator(context, file) {
     override val mutateVisitor = JavaMutateVisitor(this)
 
     /**

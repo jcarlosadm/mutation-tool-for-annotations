@@ -1,4 +1,4 @@
-package mutation.tool.operator.ada
+package mutation.tool.operator.rpav
 
 import mutation.tool.context.Context
 import mutation.tool.mutant.CSharpMutant
@@ -6,10 +6,10 @@ import mutation.tool.mutant.CSharpMutateVisitor
 import mutation.tool.operator.CSharpOperator
 import java.io.File
 
-class CSharpADA(context: Context, file: File) : CSharpOperator(context, file) {
+class CSharpRPAV(context: Context, file: File) : CSharpOperator(context, file) {
     override val mutateVisitor = CSharpMutateVisitor(this)
 
-    var annotation:String? = null
+    lateinit var map:Map<String, Map<String, List<String>>>
 
     override fun checkContext(): Boolean {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.

@@ -55,7 +55,7 @@ class JavaADAT(context: Context, file:File) : JavaOperator(context, file) {
 
                 for (attr in map.getValue(validKey)) {
                     var notEqual = true
-                    for (pair in annotation.pairs) {
+                    for (pair in annotation.pairs!!) {
                         if (attr.getValue("name") == pair.nameAsString) {
                             notEqual = false
                             break
@@ -88,7 +88,7 @@ class JavaADAT(context: Context, file:File) : JavaOperator(context, file) {
 
                 for (attr in map.getValue(validKey)) {
                     var notEqual = true
-                    for (pair in annotation.pairs) {
+                    for (pair in annotation.pairs!!) {
                         if (attr.getValue("name") == pair.nameAsString) {
                             notEqual = false
                             break

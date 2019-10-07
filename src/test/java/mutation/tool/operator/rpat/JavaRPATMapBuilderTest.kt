@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.io.File
 
-internal class RPATMapBuilderTest {
+internal class JavaRPATMapBuilderTest {
 
     @Test
     fun testGetMap() {

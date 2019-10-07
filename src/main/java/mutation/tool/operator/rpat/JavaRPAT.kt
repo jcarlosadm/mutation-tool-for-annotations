@@ -24,7 +24,7 @@ import java.io.File
  * @param file source file
  * @constructor Create a RPAT operator instance
  */
-class RPAT(context: Context, file: File) : JavaOperator(context, file) {
+class JavaRPAT(context: Context, file: File) : JavaOperator(context, file) {
     override val mutateVisitor = JavaMutateVisitor(this)
 
     /**
@@ -52,10 +52,10 @@ class RPAT(context: Context, file: File) : JavaOperator(context, file) {
 
             if (annotation.annotationType?.equals(AnnotationType.SINGLE)!! && map.getValue(validKey).containsKey(""))
                 return true
-            else if (annotation.annotationType?.equals(AnnotationType.NORMAL)!!){
+            else if (annotation.annotationType == AnnotationType.NORMAL){
                 //annotation as NormalAnnotationExpr
                 // check each attr of annotation
-                for (pair in annotation.pairs) {
+                for (pair in annotation.pairs!!) {
                     // if present on map
                     if (!map.getValue(validKey).containsKey(pair.nameAsString)) continue
 
@@ -94,10 +94,10 @@ class RPAT(context: Context, file: File) : JavaOperator(context, file) {
                     createMutant(builder.annotationExpr!!, "", attrMap, mutants)
                 }
             }
-            else if (annotation.annotationType?.equals(AnnotationType.NORMAL)!!) {
+            else if (annotation.annotationType.equals(AnnotationType.NORMAL)) {
                 //annotation as NormalAnnotationExpr
 
-                for (pair in annotation.pairs) {
+                for (pair in annotation.pairs!!) {
                     if (!map.getValue(validKey).contains(pair.nameAsString)) continue
 
                     for (attrMap in map.getValue(validKey).getValue(pair.nameAsString)) {

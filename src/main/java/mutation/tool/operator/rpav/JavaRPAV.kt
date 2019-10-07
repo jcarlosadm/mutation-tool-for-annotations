@@ -25,7 +25,7 @@ import java.io.File
  * @param file source file
  * @constructor Create a RPAV operator instance
  */
-class RPAV(context: Context, file: File) : JavaOperator(context, file) {
+class JavaRPAV(context: Context, file: File) : JavaOperator(context, file) {
     override val mutateVisitor = JavaMutateVisitor(this)
 
     /**

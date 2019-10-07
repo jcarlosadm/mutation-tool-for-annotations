@@ -40,7 +40,7 @@ class MethodContext: Context {
 
     constructor(node: Node) {
         val nameNode = getTagNode(node, "name", false)!!
-        this.name = nameNode.nodeName
+        this.name = nameNode.textContent
         this.beginLine = Integer.parseInt(nameNode.attributes.getNamedItem("pos:line").textContent)
         this.beginColumn = Integer.parseInt(nameNode.attributes.getNamedItem("pos:column").textContent)
         val typeNode = getTagNode(node, "type", false)!!

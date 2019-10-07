@@ -28,3 +28,9 @@ fun getAllTagNodes(node: Node, tag: String, ignoreTags:List<String>):List<Node> 
     }
     return list
 }
+
+fun getRootNode(node: Node):Node {
+    if (node.parentNode == null)
+        return node
+    return getRootNode(node.parentNode)
+}
