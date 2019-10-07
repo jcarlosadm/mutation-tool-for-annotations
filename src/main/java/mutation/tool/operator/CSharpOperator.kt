@@ -1,16 +1,17 @@
 package mutation.tool.operator
 
-import mutation.tool.context.Context
+import mutation.tool.context.*
 import mutation.tool.mutant.CSharpMutant
 import mutation.tool.mutant.CSharpMutateVisitor
 import mutation.tool.util.*
+import mutation.tool.util.xml.codeToDocument
 import mutation.tool.util.xml.fileToDocument
 import org.w3c.dom.Node
 import java.io.File
 
 abstract class CSharpOperator(val context:Context, val file:File):Operator {
     abstract val mutateVisitor:CSharpMutateVisitor
-    private val rootNode = fileToDocument(file, Language.C_SHARP)
+    private val rootNode = fileToDocument(file, Language.C_SHARP).childNodes.item(0)
     private var locked = false
 
     /**
@@ -63,6 +64,22 @@ abstract class CSharpOperator(val context:Context, val file:File):Operator {
      * preventing actions when visiting an ast
      */
     override fun lock() { locked = true }
+
+    protected fun getAnnotations(node: Node, insertionPoint: InsertionPoint): List<Node> = when(insertionPoint) {
+        InsertionPoint.CLASS -> convertAnnotations(ClassContext(node))
+        InsertionPoint.METHOD -> convertAnnotations(MethodContext(node))
+        InsertionPoint.PROPERTY -> convertAnnotations(PropertyContext(node))
+        InsertionPoint.PARAMETER -> convertAnnotations(ParameterContext(node))
+    }
+
+    private fun convertAnnotations(context: Context): MutableList<Node> {
+        val annotations = mutableListOf<Node>()
+        for (annotation in context.annotations) {
+            annotations += codeToDocument(annotation.string, Language.C_SHARP).childNodes.item(0)
+        }
+
+        return annotations
+    }
 }
 
 fun getValidCSharpOperators(contexts: List<Context>, cSharpFile: File, config: MutationToolConfig):List<CSharpOperator> {

@@ -6,12 +6,12 @@ import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
 fun fileToDocument(file:File, language: Language):Document {
-    val process = getProcess("srcml --position -l ${language.string} ${file.absolutePath}")
+    val process = getProcess(arrayOf("srcml", "--position", "-l", language.string, file.absolutePath))
     return getDocument(process)!!
 }
 
 fun codeToDocument(code:String, language: Language):Document {
-    val process = getProcess("srcml --position -l ${language.string} -t \"$code\"")
+    val process = getProcess(arrayOf("srcml", "--position", "-l", language.string, "-t", code))
     return getDocument(process)!!
 }
 
@@ -20,7 +20,7 @@ private fun getDocument(process: Process): Document? {
     return builder.parse(process.inputStream)
 }
 
-private fun getProcess(command:String): Process {
+private fun getProcess(command:Array<String>): Process {
     val process = Runtime.getRuntime().exec(command)
     process.waitFor()
     return process

@@ -8,7 +8,7 @@ import java.io.File
 
 class CSharpStrategy:VisitorStrategy {
     override fun getContexts(file: File): List<Context> {
-        val rootNode = fileToDocument(file, Language.C_SHARP)
+        val rootNode = fileToDocument(file, Language.C_SHARP).childNodes.item(0)
         val visitor = ContextCatcherCSharpVisitor()
         visitor.visit(rootNode)
 
