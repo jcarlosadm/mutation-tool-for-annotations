@@ -90,7 +90,7 @@ fun numOfAnnotationAttributes(annotation: Node): Int {
 }
 
 private fun getNumberOfAttributes(stringRepresentation:String):Int {
-    if (stringRepresentation.contains(Regex("\\((.*?)\\)")))
+    if (!stringRepresentation.contains(Regex("\\((.*?)\\)")))
         return 0
     return stringRepresentation.replaceBefore("(", "").split(",").size
 }
