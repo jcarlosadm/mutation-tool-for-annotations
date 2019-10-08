@@ -10,15 +10,15 @@ import java.io.File
 
 internal class RMATTest {
 
-    /*@Test
+    @Test
     fun testRMAT() {
         val mutants = mutableListOf<JavaMutant>()
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
-            val operator = RMAT(context, File(FILE1))
+            val operator = JavaRMAT(context, File(FILE1))
 
             var count = 0
-            for (annotation in context.getAnnotations()) {
-                if (annotation.toString().contains(Regex("\\((.*?)\\)"))) count++
+            for (annotation in context.annotations) {
+                if (annotation.string.contains(Regex("\\((.*?)\\)"))) count++
             }
 
             if (count > 0) {
@@ -30,5 +30,5 @@ internal class RMATTest {
         }
 
         assertEquals(10, mutants.size)
-    }*/
+    }
 }

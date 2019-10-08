@@ -9,7 +9,7 @@ import java.io.File
 
 internal class AnnotationFinderKtTest {
 
-   /* @Test
+    @Test
     fun testAnnotationFinder() {
         val names = listOf(
                 "@org.springframework.web.bind.annotation.RequestMapping",
@@ -21,8 +21,8 @@ internal class AnnotationFinderKtTest {
         val contexts = getListOfAnnotationContext(
                 File("./src/test/resources/fakeProject/src/main/java/TarefasController3.java"), JavaStrategy())
         for (context in contexts) {
-            for (annotation in context.getAnnotations()) {
-                val index = when(annotation.nameAsString) {
+            for (annotation in context.annotations) {
+                val index = when(annotation.name) {
                     "RequestMapping" -> 0
                     "Qualifier" -> 3
                     "org.springframework.beans.factory.annotation.Qualifier" -> 3
@@ -35,5 +35,5 @@ internal class AnnotationFinderKtTest {
                 assertTrue(javaAnnotationFinder(annotation, names[index]))
             }
         }
-    }*/
+    }
 }

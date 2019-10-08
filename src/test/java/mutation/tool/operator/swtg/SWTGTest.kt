@@ -12,7 +12,7 @@ import java.io.File
 
 internal class SWTGTest {
 
-    /*@Test
+    @Test
     fun testSWTG() {
         val mutants = mutableListOf<JavaMutant>()
         val contexts = getListOfAnnotationContext(File(FILE1), JavaStrategy())
@@ -22,7 +22,7 @@ internal class SWTGTest {
         )
 
         for (context in contexts) {
-            val operator = SWTG(context, File(FILE1), contexts)
+            val operator = JavaSWTG(context, File(FILE1), contexts)
             operator.mapContextType = map
             if (operator.checkContext())
                 mutants += operator.mutate()
@@ -39,12 +39,12 @@ internal class SWTGTest {
         builder.build()
 
         for (context in contexts) {
-            val operator = SWTG(context, File(FILE1), contexts)
+            val operator = JavaSWTG(context, File(FILE1), contexts)
             operator.mapContextType = builder.map
             if (operator.checkContext())
                 mutants += operator.mutate()
         }
 
         assertEquals(23, mutants.size)
-    }*/
+    }
 }

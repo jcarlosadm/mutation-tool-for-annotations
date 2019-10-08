@@ -18,12 +18,12 @@ internal class RPAVTest {
             )
     )
 
-    /*@Test
+    @Test
     fun testRPAV(){
         val mutants = mutableListOf<JavaMutant>()
 
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
-            val operator = RPAV(context, File(FILE1))
+            val operator = JavaRPAV(context, File(FILE1))
             operator.map = map
             if (operator.checkContext()) mutants += operator.mutate()
         }
@@ -38,11 +38,11 @@ internal class RPAVTest {
         builder.build()
 
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
-            val operator = RPAV(context, File(FILE1))
+            val operator = JavaRPAV(context, File(FILE1))
             operator.map = builder.map
             if (operator.checkContext()) mutants += operator.mutate()
         }
 
         assertEquals(2, mutants.size)
-    }*/
+    }
 }
