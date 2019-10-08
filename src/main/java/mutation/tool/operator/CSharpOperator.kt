@@ -4,14 +4,16 @@ import mutation.tool.context.*
 import mutation.tool.mutant.CSharpMutant
 import mutation.tool.mutant.CSharpMutateVisitor
 import mutation.tool.util.*
+import mutation.tool.util.xml.NodeType
 import mutation.tool.util.xml.codeToDocument
 import mutation.tool.util.xml.fileToDocument
+import mutation.tool.util.xml.getAllTagNodes
 import org.w3c.dom.Node
 import java.io.File
 
 abstract class CSharpOperator(val context:Context, val file:File):Operator {
     abstract val mutateVisitor:CSharpMutateVisitor
-    private val rootNode = fileToDocument(file, Language.C_SHARP).childNodes.item(0)
+    private val rootNode = fileToDocument(file, Language.C_SHARP)
     private var locked = false
 
     /**
@@ -65,20 +67,16 @@ abstract class CSharpOperator(val context:Context, val file:File):Operator {
      */
     override fun lock() { locked = true }
 
-    protected fun getAnnotations(node: Node, insertionPoint: InsertionPoint): List<Node> = when(insertionPoint) {
-        InsertionPoint.CLASS -> convertAnnotations(ClassContext(node))
-        InsertionPoint.METHOD -> convertAnnotations(MethodContext(node))
-        InsertionPoint.PROPERTY -> convertAnnotations(PropertyContext(node))
-        InsertionPoint.PARAMETER -> convertAnnotations(ParameterContext(node))
-    }
+    protected fun getAnnotations(node: Node): List<Node> {
+        val list = mutableListOf<Node>()
 
-    private fun convertAnnotations(context: Context): MutableList<Node> {
-        val annotations = mutableListOf<Node>()
-        for (annotation in context.annotations) {
-            annotations += codeToDocument(annotation.string, Language.C_SHARP).childNodes.item(0)
+        for (index in 0 until node.childNodes.length) {
+            list += getAllTagNodes(node.childNodes.item(index), NodeType.ATTRIBUTE.nodeName,
+                    listOf(NodeType.CLASS.nodeName, NodeType.METHOD.nodeName, NodeType.PROPERTY.nodeName,
+                            NodeType.PARAMETER.nodeName))
         }
 
-        return annotations
+        return list
     }
 }
 
