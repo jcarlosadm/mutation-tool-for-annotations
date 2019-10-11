@@ -47,7 +47,7 @@ internal class MutationToolTest {
     fun testMutantToolCSharp() {
         val config = MutationToolConfig(File(sourcePath2))
         config.projectName = "fakeProject2"
-        config.operators.addAll(listOf(OperatorsEnum.RMA))
+        config.operators.addAll(listOf(OperatorsEnum.RMAT))
         config.language = Language.C_SHARP
         config.mutantsFolder = "./src/test/resources/mutants"
         config.threads = 2

@@ -67,15 +67,33 @@ class CSharpRMAT(context: Context, file: File) : CSharpOperator(context, file) {
                 when (nAttr) {
                     0 -> return false
                     1 -> {
-                        val substring1 = stringRep.substring(0, stringRep.indexOf("(") - 1)
-                        val substring2 = stringRep.substring(stringRep.indexOf(")", substring1.length+1)+1)
+                        val substring1 = stringRep.substring(0, stringRep.indexOf("("))
+                        val substring2 = stringRep.substring(stringRep.indexOf(")", substring1.length) + 1)
                         annotationString = substring1 + substring2
                     }
                     else -> {
-                        val substring1 = stringRep.substring(0, stringRep.indexOf("("))
-                        val substring2 = stringRep.substring(stringRep.indexOf(",", substring1.length))
+                        val substring1 = stringRep.substring(0, stringRep.indexOf("(") + 1)
+                        val substring2 = stringRep.substring(stringRep.lastIndexOf(")"))
+                        var middle = stringRep.removePrefix(substring1).removeSuffix(substring2)
+                        middle = middle.replace(" ", "")
+
+                        val stringArray = middle.split(",").toMutableList()
+                        stringArray.removeAt(currentIndex!!)
+
+                        middle = stringArray.joinToString(",")
+                        annotationString = substring1 + middle + substring2
                     }
                 }
+
+                val builder = CSharpAnnotationBuilder(annotationString)
+                builder.build()
+                builder.node!!.parentNode.removeChild(builder.node)
+
+                val parent = annotation.parentNode
+//                parent.insertBefore(builder.node?.cloneNode(false), annotation)
+//                parent.removeChild(annotation)
+                parent.replaceChild(builder.node, annotation)
+                return true
             }
         }
 

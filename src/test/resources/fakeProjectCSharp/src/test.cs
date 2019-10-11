@@ -13,7 +13,7 @@ class BasicAttributeDemo
         Console.WriteLine("Called MyFirstdeprecatedMethod().");
     }
 
-    [ObsoleteAttribute]
+    [ObsoleteAttribute(SetLastError=false, ExactSpelling=false)]
     public void MySecondDeprecatedMethod()
     {
         Console.WriteLine("Called MySecondDeprecatedMethod().");
@@ -26,7 +26,7 @@ class BasicAttributeDemo
     }
 
     // make the program thread safe for COM
-    [STAThread]
+    [STAThread("user32.dll", ExactSpelling=false, SetLastError=false)]
     static void Main(string[] args)
     {
         BasicAttributeDemo attrDemo = new BasicAttributeDemo();
