@@ -48,7 +48,7 @@ internal class MutationToolTest {
         val config = MutationToolConfig(File(sourcePath2))
         config.pathAnnotationInfo = "./src/test/resources/configFiles/annotations-csharp.json"
         config.projectName = "fakeProject2"
-        config.operators.addAll(listOf(OperatorsEnum.ADAT))
+        config.operators.addAll(listOf(OperatorsEnum.CHODR))
         config.language = Language.C_SHARP
         config.mutantsFolder = "./src/test/resources/mutants"
         config.threads = 2
