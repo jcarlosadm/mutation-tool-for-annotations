@@ -10,6 +10,6 @@ class CSharpAnnotationBuilder(override val stringRepresentation: String) :Annota
         private set
 
     override fun build() {
-        this.node = codeToDocument(this.stringRepresentation, Language.C_SHARP).childNodes.item(0)
+        this.node = codeToDocument(this.stringRepresentation, Language.C_SHARP).firstChild
     }
 }
