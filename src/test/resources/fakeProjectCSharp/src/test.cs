@@ -5,6 +5,7 @@ class BasicAttributeDemo
 {
 
     [Obsolete]
+    [Required]
     private string name;
 
     [method: Obsolete]
@@ -14,12 +15,14 @@ class BasicAttributeDemo
     }
 
     [ObsoleteAttribute(SetLastError=false, ExactSpelling=false)]
+    [Route("/foo")]
     public void MySecondDeprecatedMethod()
     {
         Console.WriteLine("Called MySecondDeprecatedMethod().");
     }
 
     [Obsolete("You shouldn't use this method anymore.")]
+    [HttpGet(Name="nameget")]
     public void MyThirdDeprecatedMethod()
     {
         Console.WriteLine("Called MyThirdDeprecatedMethod().");
