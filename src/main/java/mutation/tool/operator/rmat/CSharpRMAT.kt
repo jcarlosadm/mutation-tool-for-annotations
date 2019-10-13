@@ -85,14 +85,13 @@ class CSharpRMAT(context: Context, file: File) : CSharpOperator(context, file) {
                     }
                 }
 
+                val parent = annotation.parentNode
+
                 val builder = CSharpAnnotationBuilder(annotationString)
                 builder.build()
-                builder.node!!.parentNode.removeChild(builder.node)
+                val newNode = parent.ownerDocument.importNode(builder.node, true)
 
-                val parent = annotation.parentNode
-//                parent.insertBefore(builder.node?.cloneNode(false), annotation)
-//                parent.removeChild(annotation)
-                parent.replaceChild(builder.node, annotation)
+                parent.replaceChild(newNode.firstChild, annotation)
                 return true
             }
         }
