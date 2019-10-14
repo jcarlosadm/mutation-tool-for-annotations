@@ -43,6 +43,6 @@ internal class RPAVTest {
             if (operator.checkContext()) mutants += operator.mutate()
         }
 
-        assertEquals(2, mutants.size)
+        assertEquals(8, mutants.size)
     }
 }
