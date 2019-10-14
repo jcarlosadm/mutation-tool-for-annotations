@@ -1,7 +1,9 @@
 package mutation.tool.annotation
 
 import com.github.javaparser.ast.expr.AnnotationExpr
+import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.context.*
+import mutation.tool.context.adapter.AnnotationAdapter
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.hamcrest.core.AnyOf
@@ -16,7 +18,7 @@ internal class AnnotationContextTest {
     @Test
     fun testGetListOfAnnotationContext() {
         val file = File(PATH)
-        val list = getListOfAnnotationContext(file)
+        val list = getListOfAnnotationContext(file, JavaStrategy())
 
         assertEquals(19, list.size)
 
@@ -26,7 +28,7 @@ internal class AnnotationContextTest {
         var parameterCount = 0
 
         for (context in list) {
-            var annotations:List<AnnotationExpr> = context.getAnnotations()
+            val annotations:List<AnnotationAdapter> = context.annotations
             when(context.getInsertionPoint()) {
                 InsertionPoint.CLASS -> classCount++
                 InsertionPoint.METHOD -> methodCount++
@@ -35,7 +37,7 @@ internal class AnnotationContextTest {
             }
 
             for (annotation in annotations){
-                MatcherAssert.assertThat(annotation.nameAsString, AnyOf.
+                MatcherAssert.assertThat(annotation.name, AnyOf.
                         anyOf(CoreMatchers.containsString("Controller"),
                                 CoreMatchers.containsString("Qualifier"),
                                 CoreMatchers.containsString("Autowired"),

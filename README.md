@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/easy-software-ufal/mutation-tool-for-annotations.svg?branch=master)](https://travis-ci.org/easy-software-ufal/mutation-tool-for-annotations) [![](https://jitpack.io/v/easy-software-ufal/mutation-tool-for-annotations.svg)](https://jitpack.io/#easy-software-ufal/mutation-tool-for-annotations) [![codecov](https://codecov.io/gh/easy-software-ufal/mutation-tool-for-annotations/branch/master/graph/badge.svg)](https://codecov.io/gh/easy-software-ufal/mutation-tool-for-annotations)
 
-This a lib to mutate code annotations from Java source code. From a set of operators, this will create one mutant for each change on original code, related to code annotations. For example, consider the following code:
+This a lib to mutate code annotations from Java source code. From a set of operators, this will create one javaMutant for each change on original code, related to code annotations. For example, consider the following code:
 
 ```java
 @RequestMapping(value = "/foo")
@@ -11,7 +11,7 @@ public String form() {
 }
 ```
 
-The **ADAT** (*Add Attribute*) operator can create the following mutants:
+The **ADAT** (*Add Attribute*) operator can create the following javaMutants:
 
 ```java
 @RequestMapping(value = "/foo", method = RequestMethod.POST)
@@ -27,7 +27,7 @@ public String form() {
 }
 ```
 
-With these mutants, the developer can evaluate your test suite. The ultimate goal is *kill* these mutants with tests, improving the test suite. This project was based on theory of *Mutation Testing*. For more details, see [An Analysis and Survey of the Development of Mutation Testing](https://ieeexplore.ieee.org/abstract/document/5487526) and [Mutation Operators for Code Annotations](https://dl.acm.org/citation.cfm?id=3266006&dl=ACM&coll=DL).
+With these javaMutants, the developer can evaluate your test suite. The ultimate goal is *kill* these javaMutants with tests, improving the test suite. This project was based on theory of *Mutation Testing*. For more details, see [An Analysis and Survey of the Development of Mutation Testing](https://ieeexplore.ieee.org/abstract/document/5487526) and [Mutation Operators for Code Annotations](https://dl.acm.org/citation.cfm?id=3266006&dl=ACM&coll=DL).
 
 ## Operators
 
@@ -48,6 +48,8 @@ SWTG | Change location of one annotation
 To use this project, it is necessary to choose one or more of these operators.
 
 ## Configuration
+
+You will need the srcML tool: [https://www.srcml.org/](https://www.srcml.org/). Install on your OS.
 
 First, create a *Maven* project with java.
 
@@ -144,7 +146,7 @@ For each attribute, we have the following fields:
 
 -----
 
-After fill the *annotations.json*, it is necessary to create a Java code to use this project to generate the mutants. The following code is an example:
+After fill the *annotations.json*, it is necessary to create a Java code to use this project to generate the javaMutants. The following code is an example:
 
 ```java
 MutationToolConfig config = new MutationToolConfig(new File(SOURCE_PATH));
@@ -184,7 +186,7 @@ config.getOperators().addAll(Arrays.asList(OperatorsEnum.values()));
 config.getOperators().addAll(Arrays.asList(OperatorsEnum.RMA, OperatorsEnum.RMAT));
 ```
 
-### Generate the mutants
+### Generate the javaMutants
 
 The last thing is the use the method *run* of the *MutationTool* class:
 
@@ -192,4 +194,4 @@ The last thing is the use the method *run* of the *MutationTool* class:
 new MutationTool(config).run();
 ```
 
-All the mutants will be generated in the *data/mutants* folder.
+All the javaMutants will be generated in the *data/javaMutants* folder.

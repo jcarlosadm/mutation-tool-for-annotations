@@ -1,14 +1,22 @@
 package mutation.tool.operator
 
 import mutation.tool.context.Context
-import mutation.tool.operator.adat.ADAT
-import mutation.tool.operator.chodr.CHODR
-import mutation.tool.operator.rma.RMA
-import mutation.tool.operator.rmat.RMAT
-import mutation.tool.operator.rpa.RPA
-import mutation.tool.operator.rpat.RPAT
-import mutation.tool.operator.rpav.RPAV
-import mutation.tool.operator.swtg.SWTG
+import mutation.tool.operator.adat.CSharpADAT
+import mutation.tool.operator.adat.JavaADAT
+import mutation.tool.operator.chodr.CSharpCHODR
+import mutation.tool.operator.chodr.JavaCHODR
+import mutation.tool.operator.rma.CSharpRMA
+import mutation.tool.operator.rma.JavaRMA
+import mutation.tool.operator.rmat.CSharpRMAT
+import mutation.tool.operator.rmat.JavaRMAT
+import mutation.tool.operator.rpa.CSharpRPA
+import mutation.tool.operator.rpa.JavaRPA
+import mutation.tool.operator.rpat.CSharpRPAT
+import mutation.tool.operator.rpat.JavaRPAT
+import mutation.tool.operator.rpav.CSharpRPAV
+import mutation.tool.operator.rpav.JavaRPAV
+import mutation.tool.operator.swtg.CSharpSWTG
+import mutation.tool.operator.swtg.JavaSWTG
 import mutation.tool.util.MutationToolConfig
 import java.io.File
 
@@ -28,34 +36,60 @@ class OperatorFactory(private val config: MutationToolConfig) {
      * @param file source file
      * @return a list of operators
      */
-    fun getOperators(operatorEnum: OperatorsEnum, contexts:List<Context>, file:File):List<Operator> =
-        when(operatorEnum) {
-            OperatorsEnum.RMA -> this.getRMAOperators(contexts, file)
-            OperatorsEnum.RMAT -> this.getRMATOperators(contexts, file)
-            OperatorsEnum.ADA -> this.getADAOperators(contexts, file)
-            OperatorsEnum.ADAT -> this.getADATOperators(contexts, file)
-            OperatorsEnum.CHODR -> this.getCHODROperators(contexts, file)
-            OperatorsEnum.RPA -> this.getRPAOperators(contexts, file)
-            OperatorsEnum.RPAT -> this.getRPATOperators(contexts, file)
-            OperatorsEnum.RPAV -> this.getRPAVOperators(contexts, file)
-            OperatorsEnum.SWTG -> this.getSWTGOperators(contexts, file)
+    fun getJavaOperators(operatorEnum: OperatorsEnum, contexts:List<Context>, file:File):List<JavaOperator> {
+        return when(operatorEnum) {
+            OperatorsEnum.RMA -> this.getJavaRMAOperators(contexts, file)
+            OperatorsEnum.RMAT -> this.getJavaRMATOperators(contexts, file)
+            OperatorsEnum.ADA -> this.getJavaADAOperators(contexts, file)
+            OperatorsEnum.ADAT -> this.getJavaADATOperators(contexts, file)
+            OperatorsEnum.CHODR -> this.getJavaCHODROperators(contexts, file)
+            OperatorsEnum.RPA -> this.getJavaRPAOperators(contexts, file)
+            OperatorsEnum.RPAT -> this.getJavaRPATOperators(contexts, file)
+            OperatorsEnum.RPAV -> this.getJavaRPAVOperators(contexts, file)
+            OperatorsEnum.SWTG -> this.getJavaSWTGOperators(contexts, file)
         }
+    }
 
-    private fun getRPAVOperators(contexts: List<Context>, file: File): List<Operator> {
-        val operators = mutableListOf<Operator>()
+    fun getCSharpOperators(operatorEnum: OperatorsEnum, contexts: List<Context>, file: File):List<CSharpOperator> {
+        return when(operatorEnum) {
+            OperatorsEnum.ADA -> this.getCSharpADAOperators(contexts, file)
+            OperatorsEnum.ADAT -> this.getCSharpADATOperators(contexts, file)
+            OperatorsEnum.CHODR -> this.getCSharpCHODROperators(contexts, file)
+            OperatorsEnum.RMA -> this.getCSharpRMAOperators(contexts, file)
+            OperatorsEnum.RMAT -> this.getCSharpRMATOperators(contexts, file)
+            OperatorsEnum.RPA -> this.getCSharpRPAOperators(contexts, file)
+            OperatorsEnum.RPAT -> this.getCSharpRPATOperators(contexts, file)
+            OperatorsEnum.RPAV -> this.getCSharpRPAVOperators(contexts, file)
+            OperatorsEnum.SWTG -> this.getCSharpSWTGOperators(contexts, file)
+        }
+    }
+
+    private fun getCSharpRPAVOperators(contexts: List<Context>, file: File): List<CSharpOperator> {
+        val operators = mutableListOf<CSharpOperator>()
         for (context in contexts){
-            val operator = RPAV(context, file)
+            val operator = CSharpRPAV(context, file)
             operator.map = config.rpavMap!!
             if (operator.checkContext()) operators += operator
         }
-        
+
         return operators
     }
 
-    private fun getRPATOperators(contexts: List<Context>, file: File): List<Operator> {
-        val operators = mutableListOf<Operator>()
+    private fun getJavaRPAVOperators(contexts: List<Context>, file: File): List<JavaOperator> {
+        val operators = mutableListOf<JavaOperator>()
+        for (context in contexts){
+            val operator = JavaRPAV(context, file)
+            operator.map = config.rpavMap!!
+            if (operator.checkContext()) operators += operator
+        }
+
+        return operators
+    }
+
+    private fun getCSharpRPATOperators(contexts: List<Context>, file: File): List<CSharpOperator> {
+        val operators = mutableListOf<CSharpOperator>()
         for (context in contexts) {
-            val operator = RPAT(context, file)
+            val operator = CSharpRPAT(context, file)
             operator.map = config.rpatMap!!
             if (operator.checkContext()) operators += operator
         }
@@ -63,10 +97,21 @@ class OperatorFactory(private val config: MutationToolConfig) {
         return operators
     }
 
-    private fun getADATOperators(contexts: List<Context>, file: File): List<Operator> {
-        val operators = mutableListOf<Operator>()
+    private fun getJavaRPATOperators(contexts: List<Context>, file: File): List<JavaOperator> {
+        val operators = mutableListOf<JavaOperator>()
         for (context in contexts) {
-            val operator = ADAT(context, file)
+            val operator = JavaRPAT(context, file)
+            operator.map = config.rpatMap!!
+            if (operator.checkContext()) operators += operator
+        }
+
+        return operators
+    }
+
+    private fun getCSharpADATOperators(contexts: List<Context>, file: File): List<CSharpOperator> {
+        val operators = mutableListOf<CSharpOperator>()
+        for (context in contexts) {
+            val operator = CSharpADAT(context, file)
             operator.map = config.adatMap!!
             if (operator.checkContext()) operators += operator
         }
@@ -74,10 +119,21 @@ class OperatorFactory(private val config: MutationToolConfig) {
         return operators
     }
 
-    private fun getSWTGOperators(contexts: List<Context>, file: File): List<Operator> {
-        val operators = mutableListOf<Operator>()
+    private fun getJavaADATOperators(contexts: List<Context>, file: File): List<JavaOperator> {
+        val operators = mutableListOf<JavaOperator>()
         for (context in contexts) {
-            val operator = SWTG(context, file, contexts)
+            val operator = JavaADAT(context, file)
+            operator.map = config.adatMap!!
+            if (operator.checkContext()) operators += operator
+        }
+
+        return operators
+    }
+
+    private fun getCSharpSWTGOperators(contexts: List<Context>, file: File): List<CSharpOperator> {
+        val operators = mutableListOf<CSharpOperator>()
+        for (context in contexts) {
+            val operator = CSharpSWTG(context, file, contexts)
             operator.mapContextType = config.swtgMap!!
             if (operator.checkContext()) operators += operator
         }
@@ -85,10 +141,21 @@ class OperatorFactory(private val config: MutationToolConfig) {
         return operators
     }
 
-    private fun getRPAOperators(contexts: List<Context>, file: File): List<Operator> {
-        val operators = mutableListOf<Operator>()
+    private fun getJavaSWTGOperators(contexts: List<Context>, file: File): List<JavaOperator> {
+        val operators = mutableListOf<JavaOperator>()
         for (context in contexts) {
-            val rpa = RPA(context, file)
+            val operator = JavaSWTG(context, file, contexts)
+            operator.mapContextType = config.swtgMap!!
+            if (operator.checkContext()) operators += operator
+        }
+
+        return operators
+    }
+
+    private fun getCSharpRPAOperators(contexts: List<Context>, file: File): List<CSharpOperator> {
+        val operators = mutableListOf<CSharpOperator>()
+        for (context in contexts) {
+            val rpa = CSharpRPA(context, file)
             rpa.switchMap = config.rpaMap!!
             if (rpa.checkContext()) operators += rpa
         }
@@ -96,18 +163,52 @@ class OperatorFactory(private val config: MutationToolConfig) {
         return operators
     }
 
-    private fun getCHODROperators(contexts: List<Context>, file: File): List<Operator> {
-        val operators = mutableListOf<Operator>()
+    private fun getJavaRPAOperators(contexts: List<Context>, file: File): List<JavaOperator> {
+        val operators = mutableListOf<JavaOperator>()
         for (context in contexts) {
-            val chodr = CHODR(context, file)
+            val rpa = JavaRPA(context, file)
+            rpa.switchMap = config.rpaMap!!
+            if (rpa.checkContext()) operators += rpa
+        }
+
+        return operators
+    }
+
+    private fun getCSharpCHODROperators(contexts: List<Context>, file: File): List<CSharpOperator> {
+        val operators = mutableListOf<CSharpOperator>()
+        for (context in contexts) {
+            val chodr = CSharpCHODR(context, file)
             if (chodr.checkContext()) operators += chodr
         }
 
         return operators
     }
 
-    private fun getADAOperators(contexts: List<Context>, file: File): List<Operator> {
-        val operators = mutableListOf<Operator>()
+    private fun getJavaCHODROperators(contexts: List<Context>, file: File): List<JavaOperator> {
+        val operators = mutableListOf<JavaOperator>()
+        for (context in contexts) {
+            val chodr = JavaCHODR(context, file)
+            if (chodr.checkContext()) operators += chodr
+        }
+
+        return operators
+    }
+
+    private fun getCSharpADAOperators(contexts: List<Context>, file: File): List<CSharpOperator> {
+        val operators = mutableListOf<CSharpOperator>()
+
+        if (this.config.adaChecker != null) {
+            val list = this.config.adaChecker!!.checkCSharp(contexts, file)
+            for (adaOperator in list) {
+                if (adaOperator.checkContext()) operators += adaOperator
+            }
+        }
+
+        return operators
+    }
+
+    private fun getJavaADAOperators(contexts: List<Context>, file: File): List<JavaOperator> {
+        val operators = mutableListOf<JavaOperator>()
 
         if (this.config.adaChecker != null) {
             val list = this.config.adaChecker!!.check(contexts, file)
@@ -119,20 +220,40 @@ class OperatorFactory(private val config: MutationToolConfig) {
         return operators
     }
 
-    private fun getRMATOperators(contexts: List<Context>, file: File): List<Operator> {
-        val operators = mutableListOf<Operator>()
+    private fun getCSharpRMATOperators(contexts: List<Context>, file: File): List<CSharpOperator> {
+        val operators = mutableListOf<CSharpOperator>()
         for (context in contexts) {
-            val rmat = RMAT(context, file)
+            val rmat = CSharpRMAT(context, file)
             if (rmat.checkContext()) operators += rmat
         }
 
         return operators
     }
 
-    private fun getRMAOperators(contexts: List<Context>, file: File):List<Operator> {
-        val operators = mutableListOf<Operator>()
+    private fun getJavaRMATOperators(contexts: List<Context>, file: File): List<JavaOperator> {
+        val operators = mutableListOf<JavaOperator>()
         for (context in contexts) {
-            val rma = RMA(context, file)
+            val rmat = JavaRMAT(context, file)
+            if (rmat.checkContext()) operators += rmat
+        }
+
+        return operators
+    }
+
+    private fun getCSharpRMAOperators(contexts: List<Context>, file: File): List<CSharpOperator> {
+        val operators = mutableListOf<CSharpOperator>()
+        for (context in contexts) {
+            val rma = CSharpRMA(context, file)
+            if (rma.checkContext()) operators += rma
+        }
+
+        return operators
+    }
+
+    private fun getJavaRMAOperators(contexts: List<Context>, file: File):List<JavaOperator> {
+        val operators = mutableListOf<JavaOperator>()
+        for (context in contexts) {
+            val rma = JavaRMA(context, file)
             if (rma.checkContext()) operators += rma
         }
 

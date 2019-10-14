@@ -2,11 +2,15 @@ package mutation.tool
 
 import mu.KotlinLogging
 import mutation.tool.annotation.getListOfAnnotationContext
-import mutation.tool.mutant.generateMutants
+import mutation.tool.annotation.visitor.CSharpStrategy
+import mutation.tool.annotation.visitor.JavaStrategy
+import mutation.tool.mutant.generateCSharpMutants
+import mutation.tool.mutant.generateJavaMutants
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.operator.ada.ADAChecker
 import mutation.tool.operator.adat.ADATMapBuilder
-import mutation.tool.operator.getValidOperators
+import mutation.tool.operator.getValidCSharpOperators
+import mutation.tool.operator.getValidJavaOperators
 import mutation.tool.operator.rpa.RPAMapBuilder
 import mutation.tool.operator.rpat.RPATMapBuilder
 import mutation.tool.operator.rpav.RPAVMapBuilder
@@ -95,21 +99,35 @@ class MutationTool(private val config: MutationToolConfig) {
         logger.info { "generating mutants" }
         val executor = Executors.newFixedThreadPool(config.threads)
 
-        for(javaFile in getAllJavaFiles(config.pathSources)){
+        val validFiles = when(config.language) {
+            Language.JAVA -> getAllJavaFiles(config.pathSources)
+            Language.C_SHARP -> getAllCSharpFiles(config.pathSources)
+        }
 
+        for(validFile in validFiles){
             val worker = Runnable {
-                synchronized(this) { logger.info { "check java file: $javaFile" } }
+                synchronized(this) { logger.info { "check source file: $validFile" } }
 
-                val operators = getValidOperators(getListOfAnnotationContext(javaFile), javaFile, config)
-                generateMutants(operators, javaFile, project!!, File(config.mutantsFolder))
+                when(config.language) {
+                    Language.JAVA -> {
+                        val visitor = JavaStrategy()
+                        val operators = getValidJavaOperators(getListOfAnnotationContext(validFile, visitor), validFile, config)
+                        generateJavaMutants(operators, validFile, project!!, File(config.mutantsFolder))
+                    }
+                    Language.C_SHARP -> {
+                        val visitor = CSharpStrategy()
+                        val operators = getValidCSharpOperators(getListOfAnnotationContext(validFile, visitor), validFile, config)
+                        generateCSharpMutants(operators, validFile, project!!, File(config.mutantsFolder))
+                    }
+                }
 
-                synchronized(this) { logger.info { "java file checked: $javaFile" } }
+                synchronized(this) { logger.info { "source file checked: $validFile" } }
             }
             executor.execute(worker)
         }
 
         executor.shutdown()
-        while (!executor.isTerminated){}
+        while (!executor.isTerminated){ Thread.sleep(100) }
 
         logger.info { "generation of mutants ended" }
     }

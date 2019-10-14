@@ -3,6 +3,7 @@ package mutation.tool.util
 import mutation.tool.context.InsertionPoint
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.operator.ada.ADAChecker
+import mutation.tool.util.json.AnnotationInfo
 import mutation.tool.util.json.getAnnotationInfos
 import java.io.File
 
@@ -90,7 +91,18 @@ class MutationToolConfig(val pathSources: File, val pathTests: File) {
     /**
      * informations about annotations
      */
-    val annotationInfos = getAnnotationInfos(File(JSON_ANNOTATION_CONFIG))
+    var annotationInfos: List<AnnotationInfo> = getAnnotationInfos(File(JSON_ANNOTATION_CONFIG))
+
+    var pathAnnotationInfo: String = JSON_ANNOTATION_CONFIG
+        set(value) {
+            field = value
+            annotationInfos = getAnnotationInfos(File(value))
+        }
+
+    /**
+     * Language processing
+     */
+    var language = Language.JAVA
 
     /**
      * turn on debug information

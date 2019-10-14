@@ -1,9 +1,11 @@
 package mutation.tool.operator.ada
 
+import mutation.tool.annotation.finder.cSharpAnnotationFinder
 import mutation.tool.context.Context
 import mutation.tool.context.InsertionPoint
-import mutation.tool.operator.Operator
-import mutation.tool.util.annotationFinder
+import mutation.tool.operator.JavaOperator
+import mutation.tool.annotation.finder.javaAnnotationFinder
+import mutation.tool.operator.CSharpOperator
 import mutation.tool.util.json.AnnotationInfo
 import java.io.File
 
@@ -50,8 +52,8 @@ class ADAChecker(private val annotationInfos:List<AnnotationInfo>) {
      * @param contexts list of contexts
      * @return list of operators
      */
-    fun check(contexts:List<Context>, javaFile:File): List<Operator> {
-        val operators = mutableListOf<Operator>()
+    fun check(contexts:List<Context>, javaFile:File): List<JavaOperator> {
+        val operators = mutableListOf<JavaOperator>()
 
         for (context in contexts) {
             if (!targetMap.containsKey(context.getInsertionPoint())) continue
@@ -60,8 +62,8 @@ class ADAChecker(private val annotationInfos:List<AnnotationInfo>) {
                 val name = info.name
 
                 var ok = true
-                for (annotation in context.getAnnotations()) {
-                    if (annotationFinder(annotation, name)){
+                for (annotation in context.annotations) {
+                    if (javaAnnotationFinder(annotation, name)){
                         ok = false
                         break
                     }
@@ -70,7 +72,37 @@ class ADAChecker(private val annotationInfos:List<AnnotationInfo>) {
                 if (!ok) continue
 
                 for (string in info.annotationStrings) {
-                    val operator = ADA(context, javaFile)
+                    val operator = JavaADA(context, javaFile)
+                    operator.annotation = string
+                    operators += operator
+                }
+            }
+        }
+
+        return operators
+    }
+
+    fun checkCSharp(contexts:List<Context>, file:File): List<CSharpOperator> {
+        val operators = mutableListOf<CSharpOperator>()
+
+        for (context in contexts) {
+            if (!targetMap.containsKey(context.getInsertionPoint())) continue
+
+            for (info in targetMap.getValue(context.getInsertionPoint())) {
+                val name = info.name
+
+                var ok = true
+                for (annotation in context.annotations) {
+                    if (cSharpAnnotationFinder(annotation, name)){
+                        ok = false
+                        break
+                    }
+                }
+
+                if (!ok) continue
+
+                for (string in info.annotationStrings) {
+                    val operator = CSharpADA(context, file)
                     operator.annotation = string
                     operators += operator
                 }
