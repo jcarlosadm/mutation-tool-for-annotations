@@ -1,0 +1,52 @@
+{
+  "annotations": [
+    {
+      "annotation": "Microsoft.AspNetCore.Routing.Route",
+      "replaceableBy": ["Microsoft.AspNetCore.Routing.HttpGet"],
+      "targets": ["type", "method"],
+      "attributes": [
+        {
+          "name": "RouteTemplate",
+          "type": "String",
+          "validValues": ["\"/ex/foo\""],
+          "default": "true"
+        },
+        {
+          "name": "Name",
+          "type": "String",
+          "validValues": ["\"Get_Products\""]
+        }
+      ]
+    },
+    {
+      "annotation": "Microsoft.AspNetCore.Routing.HttpGet",
+      "replaceableBy": ["Microsoft.AspNetCore.Routing.Route"],
+      "targets": ["type", "method"],
+      "attributes": [
+        {
+          "name": "RouteTemplate",
+          "type": "String",
+          "validValues": ["\"/ex/foo\""],
+          "default": "true"
+        },
+        {
+          "name": "Name",
+          "type": "String",
+          "validValues": ["\"Get_Products\""]
+        }
+      ]
+    },
+    {
+      "annotation": "System.ComponentModel.DataAnnotations.Required",
+      "replaceableBy": [],
+      "targets": ["field", "parameter"],
+      "attributes": [
+        {
+          "name": "ErrorMessage",
+          "type": "String",
+          "validValues": ["\"Error\""]
+        }
+      ]
+    }
+  ]
+}

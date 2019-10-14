@@ -22,12 +22,12 @@ internal class RPATTest {
             )
     )
 
-    /*@Test
+    @Test
     fun testRPAT() {
         val mutants = mutableListOf<JavaMutant>()
 
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
-            val operator = RPAT(context, File(FILE1))
+            val operator = JavaRPAT(context, File(FILE1))
             operator.map = map
             if (operator.checkContext()) mutants += operator.mutate()
         }
@@ -43,11 +43,11 @@ internal class RPATTest {
 
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy()
         )) {
-            val operator = RPAT(context, File(FILE1))
+            val operator = JavaRPAT(context, File(FILE1))
             operator.map = builder.map
             if (operator.checkContext()) mutants += operator.mutate()
         }
 
         assertEquals(14, mutants.size)
-    }*/
+    }
 }

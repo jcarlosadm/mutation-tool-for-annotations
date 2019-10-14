@@ -2,7 +2,6 @@ package mutation.tool.operator.rma
 
 import mutation.tool.annotation.builder.CSharpAnnotationBuilder
 import mutation.tool.context.Context
-import mutation.tool.context.InsertionPoint
 import mutation.tool.mutant.CSharpMutant
 import mutation.tool.mutant.CSharpMutateVisitor
 import mutation.tool.operator.CSharpOperator
@@ -33,16 +32,16 @@ class CSharpRMA(context: Context, file: File) : CSharpOperator(context, file) {
     }
 
     override fun visitClass(node: Node): Boolean = super.visitClass(node) &&
-            removeCurrentAnnotation(getAnnotations(node, InsertionPoint.CLASS))
+            removeCurrentAnnotation(getAnnotations(node))
 
     override fun visitMethod(node: Node): Boolean = super.visitMethod(node) &&
-            removeCurrentAnnotation(getAnnotations(node, InsertionPoint.METHOD))
+            removeCurrentAnnotation(getAnnotations(node))
 
     override fun visitParameter(node: Node): Boolean = super.visitParameter(node) &&
-            removeCurrentAnnotation(getAnnotations(node, InsertionPoint.PARAMETER))
+            removeCurrentAnnotation(getAnnotations(node))
 
     override fun visitProperty(node: Node): Boolean = super.visitProperty(node) &&
-            removeCurrentAnnotation(getAnnotations(node, InsertionPoint.PROPERTY))
+            removeCurrentAnnotation(getAnnotations(node))
 
     private fun removeCurrentAnnotation(annotations:List<Node>): Boolean {
         if (currentAnnotation == null)

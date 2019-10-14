@@ -26,8 +26,13 @@ class RPAVMapBuilder(private val annotationInfos:List<AnnotationInfo>) {
             val name = info.name
 
             val attrMap = mutableMapOf<String, List<String>>()
+            var defaultValues:List<String>? = null
             for (attr in info.attributes) {
                 attrMap[attr.name] = attr.validValues
+                if (attr.default) defaultValues = attr.validValues
+            }
+            if (!attrMap.containsKey("") && defaultValues != null) {
+                attrMap[""] = defaultValues
             }
 
             if (attrMap.isNotEmpty()) map[name] = attrMap

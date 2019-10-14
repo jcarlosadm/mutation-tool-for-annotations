@@ -10,14 +10,14 @@ import java.io.File
 
 internal class RMATest {
 
-   /* @Test
+    @Test
     fun testRMA() {
         val mutants = mutableListOf<JavaMutant>()
 
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
-            val operator = RMA(context, File(FILE1))
+            val operator = JavaRMA(context, File(FILE1))
 
-            val annotations = context.getAnnotations()
+            val annotations = context.annotations
             if (annotations.isNotEmpty()) {
                 assertTrue(operator.checkContext())
 
@@ -27,5 +27,5 @@ internal class RMATest {
             }
         }
         assertEquals(11, mutants.size)
-    }*/
+    }
 }

@@ -10,16 +10,16 @@ import java.io.File
 
 internal class CHODRTest {
 
-    /*@Test
+    @Test
     fun testCHODR() {
         val mutants = mutableListOf<JavaMutant>()
 
         for(context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
-            val operator = CHODR(context, File(FILE1))
+            val operator = JavaCHODR(context, File(FILE1))
             if (operator.checkContext())
                 mutants += operator.mutate()
         }
 
         assertEquals(1, mutants.size)
-    }*/
+    }
 }

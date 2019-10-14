@@ -5,11 +5,12 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration
 import com.github.javaparser.ast.body.FieldDeclaration
 import com.github.javaparser.ast.body.MethodDeclaration
 import com.github.javaparser.ast.body.Parameter
-import com.github.javaparser.ast.expr.AnnotationExpr
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter
+import mutation.tool.annotation.builder.JavaAnnotationBuilder
 import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.context.InsertionPoint
+import mutation.tool.context.adapter.AnnotationAdapter
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -19,22 +20,22 @@ private const val FILE1 = "./src/test/resources/fakeProject/src/main/java/Tarefa
 
 internal class InspectorTest {
 
-    /*@Test
+    @Test
     fun testGetAnnotations() {
-        val annotations = mutableListOf<AnnotationExpr>()
+        val annotations = mutableListOf<AnnotationAdapter>()
 
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
-            annotations.addAll(context.getAnnotations())
+            annotations.addAll(context.annotations)
         }
 
         assertTrue(annotations.isNotEmpty())
         assertEquals(11, annotations.size)
-    }*/
+    }
 
-    /*@Test
+    @Test
     fun testIsSameClass() {
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
-            if (context.getInsertionPoint() != InsertionPoint.CLASS || context.getName() != "TarefasController")
+            if (context.getInsertionPoint() != InsertionPoint.CLASS || context.name != "TarefasController")
                 continue
 
             val visitor = object:VoidVisitorAdapter<Any>() {
@@ -45,9 +46,9 @@ internal class InspectorTest {
             }
             visitor.visit(JavaParser.parse(File(FILE1)), null)
         }
-    }*/
+    }
 
-   /* @Test
+    @Test
     fun testIsSameMethod() {
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             if (context.getInsertionPoint() != InsertionPoint.METHOD) continue
@@ -77,15 +78,15 @@ internal class InspectorTest {
             }
             visitor.visit(JavaParser.parse(File(FILE1)), null)
         }
-    }*/
+    }
 
-    /*@Test
+    @Test
     fun testIsSameParameter() {
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
             if (context.getInsertionPoint() != InsertionPoint.PARAMETER) continue
             val string = context.toString()
-            val line = context.getRange().begin.line
-            val column = context.getRange().begin.column
+            val line = context.beginLine
+            val column = context.beginColumn
 
             val visitor = object:VoidVisitorAdapter<Any>() {
                 override fun visit(n: Parameter?, arg: Any?) {
@@ -101,12 +102,15 @@ internal class InspectorTest {
     @Test
     fun testNumOfAnnotationsAttributes() {
         for (context in getListOfAnnotationContext(File(FILE1), JavaStrategy())) {
-            for (annotation in context.getAnnotations()) {
-                if (!annotation.toString().contains("("))
-                    assertEquals(0, numOfAnnotationAttributes(annotation))
+            for (annotation in context.annotations) {
+                val builder = JavaAnnotationBuilder(annotation.string)
+                builder.build()
+                if (!annotation.string.contains("("))
+                    assertEquals(0, numOfAnnotationAttributes(builder.annotationExpr!!))
                 else
-                    assertEquals(annotation.toString().split(",").size, numOfAnnotationAttributes(annotation))
+                    assertEquals(annotation.string.split(",").size,
+                            numOfAnnotationAttributes(builder.annotationExpr!!))
             }
         }
-    }*/
+    }
 }

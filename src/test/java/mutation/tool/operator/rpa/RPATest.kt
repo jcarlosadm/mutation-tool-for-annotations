@@ -12,7 +12,7 @@ private const val FILE2 = "./src/test/resources/fakeProject/src/main/java/Tarefa
 
 internal class RPATest {
 
-    /*@Test
+    @Test
     fun testRPA() {
         val mutants = mutableListOf<JavaMutant>()
         val contexts = getListOfAnnotationContext(File(FILE2), JavaStrategy())
@@ -21,12 +21,12 @@ internal class RPATest {
         val map = builder.map
 
         for (context in contexts) {
-            val operator = RPA(context, File(FILE2))
+            val operator = JavaRPA(context, File(FILE2))
             operator.switchMap = map
             if (operator.checkContext())
                 mutants += operator.mutate()
         }
 
         assertEquals(2, mutants.size)
-    }*/
+    }
 }

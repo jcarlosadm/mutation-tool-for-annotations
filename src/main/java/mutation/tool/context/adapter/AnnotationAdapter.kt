@@ -14,6 +14,7 @@ class AnnotationAdapter {
     val annotationType:AnnotationType?
     val imports = mutableListOf<String>()
     val pairs: NodeList<MemberValuePair>?
+    val genericPair: MutableMap<String, String>?
     val string: String
 
     constructor(annotationExpr: AnnotationExpr) {
@@ -40,6 +41,8 @@ class AnnotationAdapter {
                 this.imports += import.nameAsString
             }
         }
+
+        this.genericPair = null
     }
 
     constructor(node: Node) {
@@ -48,6 +51,28 @@ class AnnotationAdapter {
         this.pairs = null
         this.string = node.textContent
         this.imports += getDocumentImports(node)
+        this.genericPair = buildPairs(node.textContent)
+    }
+
+    private fun buildPairs(textContent: String): MutableMap<String, String>? {
+        if (!textContent.contains("(")) {return null}
+
+        val string = textContent.substring(textContent.indexOf("(") + 1, textContent.indexOf(")"))
+        val params = string.split(",")
+
+        val pairs = mutableMapOf<String, String>()
+
+        for (param in params) {
+            if (param.contains("=")) {
+                val key = param.split("=").first().replace(" ", "")
+                val value = param.split("=").last().replace(" ", "")
+                pairs[key] = value
+            }
+        }
+
+        if (pairs.isEmpty()) return null
+
+        return pairs
     }
 
     private fun getAnnotationName(node: Node): String {

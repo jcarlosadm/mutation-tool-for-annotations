@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 
 internal class JavaMutantTest {
 
-    /*@Test
+    @Test
     fun testGenerateMutants() {
         val contexts = getListOfAnnotationContext(File(FILE1), JavaStrategy())
 
@@ -27,5 +27,5 @@ internal class JavaMutantTest {
                 File("./src/test/resources/fakeProject")), File("./src/test/resources/mutants2"))
 
         assertEquals(3, File("./src/test/resources/mutants2/").listFiles().size)
-    }*/
+    }
 }
