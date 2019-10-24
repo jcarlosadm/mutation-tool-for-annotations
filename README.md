@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/easy-software-ufal/mutation-tool-for-annotations.svg?branch=master)](https://travis-ci.org/easy-software-ufal/mutation-tool-for-annotations) [![](https://jitpack.io/v/easy-software-ufal/mutation-tool-for-annotations.svg)](https://jitpack.io/#easy-software-ufal/mutation-tool-for-annotations) [![codecov](https://codecov.io/gh/easy-software-ufal/mutation-tool-for-annotations/branch/master/graph/badge.svg)](https://codecov.io/gh/easy-software-ufal/mutation-tool-for-annotations)
 
-This a lib to mutate code annotations from Java source code. From a set of operators, this will create one javaMutant for each change on original code, related to code annotations. For example, consider the following code:
+This a lib to mutate code annotations from Java or attributes from C# source code. From a set of operators, this will create one javaMutant for each change on original code, related to code annotations. For example, consider the following code (Java):
 
 ```java
 @RequestMapping(value = "/foo")
@@ -144,6 +144,8 @@ For each attribute, we have the following fields:
 
 **default**: this mark the attribute as default, which means that the annotation will receive only the value without the attribute name. Only works when the annotation have one attribute. Can be true or false. Optional.
 
+This file is quite similar for C#. The name of attribute include the namespace, without the `@`.
+
 -----
 
 After fill the *annotations.json*, it is necessary to create a Java code to use this project to generate the javaMutants. The following code is an example:
@@ -153,6 +155,7 @@ MutationToolConfig config = new MutationToolConfig(new File(SOURCE_PATH));
 config.setProjectName(PROJECT_NAME);
 config.getOperators().addAll(Arrays.asList(OperatorsEnum.RMA, OperatorsEnum.RMAT));
 config.setThreads(2);
+config.setLanguage(Language.JAVA) // or Language.C_SHARP
 new MutationTool(config).run();
 ```
 
@@ -167,6 +170,8 @@ This class have the following methods:
 **setProjectName**: set the name of original project.
 
 **setThreads**: set the number of threads.
+
+**setLanguage**: set the language to generate the mutants (Java or C#).
 
 **getOperators**: get the list of operators.
 
