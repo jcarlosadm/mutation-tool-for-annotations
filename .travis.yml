@@ -5,5 +5,7 @@ install: true
 cache:
   directories:
   - $HOME/.m2
+before_install:
+  - sudo apt-get -y install srcml
 after_success:
   - bash <(curl -s https://codecov.io/bash)
