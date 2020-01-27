@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions.*
 import java.io.File
 
 private const val sourcePath = "./src/test/resources/fakeProject/src/main/java"
+private const val dropWizardPath = "/home/blacksamu/Documents/academy/mut-tool-test/dropwizard-master/dropwizard-core/src/main/"
 private const val sourcePath2 = "./src/test/resources/fakeProjectCSharp/src"
 private const val testPath = "./src/test/resources/fakeProject/src/test/java"
 
@@ -57,4 +58,15 @@ internal class MutationToolTest {
         assertTrue(MutationTool(config).run())
     }
 
+//    @Test
+//    fun testMutantToolJavaWithDropwizard() {
+//        val config = MutationToolConfig(File(dropWizardPath))
+//        config.projectName = "dropwizard"
+//        config.operators.addAll(OperatorsEnum.values())
+//        config.mutantsFolder = "/home/blacksamu/Documents/academy/mut-tool-test/dropwizard-mutants/"
+//        config.threads = 2
+//        config.setDebugOn()
+//        resetMutantFoldersNum()
+//        assertTrue(MutationTool(config).run())
+//    }
 }

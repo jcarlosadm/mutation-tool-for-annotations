@@ -9,6 +9,8 @@ import com.github.javaparser.ast.body.Parameter
 import mutation.tool.context.Context
 import mutation.tool.mutant.JavaMutant
 import mutation.tool.mutant.JavaMutateVisitor
+import mutation.tool.mutant.generateJavaMutants
+import mutation.tool.project.Project
 import mutation.tool.util.*
 import java.io.File
 
@@ -104,13 +106,15 @@ abstract class JavaOperator(val context:Context, val file:File):Operator {
  * @param config configuration
  * @return list of operators
  */
-fun getValidJavaOperators(contexts: List<Context>, javaFile: File, config: MutationToolConfig):List<JavaOperator> {
+fun genJavaMutants(contexts: List<Context>, javaFile: File, config: MutationToolConfig, project: Project) {
     val validOperators = mutableListOf<JavaOperator>()
     val operatorsEnum = config.operators
     val factory = OperatorFactory(config)
 
-    for (operatorEnum in operatorsEnum) validOperators += factory.getJavaOperators(operatorEnum, contexts, javaFile)
-
-    return validOperators
+    for (operatorEnum in operatorsEnum) {
+        generateJavaMutants(factory.getJavaOperators(operatorEnum, contexts, javaFile), javaFile, project,
+                File(config.mutantsFolder))
+        validOperators.clear()
+    }
 }
 

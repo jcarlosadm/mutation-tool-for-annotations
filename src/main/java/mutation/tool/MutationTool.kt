@@ -5,12 +5,11 @@ import mutation.tool.annotation.getListOfAnnotationContext
 import mutation.tool.annotation.visitor.CSharpStrategy
 import mutation.tool.annotation.visitor.JavaStrategy
 import mutation.tool.mutant.generateCSharpMutants
-import mutation.tool.mutant.generateJavaMutants
 import mutation.tool.operator.OperatorsEnum
 import mutation.tool.operator.ada.ADAChecker
 import mutation.tool.operator.adat.ADATMapBuilder
 import mutation.tool.operator.getValidCSharpOperators
-import mutation.tool.operator.getValidJavaOperators
+import mutation.tool.operator.genJavaMutants
 import mutation.tool.operator.rpa.RPAMapBuilder
 import mutation.tool.operator.rpat.RPATMapBuilder
 import mutation.tool.operator.rpav.RPAVMapBuilder
@@ -111,8 +110,7 @@ class MutationTool(private val config: MutationToolConfig) {
                 when(config.language) {
                     Language.JAVA -> {
                         val visitor = JavaStrategy()
-                        val operators = getValidJavaOperators(getListOfAnnotationContext(validFile, visitor), validFile, config)
-                        generateJavaMutants(operators, validFile, project!!, File(config.mutantsFolder))
+                        genJavaMutants(getListOfAnnotationContext(validFile, visitor), validFile, config, project!!)
                     }
                     Language.C_SHARP -> {
                         val visitor = CSharpStrategy()
