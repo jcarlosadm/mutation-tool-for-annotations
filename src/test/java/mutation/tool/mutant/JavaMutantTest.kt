@@ -24,6 +24,6 @@ internal class JavaMutantTest {
         genJavaMutants(contexts, File(FILE1), config, Project("fakeProject",
                 File("./src/test/resources/fakeProject")))
 
-        assertEquals(3, File("./src/test/resources/mutants2/").listFiles().size)
+        assertEquals(10, File("./src/test/resources/mutants/").listFiles().size)
     }
 }
