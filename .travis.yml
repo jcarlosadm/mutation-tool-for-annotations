@@ -6,6 +6,8 @@ cache:
   directories:
   - $HOME/.m2
 before_install:
-  - sudo apt-get -y install srcml
+  - wget http://131.123.42.38/lmcrs/beta/srcML-Ubuntu12.04-64.deb
+  - sudo dpkg -i srcML-Ubuntu12.04-64.deb
+  - sudo apt-get install libcurl3 -y
 after_success:
   - bash <(curl -s https://codecov.io/bash)
